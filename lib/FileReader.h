@@ -39,20 +39,59 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace tpau::cpp_kernal {
 
+/**
+ * Provides an interface for reading files, with support for caching and binary files.
+ */
 class FileReader {
   public:
+    /**
+     * Get the contents of a text file.
+     *
+     * @param file_name The name of the file to read.
+     * @param optional If `true`, return an empty file if the file does not exist.
+     * @return The contents of the file as a vector of lines.
+     * @throws Exception If the file does not exist and `optional` is `false`.
+     */
     const std::vector<std::string>& read(Symbol file_name, bool optional = false);
+
+    /**
+     * Get the contents of a binary file.
+     *
+     * @param file_name The name of the file to read.
+     * @param optional If `true`, return an empty string if the file does not exist.
+     * @return The contents of the file as a string.
+     * @throws Exception If the file does not exist and `optional` is `false`.
+     */
     [[nodiscard]] std::string read_binary(Symbol file_name, bool optional = false);
 
+    /**
+     * Get a specific line from a file.
+     *
+     * @param file The name of the file.
+     * @param line_number The line number to retrieve (0-based).
+     * @return The requested line.
+     * @throws Exception If the file has not been read or the line does not exist.
+     */
     [[nodiscard]] const std::string& get_line(Symbol file, size_t line_number) const;
+
+    /**
+     * Get the names of all files that have been read.
+     *
+     * @return A vector of file names.
+     */
     [[nodiscard]] std::vector<Symbol> file_names() const;
 
+    /// @brief The global file reader instance.
     static FileReader global;
 
   private:
+    /// @brief An empty file to return when an optional file is not found.
     static std::vector<std::string> empty_file;
 
+    /// @brief The set of binary files that have been read.
     std::unordered_set<Symbol> binary_files;
+
+    /// @brief The map of text file names to their contents.
     std::unordered_map<Symbol, std::vector<std::string>> files;
 };
 

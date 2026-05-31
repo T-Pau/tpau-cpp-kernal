@@ -37,25 +37,69 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace tpau::cpp_kernal {
 
+/**
+ * Represents a source of characters from a file, with support for lookahead and seeking.
+ */
 class FileSource {
   public:
     FileSource(Symbol filename);
 
+    /**
+     * Get the next character from the file. Returns `EOF` if the end of the file is reached.
+     *
+     * @return The next character from the file, or `EOF` if the end of the file is reached.
+     */
     int get();
+
+    /**
+     * Unget the last character read from the file. The next call to `get()` will return the same character again.
+     *
+     * @throws Exception If at the beginning of the file.
+     */
     void unget();
 
+    /**
+     * Get the name of the file.
+     *
+     * @return The name of the file.
+     */
     [[nodiscard]] Symbol filename() const { return filename_; }
 
+    /**
+     * Get the current location in the file.
+     *
+     * @return The current location in the file.
+     */
     [[nodiscard]] Location location() const { return {filename(), line + 1, column, column}; }
 
+    /**
+     * Expand a location within the file to include the current location.
+     *
+     * If the location is not within the file, it will be left unchanged.
+     *
+     * @param location The location to expand.
+     */
     void expand_location(Location& location) const;
 
+    /**
+     * Reset the current position to a new location.
+     *
+     * @param new_location The new location to reset to.
+     * @throws Exception If the new location is not within the file.
+     */
     void reset_to(const Location& new_location);
 
   private:
+    /// @brief The name of the file.
     Symbol filename_;
+
+    /// @brief The lines of the file.
     const std::vector<std::string>& lines;
+
+    /// @brief The current line number (0-based).
     size_t line{0};
+
+    /// @brief The current column number (0-based).
     size_t column{0};
 };
 

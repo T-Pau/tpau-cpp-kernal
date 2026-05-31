@@ -7,9 +7,11 @@ add_library(tpau-cpp-kernal
         FileReader.cc
         FileSource.cc
         Location.cc
+        Int.cc
         Path.cc
         Symbol.cc
         Util.cc
+        Value.cc
 )
 
 target_include_directories(tpau-cpp-kernal PRIVATE ${PROJECT_BINARY_DIR})
