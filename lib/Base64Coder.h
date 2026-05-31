@@ -36,13 +36,11 @@ namespace tpau::cpp_kernal {
 
 class Base64EncoderEngine : public CoderEngine {
   public:
-    Base64EncoderEngine(CoderOutput& output);
+    Base64EncoderEngine(CoderOutput& output) : CoderEngine(output) {}
 
   protected:
-    void encode_implementation(uint8_t datum) override;
+    void process_implementation(uint8_t datum) override;
     void finish_implementation() override;
-
-    CoderOutput& output;
 
   private:
     /// The current position in the 4-character Base64 block.
@@ -58,19 +56,35 @@ class Base64EncoderEngine : public CoderEngine {
      * @return The corresponding value.
      * @throws Exception if the character is invalid.
      */
-    static uint8_t value(char character);
+    static char encode(uint8_t value);
 };
 
 class Base64DecoderEngine : public CoderEngine {
   public:
-    Base64DecoderEngine(CoderOutput& output);
+    Base64DecoderEngine(CoderOutput& output) : CoderEngine(output) {}
 
   protected:
-    void encode_implementation(uint8_t datum) override;
+    void process_implementation(uint8_t datum) override;
     void finish_implementation() override;
 
   private:
-    CoderOutput& output;
+    /// The current position in the 4-character Base64 block.
+    int position{0};
+
+    /// The remaining bits from the previous byte that haven't been output yet.
+    uint8_t remaining_bits{};
+
+    /// Whether the end marker (`=`) has been seen in the input.
+    bool end_marker_seen{false};
+
+    /**
+     * Return the value corresponding to the given Base64 character.
+     *
+     * @param character The Base64 character.
+     * @return The corresponding value.
+     * @throws Exception if the character is invalid.
+     */
+    static uint8_t decode(char character);
 };
 
 /**
@@ -79,6 +93,13 @@ class Base64DecoderEngine : public CoderEngine {
 class Base64StringEncoder : public Coder {
   public:
     Base64StringEncoder() : Coder(engine) {};
+
+    /**
+     * Finish the encoding process and return the encoded data.
+     *
+     * @return The encoded data.
+     */
+    std::string end();
 
   private:
     StringCoderOutput output;
@@ -92,6 +113,8 @@ class Base64StreamEncoder : public Coder {
   public:
     Base64StreamEncoder(std::ostream& stream, size_t line_length = 0, size_t indent = 0) : Coder(engine), output(stream, line_length, indent), engine(output) {}
 
+    void end() { finish(); }
+
   private:
     StreamCoderOutput output;
     Base64EncoderEngine engine;
@@ -104,7 +127,9 @@ class Base64StringDecoder : public Coder {
   public:
     Base64StringDecoder() : Coder(engine) {};
 
-  private:
+    std::string end();
+
+  protected:
     StringCoderOutput output;
     Base64DecoderEngine engine{output};
 };

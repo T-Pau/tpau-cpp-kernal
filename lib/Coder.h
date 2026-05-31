@@ -31,6 +31,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <cstdint>
+#include <ostream>
 #include <string>
 #include <vector>
 
@@ -87,11 +88,11 @@ class CoderEngine {
     virtual ~CoderEngine() = default;
 
     /**
-     * Encode the given byte.
+     * Process the given byte.
      *
-     * @param datum The byte to encode.
+     * @param datum The byte to process.
      */
-    void encode(uint8_t datum);
+    void process(uint8_t datum);
 
     /**
      * Finish the coding process.
@@ -105,16 +106,16 @@ class CoderEngine {
     CoderOutput& output;
 
     /**
-     * Encode the given byte.
+     * Process the given byte.
      *
-     * @param datum The byte to encode.
+     * @param datum The byte to process.
      */
-    virtual void encode_implementation(uint8_t datum) = 0;
+    virtual void process_implementation(uint8_t datum) = 0;
 
     /**
      * Finish the coding process.
      */
-    virtual void finish_implementation() = 0;
+    virtual void finish_implementation() {}
 
     bool finished{false};
     bool error{false};
@@ -127,21 +128,28 @@ class Coder {
     virtual ~Coder() = default;
 
     /**
-     * Encode the given data.
+     * Process the given data.
      *
-     * @param data The data to encode.
+     * @param data The data to process.
      */
-    void encode(const std::string& data);
+    void process(const std::string& data);
 
     /**
-     * Encode the given byte.
+     * Process the given byte.
      *
-     * @param datum The byte to encode.
+     * @param datum The byte to process.
      */
-    void encode(uint8_t datum) { engine.encode(datum); }
+    void process(uint8_t datum) { engine.process(datum); }
 
   protected:
     Coder(CoderEngine& engine) : engine(engine) {}
+
+    /**
+     * Finish the coding process.
+     *
+     * Subclasses should call this method in their `end()` method.
+     */
+    void finish() { engine.finish(); }
 
   private:
     CoderEngine& engine;
@@ -151,8 +159,7 @@ class StreamCoderOutput : public CoderOutput {
     // @brief A CoderOutput that writes to a stream.
   public:
     StreamCoderOutput(std::ostream& stream, size_t line_length = 0, size_t indent = 0) : stream(stream), line_length(line_length), indent(std::string(indent, ' ')) {}
-    void write_implementation(uint8_t datum);
-    void end_implementation() override;
+    void write_implementation(uint8_t datum) override;
 
   private:
     std::ostream& stream;

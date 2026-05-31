@@ -1,0 +1,77 @@
+[project]
+site_name = "&nbsp;"
+site_url = "https://tpau-cpp-kernal.tpau.group/"
+repo_url = "https://github.com/T-Pau/tpau-cpp-kernal"
+copyright = "©2026 Dieter Baron"
+site_author = "Dieter Baron"
+
+nav = [
+    {"T'Pau C++ Kernal" = "index.md"},
+    {"Tutorials" = "Tutorials/index.md"},
+    {"How-To Guides" = "How-To-Guides/index.md"},
+    {"Reference" = [
+        { "index.md" = "Reference/index.md" },
+        { "Base64Coder" = "Reference/Base64Coder.md" },
+        { "Coder" = "Reference/Coder.md" },
+        { "Exception" = "Reference/Exception.md" },
+        { "FileReader" = "Reference/FileReader.md" },
+        { "FileSource" = "Reference/FileSource.md" },
+        { "HexCoder" = "Reference/HexCoder.md" },
+        { "Location" = "Reference/Location.md" },
+        { "Path" = "Reference/Path.md" },
+        { "Symbol" = "Reference/Symbol.md" },
+        { "Value" = "Reference/Value.md" }
+    ]},
+    {"Explanations" = [
+        { "Symbols" = "Explanations/Symbols.md" }
+    ]},
+    {"License" = "License.md"},
+    {"Repository ↬" = "https://github.com/T-Pau/tpau-cpp-kernal/"}
+]
+
+extra_css = [
+  "assets/styles/mkdocstrings.css",
+  "assets/styles/style.css",
+]
+
+[project.extra]
+generator = false
+
+[project.theme]
+custom_dir = "docs/.overrides"
+favicon = "assets/images/favicon.ico"
+font = false
+features = [
+    "navigation.indexes",
+    "toc.integrate",
+]
+
+[project.markdown_extensions.pymdownx.inlinehilite]
+[project.markdown_extensions.pymdownx.snippets]
+[project.markdown_extensions.pymdownx.superfences]
+[project.markdown_extensions.def_list]
+[project.markdown_extensions.pymdownx.highlight]
+anchor_linenums = true
+line_spans = "__span"
+pygments_lang_class = true
+
+
+
+[project.theme.icon]
+logo = "tpau/icon"
+repo = "fontawesome/brands/github"
+
+
+#plugins = ["extra-sass", "privacy", "search"]
+
+[project.plugins.mkdocstrings]
+default_handler = "doxygen"
+
+[project.plugins.mkdocstrings.handlers.doxygen]
+paths = ["lib"]
+include_directories = { lib = "tpau-cpp-kernal" }
+options = { show_protected = true }
+
+[project.theme.palette]
+primary = "custom"
+

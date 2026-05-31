@@ -1,5 +1,6 @@
-#include <Coder.h>
-#include <Exception.h>
+#include "Coder.h"
+
+#include "Exception.h"
 
 namespace tpau::cpp_kernal {
 
@@ -18,19 +19,19 @@ void CoderOutput::end() {
     ended = true;
 }
 
-void CoderEngine::encode(uint8_t datum) {
+void CoderEngine::process(uint8_t datum) {
     if (finished) {
         throw Exception("encoding already finished");
     }
     if (error) {
-        throw Exception("can't encode after error");
+        throw Exception("can't process after error");
     }
-    encode_implementation(datum);
+    process_implementation(datum);
 }
 
 void CoderEngine::finish() {
     if (finished) {
-        throw Exception("encoding already finished");
+        throw Exception("processing already finished");
     }
     if (error) {
         throw Exception("can't finish after error");
@@ -39,10 +40,19 @@ void CoderEngine::finish() {
     finished = true;
 }
 
-void Coder::encode(const std::string& data) {
+void Coder::process(const std::string& data) {
     for (auto c : data) {
-        encode(static_cast<uint8_t>(c));
+        process(static_cast<uint8_t>(c));
     }
+}
+
+void StreamCoderOutput::write_implementation(uint8_t datum) {
+    if (line_length != 0 && current_position >= line_length) {
+        stream << std::endl << indent;
+        current_position = 0;
+    }
+    stream << static_cast<char>(datum);
+    current_position += 1;
 }
 
 void StringCoderOutput::write_implementation(uint8_t datum) {

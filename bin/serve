@@ -1,0 +1,4 @@
+# Zensical's cache system is completely broken!
+rm -r .cache/*
+
+zensical serve -a localhost:8012

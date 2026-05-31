@@ -33,7 +33,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <limits>
 
 #include "Exception.h"
-#include "HexStreamEncoder.h"
+#include "HexCoder.h"
 #include "Int.h"
 
 namespace tpau::cpp_kernal {
@@ -766,7 +766,8 @@ void Value::serialize(std::ostream& stream) const {
     case Value::BINARY: {
         stream << "{{";
         auto encoder = HexStreamEncoder(stream, 72);
-        encoder.encode(binary_value());
+        encoder.process(binary_value());
+        encoder.end();
         stream << "}}";
         break;
     }

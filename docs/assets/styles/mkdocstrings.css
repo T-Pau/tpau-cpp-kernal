@@ -1,0 +1,17 @@
+code.doc-symbol-attribute::after {
+  content: "attribute";
+}
+
+code.doc-symbol-function::after {
+  content: "function";
+}
+
+code.doc-symbol-method::after {
+  content: "method";
+}
+
+h2.doc-heading {
+    margin-top: 1.75em;
+    padding-top: 1em;
+    border-top: 1px solid rgba(0, 0, 0, 0.09);
+}

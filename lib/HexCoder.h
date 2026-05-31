@@ -39,11 +39,12 @@ class HexEncoderEngine : public CoderEngine {
     HexEncoderEngine(CoderOutput& output);
 
   protected:
-    void encode_implementation(uint8_t datum) override;
-    void finish_implementation() override;
+    void process_implementation(uint8_t datum) override;
 
   private:
     CoderOutput& output;
+
+    static char encode(uint8_t value);
 };
 
 class HexDecoderEngine : public CoderEngine {
@@ -51,11 +52,19 @@ class HexDecoderEngine : public CoderEngine {
     HexDecoderEngine(CoderOutput& output);
 
   protected:
-    void encode_implementation(uint8_t datum) override;
+    void process_implementation(uint8_t datum) override;
     void finish_implementation() override;
 
   private:
     CoderOutput& output;
+
+    /// The partial byte that has been read so far.
+    uint8_t partial_byte;
+
+    /// Whether we're in the middle of decoding a byte.
+    bool has_partial_byte{false};
+
+    static uint8_t decode(char character);
 };
 
 /**
@@ -64,6 +73,13 @@ class HexDecoderEngine : public CoderEngine {
 class HexStringEncoder : public Coder {
   public:
     HexStringEncoder() : Coder(engine) {};
+
+    /**
+     * Finish the encoding process and return the encoded data.
+     *
+     * @return The encoded data.
+     */
+    std::string end();
 
   private:
     StringCoderOutput output;
@@ -77,6 +93,11 @@ class HexStreamEncoder : public Coder {
   public:
     HexStreamEncoder(std::ostream& stream, size_t line_length = 0, size_t indent = 0) : Coder(engine), output(stream, line_length, indent), engine(output) {}
 
+    /**
+     * Finish the encoding process.
+     */
+    void end() { finish(); }
+
   private:
     StreamCoderOutput output;
     HexEncoderEngine engine;
@@ -89,6 +110,13 @@ class HexStringDecoder : public Coder {
   public:
     HexStringDecoder() : Coder(engine) {};
 
+    /**
+     * Finish the decoding process and return the decoded data.
+     *
+     * @return The decoded data.
+     */
+    std::string end();
+
   private:
     StringCoderOutput output;
     HexDecoderEngine engine{output};
@@ -100,6 +128,11 @@ class HexStringDecoder : public Coder {
 class HexStreamDecoder : public Coder {
   public:
     HexStreamDecoder(std::ostream& stream, size_t line_length = 0, size_t indent = 0) : Coder(engine), output(stream, line_length, indent), engine(output) {}
+
+    /**
+     * Finish the decoding process.
+     */
+    void end() { finish(); }
 
   private:
     StreamCoderOutput output;
