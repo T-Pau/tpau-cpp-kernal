@@ -8,3 +8,9 @@ To get started, refer to the [Tutorials](../Tutorials/) section. For a comprehen
 ## [Using T'Pau C++ Kernal in a CMake Project](Using-cmake.md)
 
 This guide shows how to use T'Pau C++ Kernal in a CMake project.
+
+
+## [Using T'Pau C++ Kernal in a Project with pkg-config](Using-pkg-config.md)
+
+This guide shows how to use T'Pau C++ Kernal in a project that uses pkg-config to find and link against libraries, using `Makefile`s as an example.
+

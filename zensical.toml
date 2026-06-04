@@ -11,11 +11,12 @@ nav = [
     {"T'Pau C++ Kernal" = "index.md"},
     {"Tutorials" = [
         {"index.md" = "Tutorials/index.md"},
-        {"Building the Library" = "Tutorials/Building.md"}
+        {"Building the Library" = "Tutorials/Building.md"},
     ]},
     {"How-To Guides" = [
         { "index.md" = "How-To-Guides/index.md" },
-        { "Using it in a CMake Project" = "How-To-Guides/Using-cmake.md" }
+        { "Using it in a CMake Project" = "How-To-Guides/Using-cmake.md" },
+        { "Using it with pkg-config" = "How-To-Guides/Using-pkg-config.md" },
     ]},
     {"Reference" = [
         { "index.md" = "Reference/index.md" },
@@ -28,14 +29,14 @@ nav = [
         { "Location" = "Reference/Location.md" },
         { "Path" = "Reference/Path.md" },
         { "Symbol" = "Reference/Symbol.md" },
-        { "Value" = "Reference/Value.md" }
+        { "Value" = "Reference/Value.md" },
     ]},
     {"Explanations" = [
         { "index.md" = "Explanations/index.md" },
-        { "Symbols" = "Explanations/Symbols.md" }
+        { "Symbols" = "Explanations/Symbols.md" },
     ]},
     {"License" = "License.md"},
-    {"Repository ↬" = "https://github.com/T-Pau/tpau-cpp-kernal/"}
+    {"Repository ↬" = "https://github.com/T-Pau/tpau-cpp-kernal/"},
 ]
 
 extra_css = [
@@ -72,6 +73,9 @@ pygments_lang_class = true
 [project.theme.icon]
 logo = "tpau/icon"
 repo = "fontawesome/brands/github"
+
+[project.theme.icon.admonition]
+"todo" = "octicons/tools-24"
 
 
 #plugins = ["extra-sass", "privacy", "search"]

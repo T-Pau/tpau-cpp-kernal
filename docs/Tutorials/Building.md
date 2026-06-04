@@ -6,6 +6,7 @@ To build T'Pau C++ Kernal, you will need to have a C++ compiler that supports C+
 
 To run the tests, you will need to have [Catch2](https://github.com/catchorg/Catch2) installed. You can install it using your package manager, or you can build it from source.
 
+
 ## Building the Library
 
 To build the library, follow these steps:

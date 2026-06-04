@@ -10,31 +10,15 @@ T'Pau C++ Kernal is a C++ library collecting various classes and functions that 
 ## Why Use T'Pau C++ Kernal?
 
 T'Pau C++ Kernal was primarily developed for use in our own programs.
-    
+
+However, the provided classes form a solid foundation for building command line utilities, integrating with build system, and writing flexible parsers.    
 
 ## Getting Started
 
-Include T'Pau C++ Kernal as a submodule in your Git repository:
+The T'Pau C++ Kernal provides CMake and pkg-config files for easy integration into your project.
 
-``` sh
-git submodule add https://github.com/T-Pau/tpau-cpp-kernal tpau-cpp-kernal
-```
 
-Add the following lines to your CMakeLists.txt:
 
-``` cmake
-add_subdirectory(tpau-cpp-kernal)
-add_subdirectory(tpau-cpp-kernal/lib)
-set(PACKAGE_AUTHOR "<author name>")
-set(PACKAGE_BUGREPORT "<bugreport email address>")
-```
-
-For the programs using the library, add:
-
-``` cmake
-target_include_directories(${PROGRAM} PRIVATE ${CMAKE_SOURCE_DIR}/tpau-cpp-kernal/lib ${PROJECT_BINARY_DIR})
-target_link_libraries(${PROGRAM} tpau-cpp-kernal)
-```
 
 ## Staying in Touch
 
