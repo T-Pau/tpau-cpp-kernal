@@ -1,3 +1,5 @@
+# cspell:ignore BUGREPORT distcheck DHAVE DCMAKE
+
 CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
@@ -59,3 +61,34 @@ add_subdirectory(tests)
 
 # write out config file
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+
+# pkgconfig file
+file(RELATIVE_PATH pc_relative_libdir ${CMAKE_INSTALL_PREFIX} ${CMAKE_INSTALL_FULL_LIBDIR})
+set(libdir "\${prefix}/${pc_relative_libdir}")
+file(RELATIVE_PATH pc_relative_includedir ${CMAKE_INSTALL_PREFIX} ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+set(includedir "\${prefix}/${pc_relative_includedir}")
+if(CMAKE_SYSTEM_NAME MATCHES BSD)
+  set(PKG_CONFIG_RPATH "-Wl,-R\${libdir}")
+endif(CMAKE_SYSTEM_NAME MATCHES BSD)
+configure_file(tpau-cpp-kernal.pc.in tpau-cpp-kernal.pc @ONLY)
+install(FILES ${PROJECT_BINARY_DIR}/tpau-cpp-kernal.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+
+# CMake config files
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file("${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+  COMPATIBILITY AnyNewerVersion)
+
+configure_package_config_file("${PROJECT_NAME}-config.cmake.in" "${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+
+## Add targets to the build-tree export set
+export(TARGETS tpau-cpp-kernal
+  FILE "${PROJECT_BINARY_DIR}/${PROJECT_NAME}-targets.cmake")
+
+# installation
+install(FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  )
+install(EXPORT ${PROJECT_NAME}-targets NAMESPACE tpau-cpp-kernal:: FILE ${PROJECT_NAME}-targets.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  )

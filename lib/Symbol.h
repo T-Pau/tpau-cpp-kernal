@@ -50,7 +50,11 @@ struct StringPtrEqual {
     auto operator()(const std::string* a, const std::string* b) const { return *a == *b; }
 };
 
-/// @brief A Symbol represents a string in a way that allows comparison in constant time.
+/**
+ * A Symbol represents a string in a way that allows copying and comparison in constant time.
+ * 
+ * Even though it uses the global symbol table and C++ does not guarantee the order of initialization of global variables, it is safe to use the `Symbol` constructor in global initializers.
+ */
 class Symbol {
   public:
     /// @brief Create an empty symbol.
@@ -65,7 +69,7 @@ class Symbol {
     explicit Symbol(const std::string& name);
 
     /**
-     * Assign a symbol the symbol corresponding to a string.
+     * Assign the symbol corresponding to a string.
      *
      * @param name The string to create the symbol from.
      * @return The created symbol.
@@ -87,7 +91,7 @@ class Symbol {
     [[nodiscard]] const char* c_str() const { return id->c_str(); }
 
     /**
-     * Check if the symbol is empty.
+     * Check if the symbol is empty, i. e. it represents the empty string.
      *
      * @return `true` if the symbol is empty, `false` otherwise.
      */
@@ -110,37 +114,37 @@ class Symbol {
     bool operator!=(const Symbol& other) const { return id != other.id; }
 
     /**
-     * Check if this symbol is less than another symbol.
+     * Check if this symbol comes before another symbol in lexicographical order.
      *
      * @param other The symbol to compare with.
-     * @return `true` if this symbol is less than the other symbol, `false` otherwise.
+     * @return `true` if this symbol comes before the other symbol, `false` otherwise.
      */
     bool operator<(const Symbol& other) const { return *id < *other.id; }
 
     /**
-     * Check if this symbol is less than or equal to another symbol.
+     * Check if this symbol comes before or is equal to another symbol in lexicographical order.
      *
      * @param other The symbol to compare with.
-     * @return `true` if this symbol is less than or equal to the other symbol, `false` otherwise.
+     * @return `true` if this symbol comes before or is equal to the other symbol, `false` otherwise.
      */
-
     bool operator<=(const Symbol& other) const { return *id <= *other.id; }
+
     /**
-     * Check if this symbol is greater than another symbol.
+     * Check if this symbol comes after another symbol in lexicographical order.
      *
      * @param other The symbol to compare with.
-     * @return `true` if this symbol is greater than the other symbol, `false` otherwise.
+     * @return `true` if this symbol comes after the other symbol, `false` otherwise.
      */
-
     bool operator>(const Symbol& other) const { return *id > *other.id; }
+
     /**
-     * Check if this symbol is greater than or equal to another symbol.
+     * Check if this symbol comes after or is equal to another symbol in lexicographical order.
      *
      * @param other The symbol to compare with.
-     * @return `true` if this symbol is greater than or equal to the other symbol, `false` otherwise.
+     * @return `true` if this symbol comes after or is equal to the other symbol, `false` otherwise.
      */
-
     bool operator>=(const Symbol& other) const { return *id >= *other.id; }
+
     /**
      * Check if the symbol is valid (not empty).
      *
@@ -159,10 +163,10 @@ class Symbol {
         std::unordered_map<const std::string*, std::unique_ptr<std::string>, StringPtrHash, StringPtrEqual> symbols;
     };
 
-    /// @brief Pointer to the interned string represented by the symbol.
+    /// @brief Pointer to the interned representation by the symbol.
     const std::string* id{&empty_string};
 
-    /// @brief The empty string, used for empty symbols.
+    /// @brief The canonical representation of the empty string, used for empty symbols.
     static const std::string empty_string;
 
     /// @brief Initialize the global symbol table.

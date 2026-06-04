@@ -1,0 +1,9 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: tpau-cpp-kernal
+Description: collection of C++ classes and functions
+Version: @PROJECT_VERSION@
+Libs: @PKG_CONFIG_RPATH@ -L${libdir} -ltpau-cpp-kernal
+Cflags: -I${includedir}

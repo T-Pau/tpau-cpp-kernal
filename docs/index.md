@@ -5,13 +5,12 @@ keywords: C++, library, collection, classes, functions, T'Pau
 ---
 ## What Is T'Pau C++ Kernal?
 
-T'Pau C++ Kernal is a C++ library collecting various classes and functions that are used in other T'Pau projects. It is meant to be included as a Git submodule.
+T'Pau C++ Kernal is a C++ library collecting various classes and functions that are used in other T'Pau projects. 
 
 ## Why Use T'Pau C++ Kernal?
 
 T'Pau C++ Kernal was primarily developed for use in our own programs.
     
-While the scripts creating assembly code, the provided assembler routines, and the build rules are specific to Accelerate and fast-ninja, some scripts and the underlying Python classes are more versatile.
 
 ## Getting Started
 

@@ -1,3 +1,5 @@
+# cspell: ignore fontawesome inlinehilite linenums mkdocstrings nbsp pygments pymdownx superfences def_list
+
 [project]
 site_name = "&nbsp;"
 site_url = "https://tpau-cpp-kernal.tpau.group/"
@@ -7,8 +9,14 @@ site_author = "Dieter Baron"
 
 nav = [
     {"T'Pau C++ Kernal" = "index.md"},
-    {"Tutorials" = "Tutorials/index.md"},
-    {"How-To Guides" = "How-To-Guides/index.md"},
+    {"Tutorials" = [
+        {"index.md" = "Tutorials/index.md"},
+        {"Building the Library" = "Tutorials/Building.md"}
+    ]},
+    {"How-To Guides" = [
+        { "index.md" = "How-To-Guides/index.md" },
+        { "Using it in a CMake Project" = "How-To-Guides/Using-cmake.md" }
+    ]},
     {"Reference" = [
         { "index.md" = "Reference/index.md" },
         { "Base64Coder" = "Reference/Base64Coder.md" },
@@ -23,6 +31,7 @@ nav = [
         { "Value" = "Reference/Value.md" }
     ]},
     {"Explanations" = [
+        { "index.md" = "Explanations/index.md" },
         { "Symbols" = "Explanations/Symbols.md" }
     ]},
     {"License" = "License.md"},
@@ -31,6 +40,7 @@ nav = [
 
 extra_css = [
   "assets/styles/mkdocstrings.css",
+  "assets/styles/tpau.css",
   "assets/styles/style.css",
 ]
 
@@ -46,10 +56,12 @@ features = [
     "toc.integrate",
 ]
 
+[project.markdown_extensions.admonition]
+[project.markdown_extensions.def_list]
+[project.markdown_extensions.pymdownx.details]
 [project.markdown_extensions.pymdownx.inlinehilite]
 [project.markdown_extensions.pymdownx.snippets]
 [project.markdown_extensions.pymdownx.superfences]
-[project.markdown_extensions.def_list]
 [project.markdown_extensions.pymdownx.highlight]
 anchor_linenums = true
 line_spans = "__span"

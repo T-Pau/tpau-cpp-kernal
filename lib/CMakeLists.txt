@@ -1,3 +1,5 @@
+# cspell:ignore INCLUDEDIR
+
 set(KERNAL_SOURCES
         Base64Coder.cc
         Coder.cc
@@ -36,6 +38,7 @@ set(KERNAL_PUBLIC_HEADERS
 )
 
 add_library(tpau-cpp-kernal ${KERNAL_SOURCES})
+add_library(tpau-cpp-kernal::tpau-cpp-kernal ALIAS tpau-cpp-kernal)
 
 target_include_directories(tpau-cpp-kernal
         PUBLIC
@@ -46,6 +49,7 @@ target_include_directories(tpau-cpp-kernal
 )
 
 install(TARGETS tpau-cpp-kernal
+        EXPORT ${PROJECT_NAME}-targets
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/tpau-cpp-kernal
