@@ -74,8 +74,7 @@ pygments_lang_class = true
 default_handler = "doxygen"
 
 [project.plugins.mkdocstrings.handlers.doxygen]
-paths = ["lib"]
-include_directories = { lib = "tpau-cpp-kernal" }
+paths = ["tpau-cpp-kernal"]
 options = { show_protected = true }
 
 

@@ -56,7 +56,7 @@ ADD_DEFINITIONS("-DHAVE_CONFIG_H")
 enable_testing()
 
 # Targets
-add_subdirectory(lib)
+add_subdirectory(tpau-cpp-kernal)
 add_subdirectory(tests)
 
 # write out config file

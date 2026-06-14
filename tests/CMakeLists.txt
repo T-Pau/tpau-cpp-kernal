@@ -7,7 +7,7 @@ set(TEST_PROGRAMS
 
 foreach(test_program IN LISTS TEST_PROGRAMS)
     add_executable(${test_program} ${test_program}.cc)
-    target_include_directories(${test_program} PRIVATE BEFORE ${PROJECT_SOURCE_DIR}/lib)
+    target_include_directories(${test_program} PRIVATE BEFORE ${PROJECT_SOURCE_DIR}/tpau-cpp-kernal)
     target_link_libraries(${test_program} PRIVATE tpau-cpp-kernal Catch2::Catch2WithMain)
     catch_discover_tests(${test_program})
 endforeach()
