@@ -15,7 +15,7 @@ SET(CMAKE_CXX_EXTENSIONS OFF)
 
 INCLUDE(GNUInstallDirs)
 
-find_package(Catch2 3 REQUIRED)
+find_package(Catch2 3 OPTIONAL)
 
 set(ARCHIVE_NAME ${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION})
 IF(NOT TARGET dist)
@@ -57,7 +57,12 @@ enable_testing()
 
 # Targets
 add_subdirectory(tpau-cpp-kernal)
-add_subdirectory(tests)
+
+if(Catch2_FOUND)
+    add_subdirectory(tests)
+else()
+    message(WARNING "Catch2 not found, skipping tests")
+endif(Catch2_FOUND)
 
 # write out config file
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)

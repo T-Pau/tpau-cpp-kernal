@@ -72,9 +72,23 @@ jobs:
       run: brew install catch2
     - name: Install Catch2 (Windows)
       if: matrix.os == 'windows-latest'
-      run: vcpkg install catch2
+      run: vcpkg install catch2:x64-windows
 
-    - name: Configure CMake
+    - name: Configure CMake (Windows with vcpkg)
+      if: matrix.os == 'windows-latest'
+      shell: bash
+      run: >
+        cmake -B ${{ steps.strings.outputs.build-output-dir }}
+        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -DCMAKE_INSTALL_PREFIX=${{ steps.strings.outputs.packages-dir }}
+        -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+        -DVCPKG_TARGET_TRIPLET=x64-windows
+        -S ${{ github.workspace }}
+
+    - name: Configure CMake (Non-Windows)
+      if: matrix.os != 'windows-latest'
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: >
