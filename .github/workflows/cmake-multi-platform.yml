@@ -12,9 +12,6 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
 
-    env:
-      PACKAGES_DIR: ${{ runner.temp }}/packages
-
     strategy:
       # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations. Consider changing this to true when your workflow is stable.
       fail-fast: false
@@ -65,6 +62,7 @@ jobs:
       shell: bash
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+        echo "packages-dir=$HOME/packages" >> "$GITHUB_OUTPUT"
 
     - name: Install Catch2 (Linux)
       if: matrix.os == 'ubuntu-latest'
@@ -84,7 +82,7 @@ jobs:
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -DCMAKE_INSTALL_PREFIX=${{ env.PACKAGES_DIR }}
+        -DCMAKE_INSTALL_PREFIX=${{ steps.strings.outputs.packages-dir }}
         -S ${{ github.workspace }}
 
     - name: Build
@@ -105,4 +103,4 @@ jobs:
       with:
         name: tpau-cpp-kernal-${{ matrix.os }}-${{ matrix.name_extra }}
         path: |
-          ${{env.PACKAGES_DIR}}
+          ${{ steps.strings.outputs.packages-dir }}
