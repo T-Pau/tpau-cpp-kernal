@@ -71,6 +71,7 @@ if(CMAKE_SYSTEM_NAME MATCHES BSD)
   set(PKG_CONFIG_RPATH "-Wl,-R\${libdir}")
 endif(CMAKE_SYSTEM_NAME MATCHES BSD)
 configure_file(tpau-cpp-kernal.pc.in tpau-cpp-kernal.pc @ONLY)
+configure_file(tpau-cpp-kernal-uninstalled.pc.in tpau-cpp-kernal-uninstalled.pc @ONLY)
 install(FILES ${PROJECT_BINARY_DIR}/tpau-cpp-kernal.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 # CMake config files

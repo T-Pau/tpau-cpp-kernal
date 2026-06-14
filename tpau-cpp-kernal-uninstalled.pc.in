@@ -1,0 +1,15 @@
+# This pkg-config file is for using the library directly from the build
+# directory, without installing it. This only works if the library is 
+# built as a static library.
+
+# cspell: words Cflags includedir ltpau 
+
+prefix=@PROJECT_BINARY_DIR@
+libdir=${prefix}/tpau-cpp-kernal
+includedir=${prefix}
+
+Name: tpau-cpp-kernal-uninstalled
+Description: collection of C++ classes and functions (uninstalled version)
+Version: @PROJECT_VERSION@
+Libs: -L${libdir} -ltpau-cpp-kernal
+Cflags: -I${includedir}

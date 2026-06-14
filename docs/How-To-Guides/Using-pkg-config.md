@@ -17,17 +17,13 @@ LDFLAGS += $(shell pkg-config --libs tpau-cpp-kernal)
 
 This will link all programs against the library and its dependencies. How to add it only for certain targets depends on your build system and is beyond the scope of this guide, but in general you can add the output of `pkg-config` to the compiler and linker flags for those targets instead of `LDFLAGS`.
 
-If you are using the library from its build directory, pkg-config will not be able to find it. In that case, you can add the include directory and library directory manually:
+If you are using the library from its build directory, you will have to tell pkg-config where to find the configuration file and use the package name `tpau-cpp-kernal-uninstalled`. It is in the top level of the build directory.
 
 ```make
 TPAU_CPP_KERNAL_DIR = /path/to/tpau-cpp-kernal/build
-CXXFLAGS += -I$(TPAU_CPP_KERNAL_DIR)/lib
-LDFLAGS += -L$(TPAU_CPP_KERNAL_DIR)/lib -ltpau-cpp-kernal
+CXXFLAGS += $(shell pkg-config --with-path=$(TPAU_CPP_KERNAL_DIR) --cflags tpau-cpp-kernal-uninstalled)
+LDFLAGS += $(shell pkg-config --with-path=$(TPAU_CPP_KERNAL_DIR) --libs tpau-cpp-kernal-uninstalled)
 ```
-
-!!! todo
-
-    Add a pkg-config file to use the library from its build directory without having to add the include and library directories manually, then document how to use it here.
 
 
 ## Using the Library in Your Code
