@@ -115,6 +115,6 @@ jobs:
     - name: Upload Package
       uses: actions/upload-artifact@v7
       with:
-        name: tpau-cpp-kernal-${{ matrix.os }}-${{ matrix.name_extra }}
+        name: tpau-cpp-kernal-${{ matrix.os }}-${{ matrix.c_compiler }}
         path: |
           ${{ steps.strings.outputs.packages-dir }}
