@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      PACKAGES_DIR: $HOME/packages
+      PACKAGES_DIR: ${{ env.HOME }}/packages
 
     strategy:
       # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations. Consider changing this to true when your workflow is stable.
