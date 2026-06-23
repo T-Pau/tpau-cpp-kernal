@@ -52,7 +52,7 @@ jobs:
             c_compiler: cl
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         submodules: recursive
 
@@ -76,32 +76,35 @@ jobs:
 
     - name: Configure CMake (Windows with vcpkg)
       if: matrix.os == 'windows-latest'
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}
       shell: bash
       run: >
-        cmake -B ${{ steps.strings.outputs.build-output-dir }}
+        cmake
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -DCMAKE_INSTALL_PREFIX=${{ steps.strings.outputs.packages-dir }}
+        -DCMAKE_INSTALL_PREFIX="${{ steps.strings.outputs.packages-dir }}"
         -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
         -DVCPKG_TARGET_TRIPLET=x64-windows
-        -S ${{ github.workspace }}
+        -S ..
 
     - name: Configure CMake (Non-Windows)
       if: matrix.os != 'windows-latest'
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: >
-        cmake -B ${{ steps.strings.outputs.build-output-dir }}
+        cmake
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -DCMAKE_INSTALL_PREFIX=${{ steps.strings.outputs.packages-dir }}
-        -S ${{ github.workspace }}
+        -DCMAKE_INSTALL_PREFIX="${{ steps.strings.outputs.packages-dir }}"
+        -S ..
 
     - name: Build
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
-      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}
+      run: cmake --build . --config ${{ matrix.build_type }}
 
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
@@ -110,7 +113,8 @@ jobs:
       run: ctest --build-config ${{ matrix.build_type }}
     
     - name: Install
-      run: cmake --install ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}
+      run: cmake --install . --config ${{ matrix.build_type }}
     
     - name: Upload Package
       uses: actions/upload-artifact@v7
