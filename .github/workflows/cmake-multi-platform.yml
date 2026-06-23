@@ -111,6 +111,8 @@ jobs:
 
     - name: Build
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
+      # To debug compile errors, show the full command line for compilation:
+      #   -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON 
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       run: cmake --build . --config ${{ matrix.build_type }}
 
@@ -118,7 +120,7 @@ jobs:
       # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: ctest --build-config ${{ matrix.build_type }}
+      run: ctest --output-on-failure --build-config ${{ matrix.build_type }}
     
     - name: Install
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
