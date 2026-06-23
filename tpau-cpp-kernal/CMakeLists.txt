@@ -42,9 +42,9 @@ add_library(tpau-cpp-kernal::tpau-cpp-kernal ALIAS tpau-cpp-kernal)
 
 target_include_directories(tpau-cpp-kernal
         PUBLIC
-                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-                $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tpau-cpp-kernal>
+                $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
         PRIVATE
+                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                 ${PROJECT_BINARY_DIR}
 )
 
@@ -52,7 +52,6 @@ install(TARGETS tpau-cpp-kernal
         EXPORT ${PROJECT_NAME}-targets
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/tpau-cpp-kernal
 )
 
 install(FILES ${KERNAL_PUBLIC_HEADERS}
