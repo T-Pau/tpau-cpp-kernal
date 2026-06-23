@@ -30,6 +30,8 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include "config.h"
+
 #if defined(HAVE_STRERROR_S) && !defined(HAVE_STRERRORLEN_S)
 #define strerrorlen_s(errnum) 8192
 #endif
