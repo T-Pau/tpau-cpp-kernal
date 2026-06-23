@@ -19,7 +19,7 @@ cd tpau-cpp-kernal
 
 2. Create a build directory and navigate to it:
 ```bash
-mkdir build
+cmake -E make_directory build
 cd build
 ```
 

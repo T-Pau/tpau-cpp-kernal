@@ -61,8 +61,13 @@ jobs:
       id: strings
       shell: bash
       run: |
+        packages_dir="$HOME/packages"
+        if [[ "$packages_dir" == /c/* ]]; then
+          # Convert the path to a Windows-style path if it is a Cygwin-style path (e.g., /c/Users/runneradmin/packages -> C:\Users\runneradmin\packages)
+          packages_dir="$(cygpath -w "$packages_dir")"
+        fi
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-        echo "packages-dir=$HOME/packages" >> "$GITHUB_OUTPUT"
+        echo "packages-dir=$packages_dir" >> "$GITHUB_OUTPUT"
 
     - name: Install Catch2 (Linux)
       if: matrix.os == 'ubuntu-latest'
