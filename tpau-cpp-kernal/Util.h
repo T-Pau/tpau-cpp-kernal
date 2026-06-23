@@ -32,6 +32,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <cstdarg>
 #include <filesystem>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -75,6 +76,14 @@ std::string join(const std::vector<Symbol>& symbols, const std::string& separato
  * @return The file name with the replaced extension.
  */
 std::filesystem::path replace_extension(const std::filesystem::path& file_name, const std::string& extension);
+
+/**
+ * Get a string representation of a system error code.
+ *
+ * @param errnum The error code to get the string representation of. If not provided, the current value of `errno` will be used.
+ * @return The string representation of the error code.
+ */
+std::string strerror_string(std::optional<int> errnum);
 
 } // namespace tpau::cpp_kernal
 

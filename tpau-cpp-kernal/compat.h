@@ -1,5 +1,8 @@
+#ifndef HAD_TPAU_CPP_KERNAL_COMPAT_H
+#define HAD_TPAU_CPP_KERNAL_COMPAT_H
+
 /*
-Copyright (C) Dieter Baron and Thomas Klausner
+Copyright (C) Dieter Baron
 
 The authors can be contacted at <tpau-cpp-kernal@tpau.group>
 
@@ -27,30 +30,8 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "Exception.h"
+#if defined(HAVE_STRERROR_S) && !defined(HAVE_STRERRORLEN_S)
+#define strerrorlen_s(errnum) 8192
+#endif
 
-#include <cstring>
-
-#include "Util.h"
-
-namespace tpau::cpp_kernal {
-
-Exception::Exception(const char* format, ...) {
-    va_list ap;
-    va_start(ap, format);
-    message = string_format_v(format, ap);
-    va_end(ap);
-}
-
-Exception Exception::append_detail(const std::string& str) {
-    message += ": " + str;
-
-    return *this;
-}
-
-Exception Exception::append_system_error(std::optional<int> code) { return append_detail(strerror_string(code)); }
-
-
-const char* Exception::what() const noexcept { return message.c_str(); }
-
-} // namespace tpau::cpp_kernal
+#endif // HAD_TPAU_CPP_KERNAL_COMPAT_H

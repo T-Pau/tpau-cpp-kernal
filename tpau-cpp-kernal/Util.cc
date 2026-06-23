@@ -32,6 +32,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <cstring>
 #include <filesystem>
 
+#include "compat.h"
+
 namespace tpau::cpp_kernal {
 
 std::string string_format(const char* format, ...) {
@@ -84,6 +86,19 @@ std::string join(const std::vector<Symbol>& symbols, const std::string& separato
     }
 
     return s;
+}
+
+std::string strerror_string(std::optional<int> errnum) {
+    if (!errnum) {
+        errnum = errno;
+    }
+#if HAVE_STRERROR_S
+    char buf[strerrorlen_s(*errnum)];
+    strerror_s(buf, sizeof(buf), *errnum);
+    return std::string(buf);
+#else
+    return std::string(strerror(*errnum));
+#endif
 }
 
 } // namespace tpau::cpp_kernal

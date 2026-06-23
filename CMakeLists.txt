@@ -13,9 +13,13 @@ SET(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 SET(CMAKE_CXX_EXTENSIONS OFF)
 
+include(CheckFunctionExists)
 INCLUDE(GNUInstallDirs)
 
 find_package(Catch2 3)
+
+check_function_exists(strerror_s HAVE_STRERROR_S)
+check_function_exists(strerrorlen_s HAVE_STRERRORLEN_S)
 
 set(ARCHIVE_NAME ${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION})
 IF(NOT TARGET dist)

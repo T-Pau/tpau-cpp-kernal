@@ -35,6 +35,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <ranges>
 
 #include "Exception.h"
+#include "Util.h"
 
 namespace tpau::cpp_kernal {
 
@@ -64,7 +65,7 @@ const std::vector<std::string>& FileReader::read(Symbol file_name, bool optional
         return empty_file;
     }
     else {
-        throw Exception("can't open '%s': %s", file_name.c_str(), strerror(errno));
+        throw Exception("can't open '%s': %s", file_name.c_str(), strerror_string(errno).c_str());
     }
 }
 
@@ -78,7 +79,7 @@ std::string FileReader::read_binary(Symbol file_name, bool optional) {
         return "";
     }
     else {
-        throw Exception("can't open '%s': %s", file_name.c_str(), strerror(errno));
+        throw Exception("can't open '%s': %s", file_name.c_str(), strerror_string(errno).c_str());
     }
 }
 

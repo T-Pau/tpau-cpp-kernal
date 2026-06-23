@@ -73,7 +73,7 @@ int64_t Value::signed_value() const {
         return raw_signed_value();
 
     case UNSIGNED:
-        if (raw_unsigned_value() > std::numeric_limits<int64_t>::max()) {
+        if (raw_unsigned_value() > static_cast<uint64_t>(std::numeric_limits<int64_t>::max())) {
             throw Exception("can't convert too large value to signed");
         }
         return static_cast<int64_t>(raw_unsigned_value());
@@ -384,7 +384,7 @@ Value Value::operator>>(const Value& other) const {
         return Value(raw_unsigned_value() >> other.raw_unsigned_value());
     }
     else if (is_signed() && other.is_unsigned()) {
-        if (other.raw_unsigned_value() > std::numeric_limits<int64_t>::max()) {
+        if (other.raw_unsigned_value() > static_cast<uint64_t>(std::numeric_limits<int64_t>::max())) {
             return Value(static_cast<uint64_t>(0));
         }
         else {
@@ -408,7 +408,7 @@ uint64_t Value::shift_left_unsigned(uint64_t a, uint64_t b) {
 }
 
 int64_t Value::shift_left_signed(int64_t a, uint64_t b) {
-    if (b > std::numeric_limits<int64_t>::max()) {
+    if (b > static_cast<uint64_t>(std::numeric_limits<int64_t>::max())) {
         return -1;
     }
     else {
@@ -422,7 +422,7 @@ Value Value::operator<<(const Value& other) const {
         return Value(shift_left_unsigned(raw_unsigned_value(), other.raw_unsigned_value()));
     }
     else if (is_signed() && other.is_unsigned()) {
-        if (other.raw_unsigned_value() > std::numeric_limits<int64_t>::max()) {
+        if (other.raw_unsigned_value() > static_cast<uint64_t>(std::numeric_limits<int64_t>::max())) {
             throw Exception("integer overflow");
         }
         else {
