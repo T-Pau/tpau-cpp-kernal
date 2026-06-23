@@ -74,6 +74,9 @@ jobs:
       if: matrix.os == 'windows-latest'
       run: vcpkg install catch2:x64-windows
 
+    - name: Create Build Directory
+      run: cmake -E make_directory "${{ steps.strings.outputs.build-output-dir }}"
+
     - name: Configure CMake (Windows with vcpkg)
       if: matrix.os == 'windows-latest'
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
@@ -107,9 +110,9 @@ jobs:
       run: cmake --build . --config ${{ matrix.build_type }}
 
     - name: Test
-      working-directory: ${{ steps.strings.outputs.build-output-dir }}
       # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}
       run: ctest --build-config ${{ matrix.build_type }}
     
     - name: Install
@@ -117,6 +120,7 @@ jobs:
       run: cmake --install . --config ${{ matrix.build_type }}
     
     - name: Upload Package
+      # Until we have an official release, we will use these builds in projects using this library, so keep them.
       uses: actions/upload-artifact@v7
       with:
         name: tpau-cpp-kernal-${{ matrix.os }}-${{ matrix.c_compiler }}
