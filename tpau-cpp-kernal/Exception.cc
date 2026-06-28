@@ -35,13 +35,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace tpau::cpp_kernal {
 
-Exception::Exception(const char* format, ...) {
-    va_list ap;
-    va_start(ap, format);
-    message = string_format_v(format, ap);
-    va_end(ap);
-}
-
 Exception Exception::append_detail(const std::string& str) {
     message += ": " + str;
 

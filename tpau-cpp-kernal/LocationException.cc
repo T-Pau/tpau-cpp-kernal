@@ -1,8 +1,5 @@
-#ifndef HAD_TPAU_CPP_KERNAL_PRINTF_LIKE_H
-#define HAD_TPAU_CPP_KERNAL_PRINTF_LIKE_H
-
 /*
-Copyright (C) Dieter Baron and Thomas Klausner
+Copyright (C) Dieter Baron
 
 The authors can be contacted at <tpau-cpp-kernal@tpau.group>
 
@@ -30,10 +27,8 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#if defined(__GNUC__) && __GNUC__ >= 4
-#define PRINTF_LIKE(n, m) __attribute__((__format__(__printf__, n, m)))
-#else
-#define PRINTF_LIKE(n, m)
-#endif
+#include "LocationException.h"
 
-#endif // HAD_TPAU_CPP_KERNAL_PRINTF_LIKE_H
+#include "Util.h"
+
+namespace tpau::cpp_kernal {} // namespace tpau::cpp_kernal

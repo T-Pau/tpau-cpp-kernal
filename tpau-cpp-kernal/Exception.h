@@ -31,10 +31,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <exception>
+#include <format>
 #include <optional>
 #include <string>
-
-#include "printf_like.h"
 
 namespace tpau::cpp_kernal {
 
@@ -56,9 +55,9 @@ class Exception : public std::exception {
      * Create an exception with a formatted message.
      *
      * @param format The format string for the message.
-     * @param ... The arguments for the format string.
+     * @param args The arguments for the format string.
      */
-    explicit Exception(const char* format, ...) PRINTF_LIKE(2, 3);
+    template <typename... Args> Exception(std::string format, Args&&... args) : message(std::vformat(format, std::make_format_args(args...))) {}
 
     /**
      * Create a new exception with additional information appended to the message.

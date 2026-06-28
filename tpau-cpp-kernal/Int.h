@@ -36,12 +36,53 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace tpau::cpp_kernal {
 
 class Int {
+  /**
+   * This class provides static methods for various integer utility functions.
+   */
   public:
+    /**
+     * Encode the given signed integer value into a string of bytes.
+     * 
+     * @param bytes The string to append the encoded bytes to.
+     * @param value The signed integer value to encode.
+     * @param size The number of bytes to use for the encoding. If 0, the minimum number of bytes required to represent the value will be used.
+     * @param byte_order The byte order to use for the encoding.
+     */
     static void encode(std::string& bytes, int64_t value, uint64_t size, uint64_t byte_order) { encode(bytes, static_cast<uint64_t>(value), size > 0 ? size : minimum_byte_size(value), byte_order); }
+
+    /**
+     * Encode the given unsigned integer value into a string of bytes.
+     * 
+     * @param bytes The string to append the encoded bytes to.
+     * @param value The unsigned integer value to encode.
+     * @param size The number of bytes to use for the encoding. If 0, the minimum number of bytes required to represent the value will be used.
+     * @param byte_order The byte order to use for the encoding.
+     */
     static void encode(std::string& bytes, uint64_t value, uint64_t size, uint64_t byte_order);
+
+    /**
+     * Get the minimum number of bytes required to represent the given signed integer value.
+     * 
+     * @param value The signed integer value.
+     * @return The minimum number of bytes required to represent the value.
+     */
     static size_t minimum_byte_size(int64_t value);
+
+    /**
+     * Get the minimum number of bytes required to represent the given unsigned integer value.
+     * 
+     * @param value The unsigned integer value.
+     * @return The minimum number of bytes required to represent the value.
+     */
     static size_t minimum_byte_size(uint64_t value);
 
+    /**
+     * Align the given value to the specified alignment.
+     * 
+     * @param value The value to align.
+     * @param alignment The alignment boundary.
+     * @return The aligned value.
+     */
     static size_t align(size_t value, size_t alignment);
 };
 

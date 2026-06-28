@@ -86,14 +86,311 @@ class DiagnosticOutput {
 
     void register_category(Symbol category, Severity severity);
 
-    Stream notice(Symbol category, const Location& location) { return output(category, NOTICE, location); }
+    /**
+     * Output a notice with stream interface.
+     *
+     * @param category The category of the notice.
+     * @param location The location of the notice.
+     * @return A stream to output the notice message to.
+     */
+    Stream notice(Symbol category = {}, const Location& location = {}) { return output(category, NOTICE, location); }
+
+    /**
+     * Output a formatted notice.
+     *
+     * @param category The category of the notice.
+     * @param location The location of the notice.
+     * @param format The format string for the notice message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void notice(Symbol category, const Location& location, const std::string& format, Args&&... args) { output(category, NOTICE, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a formatted notice with default category.
+     *
+     * @param location The location of the notice.
+     * @param format The format string for the notice message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void notice(const Location& location, const std::string& format, Args&&... args) { output(Symbol{}, NOTICE, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a formatted notice without location.
+     *
+     * @param category The category of the notice.
+     * @param format The format string for the notice message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void notice(Symbol category, const std::string& format, Args&&... args) { output(category, NOTICE, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a formatted notice with default category and without location.
+     *
+     * @param format The format string for the notice message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void notice(const std::string& format, Args&&... args) { output(Symbol{}, NOTICE, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a notice message.
+     *
+     * @param category The category of the notice.
+     * @param location The location of the notice.
+     * @param message The message of the notice.
+     */
     void notice(Symbol category, const Location& location, const std::string& message) { output(category, NOTICE, location, message); }
-    Stream warning(Symbol category, const Location& location) { return output(category, WARNING, location); }
+
+    /**
+     * Output a notice message with default category.
+     *
+     * @param location The location of the notice.
+     * @param message The message of the notice.
+     */
+    void notice(const Location& location, const std::string& message) { output(Symbol{}, NOTICE, location, message); }
+
+    /**
+     * Output a notice message without location.
+     *
+     * @param message The message of the notice.
+     */
+    void notice(Symbol category, const std::string& message) { output(category, NOTICE, Location{}, message); }
+
+    /**
+     * Output a notice message with default category and without location.
+     *
+     * @param message The message of the notice.
+     */
+    void notice(const std::string& message) { output(Symbol{}, NOTICE, Location{}, message); }
+
+    /**
+     * Output a warning with stream interface.
+     *
+     * @param category The category of the warning.
+     * @param location The location of the warning.
+     * @return A stream to output the warning message to.
+     */
+    Stream warning(Symbol category = {}, const Location& location = {}) { return output(category, WARNING, location); }
+
+    /**
+     * Output a formatted warning.
+     *
+     * @param category The category of the warning.
+     * @param location The location of the warning.
+     * @param format The format string for the warning message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void warning(Symbol category, const Location& location, const std::string& format, Args&&... args) { output(category, WARNING, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a formatted warning with default category.
+     *
+     * @param location The location of the warning.
+     * @param format The format string for the warning message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void warning(const Location& location, const std::string& format, Args&&... args) { output(Symbol{}, WARNING, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a formatted warning without location.
+     *
+     * @param category The category of the warning.
+     * @param format The format string for the warning message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void warning(Symbol category, const std::string& format, Args&&... args) { output(category, WARNING, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a formatted warning with default category and without location.
+     *
+     * @param format The format string for the warning message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void warning(const std::string& format, Args&&... args) { output(Symbol{}, WARNING, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a warning.
+     *
+     * @param category The category of the warning.
+     * @param location The location of the warning.
+     * @param message The message of the warning.
+     */
     void warning(Symbol category, const Location& location, const std::string& message) { output(category, WARNING, location, message); }
-    Stream error(Symbol category, const Location& location) { return output(category, ERROR, location); }
+
+    /**
+     * Output a warning with default category.
+     *
+     * @param location The location of the warning.
+     * @param message The message of the warning.
+     */
+    void warning(const Location& location, const std::string& message) { output(Symbol{}, WARNING, location, message); }
+
+    /**
+     * Output a warning without location.
+     *
+     * @param category The category of the warning.
+     * @param message The message of the warning.
+     */
+    void warning(Symbol category, const std::string& message) { output(category, WARNING, Location{}, message); }
+
+    /**
+     * Output a warning with default category and without location.
+     *
+     * @param message The message of the warning.
+     */
+    void warning(const std::string& message) { output(Symbol{}, WARNING, Location{}, message); }
+
+    /**
+     * Output an error message with stream interface.
+     *
+     * @param category The category of the error.
+     * @param location The location of the error.
+     * @return A stream to output the error message to.
+     */
+    Stream error(Symbol category = {}, const Location& location = {}) { return output(category, ERROR, location); }
+
+    /**
+     * Output a formatted error message.
+     *
+     * @param category The category of the error.
+     * @param location The location of the error.
+     * @param format The format string for the error message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void error(Symbol category, const Location& location, const std::string& format, Args&&... args) { output(category, ERROR, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a formatted error message with default category.
+     *
+     * @param location The location of the error.
+     * @param format The format string for the error message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void error(const Location& location, const std::string& format, Args&&... args) { output(Symbol{}, ERROR, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a formatted error message without location.
+     *
+     * @param category The category of the error.
+     * @param format The format string for the error message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void error(Symbol category, const std::string& format, Args&&... args) { output(category, ERROR, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a formatted error message with default category and without location.
+     *
+     * @param format The format string for the error message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void error(const std::string& format, Args&&... args) { output(Symbol{}, ERROR, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output an error message.
+     *
+     * @param category The category of the error.
+     * @param location The location of the error.
+     * @param message The message of the error.
+     */
     void error(Symbol category, const Location& location, const std::string& message) { output(category, ERROR, location, message); }
+
+    /**
+     * Output an error message with default category.
+     *
+     * @param location The location of the error.
+     * @param message The message of the error.
+     */
+    void error(const Location& location, const std::string& message) { output(Symbol{}, ERROR, location, message); }
+
+    /**
+     * Output an error message without location.
+     *
+     * @param category The category of the error.
+     * @param message The message of the error.
+     */
+    void error(Symbol category, const std::string& message) { output(category, ERROR, Location{}, message); }
+
+    /**
+     * Output an error message with default category and without location.
+     *
+     * @param message The message of the error.
+     */
+    void error(const std::string& message) { output(Symbol{}, ERROR, Location{}, message); }
+
+    /**
+     * Output a message with stream interface.
+     *
+     * @param category The category of the message.
+     * @param severity The severity of the message.
+     * @param location The location of the message.
+     * @return A stream to output the message to.
+     */
     Stream output(Symbol category, Severity severity, const Location& location);
+
+    /**
+     * Output a message with formatting.
+     *
+     * @param category The category of the message.
+     * @param severity The severity of the message.
+     * @param location The location of the message.
+     * @param format The format string for the message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void output(Symbol category, Severity severity, const Location& location, const std::string& format, Args&&... args) { output(category, severity, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a message with default category and formatting.
+     *
+     * @param severity The severity of the message.
+     * @param location The location of the message.
+     * @param format The format string for the message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void output(Severity severity, const Location& location, const std::string& format, Args&&... args) { output(Symbol{}, severity, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a message without location and with formatting.
+     *
+     * @param category The category of the message.
+     * @param severity The severity of the message.
+     * @param format The format string for the message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void output(Symbol category, Severity severity, const std::string& format, Args&&... args) { output(category, severity, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a message with default category, without location and with formatting.
+     *
+     * @param severity The severity of the message.
+     * @param format The format string for the message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> void output(Severity severity, const std::string& format, Args&&... args) { output(Symbol{}, severity, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+
+    /**
+     * Output a message with default category.
+     *
+     * @param severity The severity of the message.
+     * @param location The location of the message.
+     * @param message The message to output.
+     */
+    void output(Severity severity, const Location& location, const std::string& message) { output(Symbol{}, severity, location, message); }
+
+    /**
+     * Output a message without location.
+     *
+     * @param category The category of the message.
+     * @param severity The severity of the message.
+     * @param message The message to output.
+     */
     void output(Symbol category, Severity severity, const Location& location, const std::string& message);
+
+    /**
+     * Output a message with default category and without location.
+     *
+     * @param severity The severity of the message.
+     * @param message The message to output.
+     */
+    void output(Severity severity, const std::string& message) { output(Symbol{}, severity, Location{}, message); }
 
     [[nodiscard]] bool failed() const { return fail_flag; }
 

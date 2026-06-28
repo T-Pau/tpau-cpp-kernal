@@ -41,59 +41,202 @@ namespace tpau::cpp_kernal {
 } // fix auto-indentation
 #endif
 
+/**
+ * The parsed command line options and arguments.
+ */
 class ParsedCommandline {
   public:
+    /**
+     * A parsed command line option.
+     */
     class OptionValue {
       public:
+        /**
+         * Create a parsed command line option with the given name and argument.
+         *
+         * @param name The name of the option.
+         * @param argument The argument of the option. Empty string for options without argument.
+         */
         OptionValue(std::string name_, std::string argument_) : name(std::move(name_)), argument(std::move(argument_)) {}
 
+        /**
+         * The name of the option.
+         */
         std::string name;
-        std::string argument; // empty string for options without argument
+
+        /**
+         * The argument of the option. Empty string for options without argument.
+         */
+        std::string argument;
     };
 
+    /**
+     * Find the first occurrence of the option with the given name.
+     *
+     * @param name The name of the option to find.
+     *
+     * @return The argument of the option, or `{}` if the option was not found.
+     */
     [[nodiscard]] std::optional<std::string> find_first(const std::string& name) const;
+
+    /**
+     * Find the last occurrence of the option with the given name.
+     *
+     * @param name The name of the option to find.
+     *
+     * @return The argument of the option, or `{}` if the option was not found.
+     */
     [[maybe_unused]] [[nodiscard]] std::optional<std::string> find_last(const std::string& name) const;
 
+    /**
+     * Add an argument to the parsed command line.
+     *
+     * @param name The argument to add.
+     */
     void add_argument(std::string name) { arguments.emplace_back(std::move(name)); }
+
+    /**
+     * Add an option to the parsed command line.
+     *
+     * @param name The name of the option.
+     * @param argument The argument of the option. Empty string for options without argument.
+     */
     void add_option(std::string name, std::string argument) { options.emplace_back(std::move(name), std::move(argument)); }
 
+    /**
+     * The parsed command line options.
+     */
     std::vector<OptionValue> options;
+
+    /**
+     * The parsed command line arguments.
+     */
     std::vector<std::string> arguments;
 };
 
+/**
+ * A command line parser.
+ *
+ * It parses command line options and arguments according to the given options and arguments specification. It also provides usage and version information.
+ */
 class Commandline {
   public:
+    /**
+     * A command line option.
+     */
     class Option {
       public:
+        /**
+         * Create a command line option with both short and long variants and an argument.
+         *
+         * @param name The long name of the option. This is specified on the command line by prefixing it with `--` (e.g. "help" for `--help`).
+         * @param short_name The short name of the option. This is specified on the command line by prefixing it with `-` (e.g. 'h' for `-h`).
+         * @param argument_name The name of the argument for the option. This is used in the usage message.
+         * @param description The description of the option. This is used in the usage message.
+         */
         Option(std::string name_, char short_name_, std::string argument_name_, std::string description_) : name(std::move(name_)), short_name(short_name_), argument_name(std::move(argument_name_)), description(std::move(description_)) {}
+
+        /**
+         * Create a command line option with a long variant and an argument.
+         *
+         * @param name The long name of the option. This is specified on the command line by prefixing it with `--` (e.g. "help" for `--help`).
+         * @param argument_name The name of the argument for the option. This is used in the usage message.
+         * @param description The description of the option. This is used in the usage message.
+         */
         Option(std::string name_, std::string argument_name_, std::string description_) : name(std::move(name_)), argument_name(std::move(argument_name_)), description(std::move(description_)) {}
+
+        /**
+         * Create a command line option with both short and long variants and no argument.
+         *
+         * @param name The long name of the option. This is specified on the command line by prefixing it with `--` (e.g. "help" for `--help`).
+         * @param short_name The short name of the option. This is specified on the command line by prefixing it with `-` (e.g. 'h' for `-h`).
+         * @param description The description of the option. This is used in the usage message.
+         */
         Option(std::string name_, char short_name_, std::string description_) : name(std::move(name_)), short_name(short_name_), description(std::move(description_)) {}
+
+        /**
+         * Create a command line option with a long variant and no argument.
+         *
+         * @param name The long name of the option. This is specified on the command line by prefixing it with `--` (e.g. "help" for `--help`).
+         * @param description The description of the option. This is used in the usage message.
+         */
         Option(std::string name_, std::string description_) : name(std::move(name_)), description(std::move(description_)) {}
 
-
+        /// @brief The long name of the option. This is specified on the command line by prefixing it with `--` (e.g. "help" for `--help`).
         std::string name;
+
+        /// @brief The short name of the option. This is specified on the command line by prefixing it with `-` (e.g. 'h' for `-h`). Empty if the option has no short name.
         std::optional<char> short_name;
+
+        /// @brief The name of the argument for the option. This is used in the usage message. Empty if the option has no argument.
         std::string argument_name;
+
+        /// @brief The description of the option. This is used in the usage message.
         std::string description;
 
+        /**
+         * Check if the option has an argument.
+         *
+         * @return `true` if the option has an argument, `false` otherwise.
+         */
         [[nodiscard]] bool has_argument() const { return !argument_name.empty(); }
 
         bool operator<(const Option& other) const;
     };
 
+    /**
+     * Create a command line parser.
+     *
+     * @param options The list of options supported by the command line parser.
+     * @param arguments The description of the positional arguments. This is used in the usage message.
+     * @param header The header of the usage message.
+     * @param footer The footer of the usage message.
+     * @param version The version of the program.
+     */
     Commandline(std::vector<Option> options, std::string arguments, std::string header, std::string footer, std::string version);
 
+    /**
+     * Add an option to the command line parser.
+     *
+     * @param option The option to add.
+     */
     void add_option(Option option);
 
+    /// @brief The list of options supported by the command line parser.
     std::vector<Option> options;
+
+    /// @brief The name of the program.
     std::string program_name;
+
+    /// @brief The description of the positional arguments. This is used in the usage message.
     std::string arguments;
+
+    /// @brief The header of the usage message.
     std::string header;
+
+    /// @brief The footer of the usage message.
     std::string footer;
+
+    /// @brief The version of the program.
     std::string version;
 
+    /**
+     * Parse the command line arguments and options.
+     *
+     * The command line arguments are expected as a list of C strings with `argv[0]` being the program name. This is the same format as the arguments passed to the `main()` function.
+     *
+     * @param argc The number of command line arguments.
+     * @param argv The command line arguments.
+     * @return The parsed command line.
+     */
     ParsedCommandline parse(int argc, char* const argv[]);
 
+    /**
+     * Print the usage message to the given `FILE`.
+     *
+     * @param full If `true`, print the full usage message. If `false`, print a brief usage message.
+     * @param fout The `FILE` to print the usage message to.
+     */
     void usage(bool full = false, FILE* fout = stdout);
 
   private:

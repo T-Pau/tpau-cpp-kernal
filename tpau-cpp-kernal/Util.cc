@@ -36,37 +36,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace tpau::cpp_kernal {
 
-std::string string_format(const char* format, ...) {
-    va_list ap;
-    va_start(ap, format);
-    auto string = string_format_v(format, ap);
-    va_end(ap);
-    return string;
-}
-
-
-std::string string_format_v(const char* format, va_list ap) {
-    auto size = strlen(format) + 50;
-    std::string str;
-    va_list ap2;
-    while (true) {
-        str.resize(size);
-        va_copy(ap2, ap);
-        int n = vsnprintf((char*)str.data(), size, format, ap2);
-        va_end(ap2);
-        if (n > -1 && static_cast<size_t>(n) < size) {
-            str.resize(static_cast<size_t>(n));
-            return str;
-        }
-        if (n > -1) {
-            size = static_cast<size_t>(n) + 1;
-        }
-        else {
-            size *= 2;
-        }
-    }
-}
-
 
 std::filesystem::path replace_extension(const std::filesystem::path& file_name, const std::string& extension) { return file_name.parent_path() / (file_name.stem().string() + "." + extension); }
 

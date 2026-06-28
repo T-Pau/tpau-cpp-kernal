@@ -768,4 +768,12 @@ template <> struct std::hash<tpau::cpp_kernal::Value> {
     }
 };
 
+template <> struct std::formatter<tpau::cpp_kernal::Value::Type> : std::formatter<std::string_view> {
+    auto format(const tpau::cpp_kernal::Value::Type& t, format_context& ctx) const {
+        // We delegate the actual rendering to the base class.
+        // It will use the options parsed by the inherited parse() method.
+        return std::formatter<std::string_view>::format(tpau::cpp_kernal::Value::type_name(t), ctx);
+    }
+};
+
 #endif // HAD_TPAU_CPP_KERNAL_VALUE_H

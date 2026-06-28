@@ -52,7 +52,7 @@ struct StringPtrEqual {
 
 /**
  * A Symbol represents a string in a way that allows copying and comparison in constant time.
- * 
+ *
  * Even though it uses the global symbol table and C++ does not guarantee the order of initialization of global variables, it is safe to use the `Symbol` constructor in global initializers.
  */
 class Symbol {
@@ -196,4 +196,11 @@ template <> struct std::hash<tpau::cpp_kernal::Symbol> {
     std::size_t operator()(tpau::cpp_kernal::Symbol const& symbol) const noexcept { return std::hash<const char*>{}(symbol.c_str()); }
 };
 
+template <> struct std::formatter<tpau::cpp_kernal::Symbol> : std::formatter<std::string_view> {
+    auto format(const tpau::cpp_kernal::Symbol& s, format_context& ctx) const {
+        // We delegate the actual rendering to the base class.
+        // It will use the options parsed by the inherited parse() method.
+        return std::formatter<std::string_view>::format(s.str(), ctx);
+    }
+};
 #endif // HAD_TPAU_CPP_KERNAL_SYMBOL_H

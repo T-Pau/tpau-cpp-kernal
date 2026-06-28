@@ -52,7 +52,7 @@ uint64_t Value::unsigned_value() const {
         return raw_unsigned_value();
     }
     else {
-        throw Exception("can't convert value of type %s to unsigned", type_name().c_str());
+        throw Exception("can't convert value of type {} to unsigned", type_name());
     }
 }
 
@@ -63,11 +63,11 @@ int64_t Value::signed_value() const {
     case FLOAT:
     case STRING:
     case VOID:
-        throw Exception("can't convert value of type %s to signed", type_name().c_str());
+        throw Exception("can't convert value of type {} to signed", type_name());
 
     case NUMBER:
     case INTEGER:
-        throw Exception("internal error: value can't have abstract type %s", type_name().c_str());
+        throw Exception("internal error: value can't have abstract type {}", type_name());
 
     case SIGNED:
         return raw_signed_value();
@@ -79,7 +79,7 @@ int64_t Value::signed_value() const {
         return static_cast<int64_t>(raw_unsigned_value());
     }
 
-    throw Exception("internal error: invalid value type %d", type());
+    throw Exception("internal error: invalid value type {}", type());
 }
 
 Symbol Value::symbol_value() const {
@@ -87,7 +87,7 @@ Symbol Value::symbol_value() const {
         return raw_symbol_value();
     }
     else {
-        throw Exception("can't convert value of type %s to string", type_name().c_str());
+        throw Exception("can't convert value of type {} to string", type_name());
     }
 }
 
@@ -97,11 +97,11 @@ double Value::float_value() const {
     case BOOLEAN:
     case STRING:
     case VOID:
-        throw Exception("can't convert value of type %s to float", type_name().c_str());
+        throw Exception("can't convert value of type {} to float", type_name());
 
     case NUMBER:
     case INTEGER:
-        throw Exception("internal error: value can't have abstract type %s", type_name().c_str());
+        throw Exception("internal error: value can't have abstract type {}", type_name());
 
     case FLOAT:
         return raw_float_value();
@@ -135,14 +135,14 @@ bool Value::boolean_value() const {
 
     case BINARY:
     case VOID:
-        throw Exception("can't convert value of type %s to boolean", type_name().c_str());
+        throw Exception("can't convert value of type {} to boolean", type_name());
 
     case NUMBER:
     case INTEGER:
-        throw Exception("internal error: value can't have abstract type %s", type_name().c_str());
+        throw Exception("internal error: value can't have abstract type {}", type_name());
     }
 
-    throw Exception("internal error: invalid value type %d", type());
+    throw Exception("internal error: invalid value type {}", type());
 }
 
 Value::Type Value::type() const {
@@ -191,7 +191,7 @@ std::string Value::type_name(Type type) {
         return "void";
     }
 
-    throw Exception("internal error: invalid value type %d", type);
+    throw Exception("internal error: invalid value type {}", type);
 }
 
 std::string Value::binary_value() const {
@@ -199,7 +199,7 @@ std::string Value::binary_value() const {
         return raw_binary_value();
     }
     else {
-        throw Exception("can't convert value of type %s to binary", type_name().c_str());
+        throw Exception("can't convert value of type {} to binary", type_name());
     }
 }
 
@@ -232,7 +232,7 @@ Value Value::operator+(const Value& other) const {
         }
     }
     else {
-        throw Exception("can't add %s and %s", type_name().c_str(), other.type_name().c_str());
+        throw Exception("can't add {} and {}", type_name(), other.type_name());
     }
 }
 
@@ -258,7 +258,7 @@ Value Value::operator-(const Value& other) const {
         return Value(add_unsigned(raw_unsigned_value(), negate_signed(other.raw_signed_value())));
     }
     else {
-        throw Exception("can't subtract %s and %s", type_name().c_str(), other.type_name().c_str());
+        throw Exception("can't subtract {} and {}", type_name(), other.type_name());
     }
 }
 
@@ -282,7 +282,7 @@ Value Value::operator/(const Value& other) const {
         return Value(negate_unsigned(raw_unsigned_value() / negate_signed(other.raw_signed_value())));
     }
     else {
-        throw Exception("can't divide %s and %s", type_name().c_str(), other.type_name().c_str());
+        throw Exception("can't divide {} and {}", type_name(), other.type_name());
     }
 }
 
@@ -303,7 +303,7 @@ Value Value::operator*(const Value& other) const {
         return Value(negate_unsigned(multiply_unsigned(raw_unsigned_value(), negate_signed(other.raw_signed_value()))));
     }
     else {
-        throw Exception("can't multiply %s and %s", type_name().c_str(), other.type_name().c_str());
+        throw Exception("can't multiply {} and {}", type_name(), other.type_name());
     }
 }
 
@@ -353,7 +353,7 @@ Value Value::operator|(const Value& other) const {
         return Value(raw_unsigned_value() | other.raw_unsigned_value());
     }
     else {
-        throw Exception("can't bitwise or %s and %s", type_name().c_str(), other.type_name().c_str());
+        throw Exception("can't bitwise or {} and {}", type_name(), other.type_name());
     }
 }
 
@@ -362,7 +362,7 @@ Value Value::operator&(const Value& other) const {
         return Value(raw_unsigned_value() & other.raw_unsigned_value());
     }
     else {
-        throw Exception("can't bitwise and %s and %s", type_name().c_str(), other.type_name().c_str());
+        throw Exception("can't bitwise and {} and {}", type_name(), other.type_name());
     }
 }
 
@@ -371,7 +371,7 @@ Value Value::operator^(const Value& other) const {
         return Value(raw_unsigned_value() ^ other.raw_unsigned_value());
     }
     else {
-        throw Exception("can't bitwise exclusive or %s and %s", type_name().c_str(), other.type_name().c_str());
+        throw Exception("can't bitwise exclusive or {} and {}", type_name(), other.type_name());
     }
 }
 
@@ -398,7 +398,7 @@ Value Value::operator>>(const Value& other) const {
         return Value(shift_left_signed(raw_signed_value(), negate_signed(other.raw_signed_value())));
     }
     else {
-        throw Exception("can't shift %s and %s", type_name().c_str(), other.type_name().c_str());
+        throw Exception("can't shift {} and {}", type_name(), other.type_name());
     }
 }
 
@@ -436,7 +436,7 @@ Value Value::operator<<(const Value& other) const {
         return Value(raw_signed_value() >> negate_signed(other.raw_signed_value()));
     }
     else {
-        throw Exception("can't shift %s and %s", type_name().c_str(), other.type_name().c_str());
+        throw Exception("can't shift {} and {}", type_name(), other.type_name());
     }
 }
 
@@ -465,10 +465,10 @@ bool Value::operator==(const Value& other) const {
 
     case NUMBER:
     case INTEGER:
-        throw Exception("internal error: value can't have abstract type %s", type_name().c_str());
+        throw Exception("internal error: value can't have abstract type {}", type_name());
     }
 
-    throw Exception("internal error: invalid value type %d", type());
+    throw Exception("internal error: invalid value type {}", type());
 }
 
 bool Value::operator<(const Value& other) const {
@@ -492,10 +492,10 @@ bool Value::operator<(const Value& other) const {
 
     case NUMBER:
     case INTEGER:
-        throw Exception("internal error: value can't have abstract type %s", type_name().c_str());
+        throw Exception("internal error: value can't have abstract type {}", type_name());
     }
 
-    throw Exception("internal error: invalid value type %d", type());
+    throw Exception("internal error: invalid value type {}", type());
 }
 
 bool Value::operator<=(const Value& other) const {
@@ -519,10 +519,10 @@ bool Value::operator<=(const Value& other) const {
 
     case NUMBER:
     case INTEGER:
-        throw Exception("internal error: value can't have abstract type %s", type_name().c_str());
+        throw Exception("internal error: value can't have abstract type {}", type_name());
     }
 
-    throw Exception("internal error: invalid value type %d", type());
+    throw Exception("internal error: invalid value type {}", type());
 }
 
 Value Value::operator%(const Value& other) const {
@@ -534,7 +534,7 @@ Value Value::operator%(const Value& other) const {
     }
     // TODO: signed
     else {
-        throw Exception("can't compute modulus of %s and %s", type_name().c_str(), other.type_name().c_str());
+        throw Exception("can't compute modulus of {} and {}", type_name(), other.type_name());
     }
 }
 
@@ -570,7 +570,7 @@ Value Value::operator-() const {
     case BOOLEAN:
     case STRING:
     case VOID:
-        throw Exception("can't negate %s", type_name().c_str());
+        throw Exception("can't negate {}", type_name());
 
     case FLOAT:
         return Value(-raw_float_value());
@@ -583,10 +583,10 @@ Value Value::operator-() const {
 
     case NUMBER:
     case INTEGER:
-        throw Exception("internal error: value can't have abstract type %s", type_name().c_str());
+        throw Exception("internal error: value can't have abstract type {}", type_name());
     }
 
-    throw Exception("internal error: invalid value type %d", type());
+    throw Exception("internal error: invalid value type {}", type());
 }
 
 Value Value::operator~() const {
@@ -596,7 +596,7 @@ Value Value::operator~() const {
     case FLOAT:
     case STRING:
     case VOID:
-        throw Exception("can't bitwise negate %s", type_name().c_str());
+        throw Exception("can't bitwise negate {}", type_name());
 
     case SIGNED:
         return Value(~raw_signed_value());
@@ -606,10 +606,10 @@ Value Value::operator~() const {
 
     case NUMBER:
     case INTEGER:
-        throw Exception("internal error: value can't have abstract type %s", type_name().c_str());
+        throw Exception("internal error: value can't have abstract type {}", type_name());
     }
 
-    throw Exception("internal error: invalid value type %d", type());
+    throw Exception("internal error: invalid value type {}", type());
 }
 
 std::optional<uint64_t> Value::default_size() const {
@@ -636,7 +636,7 @@ std::optional<uint64_t> Value::default_size() const {
 
     case NUMBER:
     case INTEGER:
-        throw Exception("internal error: value can't have abstract type %s", type_name().c_str());
+        throw Exception("internal error: value can't have abstract type {}", type_name());
     }
 
     if (implicit_default_size) {
@@ -734,7 +734,7 @@ std::string Value::string_value() const {
     case BINARY:
     case BOOLEAN:
     case VOID:
-        throw Exception("can't convert %s to string", type_name().c_str());
+        throw Exception("can't convert {} to string", type_name());
 
     case FLOAT:
         return std::to_string(raw_float_value());
@@ -750,10 +750,10 @@ std::string Value::string_value() const {
 
     case NUMBER:
     case INTEGER:
-        throw Exception("internal error: value can't have abstract type %s", type_name().c_str());
+        throw Exception("internal error: value can't have abstract type {}", type_name());
     }
 
-    throw Exception("internal error: invalid value type %d", type());
+    throw Exception("internal error: invalid value type {}", type());
 }
 
 std::ostream& operator<<(std::ostream& stream, const Value& value) {
@@ -805,7 +805,7 @@ void Value::serialize(std::ostream& stream) const {
 
     case Value::INTEGER:
     case Value::NUMBER:
-        throw Exception("internal error: value can't have abstract type %s", type_name().c_str());
+        throw Exception("internal error: value can't have abstract type {}", type_name());
     }
 }
 

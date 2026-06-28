@@ -11,6 +11,7 @@ set(KERNAL_SOURCES
         FileSource.cc
         HexCoder.cc
         Location.cc
+        LocationException.cc
         Int.cc
         Path.cc
         Symbol.cc
@@ -30,6 +31,7 @@ set(KERNAL_PUBLIC_HEADERS
         HexCoder.h
         Int.h
         Location.h
+        LocationException.h
         Path.h
         printf_like.h
         Symbol.h

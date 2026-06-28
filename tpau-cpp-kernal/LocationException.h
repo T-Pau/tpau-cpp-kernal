@@ -1,8 +1,8 @@
-#ifndef HAD_TPAU_CPP_KERNAL_UTIL_H
-#define HAD_TPAU_CPP_KERNAL_UTIL_H
+#ifndef HAD_TPAU_CPP_KERNAL_LOCATION_EXCEPTION_H
+#define HAD_TPAU_CPP_KERNAL_LOCATION_EXCEPTION_H
 
 /*
-Copyright (C) Dieter Baron
+Copyright (C) Dieter Baron and Thomas Klausner
 
 The authors can be contacted at <tpau-cpp-kernal@tpau.group>
 
@@ -30,42 +30,42 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <cstdarg>
-#include <filesystem>
+#include <exception>
 #include <optional>
 #include <string>
-#include <vector>
 
-#include "Symbol.h"
+#include "Exception.h"
+#include "Location.h"
 
 namespace tpau::cpp_kernal {
 
 /**
- * Join a vector of symbols into a string with a separator between the symbols.
- *
- * @param symbols The symbols to join.
- * @param separator The separator to use between the symbols. (default: ", ")
- * @return The joined string.
+ * Kernal exceptions with location.
  */
-std::string join(const std::vector<Symbol>& symbols, const std::string& separator = ", ");
+class LocationException : public Exception {
+  public:
+    LocationException() = default;
 
-/**
- * Replace the extension of a file name with a new extension.
- *
- * @param file_name The file name to replace the extension of.
- * @param extension The new extension to use.
- * @return The file name with the replaced extension.
- */
-std::filesystem::path replace_extension(const std::filesystem::path& file_name, const std::string& extension);
+    /**
+     * Create an exception with the given message.
+     *
+     * @param message The message of the exception.
+     */
+    explicit LocationException(Location location, std::string message) : Exception(std::move(message)), location(std::move(location)) {}
 
-/**
- * Get a string representation of a system error code.
- *
- * @param errnum The error code to get the string representation of. If not provided, the current value of `errno` will be used.
- * @return The string representation of the error code.
- */
-std::string strerror_string(std::optional<int> errnum);
+    /**
+     * Create an exception with a formatted message.
+     *
+     * @param format The format string for the message.
+     * @param args The arguments for the format string.
+     */
+    template <typename... Args> LocationException(Location location, std::string format, Args&&... args) : Exception(std::vformat(format, std::make_format_args(args...))), location(std::move(location)) {}
+
+  protected:
+    /// The location of the exception.
+    Location location;
+};
 
 } // namespace tpau::cpp_kernal
 
-#endif // HAD_TPAU_CPP_KERNAL_UTIL_H
+#endif // HAD_TPAU_CPP_KERNAL_LOCATION_EXCEPTION_H

@@ -65,7 +65,7 @@ const std::vector<std::string>& FileReader::read(Symbol file_name, bool optional
         return empty_file;
     }
     else {
-        throw Exception("can't open '%s': %s", file_name.c_str(), strerror_string(errno).c_str());
+        throw Exception("can't open '{}': {}", file_name, strerror_string(errno));
     }
 }
 
@@ -79,7 +79,7 @@ std::string FileReader::read_binary(Symbol file_name, bool optional) {
         return "";
     }
     else {
-        throw Exception("can't open '%s': %s", file_name.c_str(), strerror_string(errno).c_str());
+        throw Exception("can't open '{}': {}", file_name, strerror_string(errno));
     }
 }
 
@@ -88,11 +88,11 @@ const std::string& FileReader::get_line(Symbol file, size_t line_number) const {
     const auto it = files.find(file);
 
     if (it == files.end()) {
-        throw Exception("unknown file '%s'", file.c_str());
+        throw Exception("unknown file '{}'", file);
     }
 
     if (line_number == 0 || line_number > it->second.size()) {
-        throw Exception("line integer %zu out of range in '%s'", line_number, file.c_str());
+        throw Exception("line integer {} out of range in '{}'", line_number, file);
     }
 
     return it->second[line_number - 1];

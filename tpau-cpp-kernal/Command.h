@@ -35,6 +35,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Commandline.h"
 
+/**
+ * Sets the default package information for the command line interface from CMake definitions.
+ * When using CMake, this macro should be called in the main function of the program before creating a Command object, to pass the information from CMake to the command line interface.
+ */
 #define TPAU_CPP_KERNAL_SET_DEFAULT_PACKAGE_INFO()                               \
     tpau::cpp_kernal::Command::header = " -- " PACKAGE " by " PACKAGE_AUTHOR;    \
     tpau::cpp_kernal::Command::footer = "Report bugs to " PACKAGE_BUGREPORT "."; \
@@ -42,20 +46,66 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace tpau::cpp_kernal {
 
+/**
+ * Base class for command line programs.
+ *
+ * It only produces the output files if no errors occurred during processing.
+ */
 class Command {
   public:
+    /**
+     * Create a command line program with the given options and arguments.
+     *
+     * @param options The options for the command line program.
+     * @param arguments The arguments for the command line program.
+     * @param name The name of the command line program.
+     */
     Command(const std::vector<Commandline::Option>& options, std::string arguments, const std::string& name);
     int run(int argc, char* const argv[]);
 
     std::string program_name;
 
   protected:
+    /**
+     * Process the command line arguments and options.
+     *
+     * This method must be implemented by subclasses to perform the actual processing of the command.
+     */
     virtual void process() = 0;
+
+    /**
+     * Create the output files for the command.
+     *
+     * This method must be implemented by subclasses to create the output files. It will only be called if no errors occurred during processing.
+     */
     virtual void create_output() = 0;
+
+    /**
+     * Get the minimum number of arguments required for the command.
+     *
+     * This method can be overridden by subclasses.
+     *
+     * @return The minimum number of arguments required for the command. The default is 0.
+     */
     virtual size_t minimum_arguments() { return 0; }
+
+    /**
+     * Get the maximum number of arguments allowed for the command.
+     *
+     * This method can be overridden by subclasses.
+     *
+     * @return The maximum number of arguments allowed for the command. The default is the maximum value of size_t, representing unlimited.
+     */
     virtual size_t maximum_arguments() { return std::numeric_limits<size_t>::max(); }
 
+    /**
+     * The command line parser for the command.
+     */
     Commandline commandline;
+
+    /**
+     * The parsed command line arguments and options.
+     */
     ParsedCommandline arguments;
 
   private:
