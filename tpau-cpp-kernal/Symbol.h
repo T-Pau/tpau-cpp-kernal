@@ -30,6 +30,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef HAD_TPAU_CPP_KERNAL_SYMBOL_H
 #define HAD_TPAU_CPP_KERNAL_SYMBOL_H
 
+#include <format>
 #include <memory>
 #include <ostream>
 #include <string>

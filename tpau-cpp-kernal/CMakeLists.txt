@@ -33,7 +33,6 @@ set(KERNAL_PUBLIC_HEADERS
         Location.h
         LocationException.h
         Path.h
-        printf_like.h
         Symbol.h
         Util.h
         Value.h

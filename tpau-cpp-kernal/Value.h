@@ -31,6 +31,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define HAD_TPAU_CPP_KERNAL_VALUE_H
 
 #include <cstdint>
+#include <format>
 #include <optional>
 #include <ostream>
 #include <variant>
