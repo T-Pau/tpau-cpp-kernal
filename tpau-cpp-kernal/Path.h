@@ -65,7 +65,7 @@ class Path {
      * @param path The path to prepend.
      * @param subdirectory An optional subdirectory to add to each directory in the prepended path.
      */
-    void prepend_path(const Path& path, const std::string& subdirectory = "");
+    void prepend_path(const Path& path, std::string_view subdirectory = "");
 
     /**
      * Append another path to the search path.
@@ -73,7 +73,7 @@ class Path {
      * @param path The path to append.
      * @param subdirectory An optional subdirectory to add to each directory in the appended path.
      */
-    void append_path(const Path& path, const std::string& subdirectory = "");
+    void append_path(const Path& path, std::string_view subdirectory = "");
 
     /**
      * Check if the search path is empty.

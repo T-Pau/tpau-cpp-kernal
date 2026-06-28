@@ -47,7 +47,7 @@ namespace tpau::cpp_kernal {
  * @param separator The separator to use between the symbols. (default: ", ")
  * @return The joined string.
  */
-std::string join(const std::vector<Symbol>& symbols, const std::string& separator = ", ");
+std::string join(const std::vector<Symbol>& symbols, std::string_view separator = ", ");
 
 /**
  * Replace the extension of a file name with a new extension.
@@ -56,7 +56,7 @@ std::string join(const std::vector<Symbol>& symbols, const std::string& separato
  * @param extension The new extension to use.
  * @return The file name with the replaced extension.
  */
-std::filesystem::path replace_extension(const std::filesystem::path& file_name, const std::string& extension);
+std::filesystem::path replace_extension(const std::filesystem::path& file_name, std::string_view extension);
 
 /**
  * Get a string representation of a system error code.

@@ -34,12 +34,12 @@ namespace tpau::cpp_kernal {
 Symbol::Table* Symbol::global = nullptr;
 const std::string Symbol::empty_string{};
 
-Symbol::Symbol(const std::string& name) {
+Symbol::Symbol(std::string_view name) {
     init_global();
     id = global->intern(name);
 }
 
-Symbol& Symbol::operator=(const std::string& name) {
+Symbol& Symbol::operator=(std::string_view name) {
     *this = Symbol(name);
     return *this;
 }
@@ -56,15 +56,15 @@ void Symbol::init_global() {
     }
 }
 
-const std::string* Symbol::Table::intern(const std::string& string) {
+const std::string* Symbol::Table::intern(std::string_view string) {
     if (string.empty()) {
         return &empty_string;
     }
-    auto it = symbols.find(&string);
+    auto it = symbols.find(string);
     if (it == symbols.end()) {
         auto interned_string = std::make_unique<std::string>(string);
-        auto [new_it, _] = symbols.insert({interned_string.get(), std::move(interned_string)});
-        return new_it->first;
+        auto [new_it, _] = symbols.insert({*interned_string.get(), std::move(interned_string)});
+        return new_it->second.get();
     }
     else {
         return it->second.get();

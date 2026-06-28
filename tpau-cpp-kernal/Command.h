@@ -60,7 +60,7 @@ class Command {
      * @param arguments The arguments for the command line program.
      * @param name The name of the command line program.
      */
-    Command(const std::vector<Commandline::Option>& options, std::string arguments, const std::string& name);
+    Command(const std::vector<Commandline::Option>& options, std::string arguments, std::string_view name);
     int run(int argc, char* const argv[]);
 
     std::string program_name;

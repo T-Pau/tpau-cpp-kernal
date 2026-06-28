@@ -55,7 +55,7 @@ DiagnosticOutput::Stream DiagnosticOutput::output(Symbol category, Severity seve
     return {*this, location, diagnostics_file, output};
 }
 
-void DiagnosticOutput::output(Symbol category, Severity severity, const Location& location, const std::string& message) {
+void DiagnosticOutput::output(Symbol category, Severity severity, const Location& location, std::string_view message) {
     if (begin_message(category, severity, location)) {
         diagnostics_file << message << std::endl;
         end_message(location);
@@ -97,7 +97,7 @@ void DiagnosticOutput::end_message(const Location& location) const {
     }
 }
 
-void DiagnosticOutput::underscore_line(const std::string& line, size_t start_column, size_t width, char underline_char) const {
+void DiagnosticOutput::underscore_line(std::string_view line, size_t start_column, size_t width, char underline_char) const {
     auto end_column = start_column + width;
     auto position = start_column;
     while (position < end_column && position < line.size()) {

@@ -153,7 +153,7 @@ ParsedCommandline Commandline::parse(int argc, char* const* argv) {
 }
 
 
-std::optional<std::string> ParsedCommandline::find_first(const std::string& name) const {
+std::optional<std::string> ParsedCommandline::find_first(std::string_view name) const {
     for (const auto& option : options) {
         if (option.name == name) {
             return option.argument;
@@ -163,7 +163,7 @@ std::optional<std::string> ParsedCommandline::find_first(const std::string& name
     return {};
 }
 
-[[maybe_unused]] std::optional<std::string> ParsedCommandline::find_last(const std::string& name) const {
+[[maybe_unused]] std::optional<std::string> ParsedCommandline::find_last(std::string_view name) const {
     for (auto it = options.rbegin(); it != options.rend(); it++) {
         const auto& option = *it;
 

@@ -40,7 +40,7 @@ void CoderEngine::finish() {
     finished = true;
 }
 
-void Coder::process(const std::string& data) {
+void Coder::process(std::string_view data) {
     for (auto c : data) {
         process(static_cast<uint8_t>(c));
     }

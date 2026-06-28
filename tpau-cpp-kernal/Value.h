@@ -94,7 +94,7 @@ class Value {
      *
      * @param value The binary data.
      */
-    explicit Value(const std::string& value) : value{value} {}
+    explicit Value(std::string_view value) : value{std::string(value)} {}
 
     /**
      * Create a string value.

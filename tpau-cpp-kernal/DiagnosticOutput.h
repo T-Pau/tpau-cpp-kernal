@@ -103,7 +103,7 @@ class DiagnosticOutput {
      * @param format The format string for the notice message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void notice(Symbol category, const Location& location, const std::string& format, Args&&... args) { output(category, NOTICE, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void notice(Symbol category, const Location& location, std::string_view format, Args&&... args) { output(category, NOTICE, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a formatted notice with default category.
@@ -112,7 +112,7 @@ class DiagnosticOutput {
      * @param format The format string for the notice message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void notice(const Location& location, const std::string& format, Args&&... args) { output(Symbol{}, NOTICE, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void notice(const Location& location, std::string_view format, Args&&... args) { output(Symbol{}, NOTICE, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a formatted notice without location.
@@ -121,7 +121,7 @@ class DiagnosticOutput {
      * @param format The format string for the notice message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void notice(Symbol category, const std::string& format, Args&&... args) { output(category, NOTICE, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void notice(Symbol category, std::string_view format, Args&&... args) { output(category, NOTICE, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a formatted notice with default category and without location.
@@ -129,7 +129,7 @@ class DiagnosticOutput {
      * @param format The format string for the notice message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void notice(const std::string& format, Args&&... args) { output(Symbol{}, NOTICE, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void notice(std::string_view format, Args&&... args) { output(Symbol{}, NOTICE, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a notice message.
@@ -138,7 +138,7 @@ class DiagnosticOutput {
      * @param location The location of the notice.
      * @param message The message of the notice.
      */
-    void notice(Symbol category, const Location& location, const std::string& message) { output(category, NOTICE, location, message); }
+    void notice(Symbol category, const Location& location, std::string_view message) { output(category, NOTICE, location, message); }
 
     /**
      * Output a notice message with default category.
@@ -146,21 +146,21 @@ class DiagnosticOutput {
      * @param location The location of the notice.
      * @param message The message of the notice.
      */
-    void notice(const Location& location, const std::string& message) { output(Symbol{}, NOTICE, location, message); }
+    void notice(const Location& location, std::string_view message) { output(Symbol{}, NOTICE, location, message); }
 
     /**
      * Output a notice message without location.
      *
      * @param message The message of the notice.
      */
-    void notice(Symbol category, const std::string& message) { output(category, NOTICE, Location{}, message); }
+    void notice(Symbol category, std::string_view message) { output(category, NOTICE, Location{}, message); }
 
     /**
      * Output a notice message with default category and without location.
      *
      * @param message The message of the notice.
      */
-    void notice(const std::string& message) { output(Symbol{}, NOTICE, Location{}, message); }
+    void notice(std::string_view message) { output(Symbol{}, NOTICE, Location{}, message); }
 
     /**
      * Output a warning with stream interface.
@@ -179,7 +179,7 @@ class DiagnosticOutput {
      * @param format The format string for the warning message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void warning(Symbol category, const Location& location, const std::string& format, Args&&... args) { output(category, WARNING, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void warning(Symbol category, const Location& location, std::string_view format, Args&&... args) { output(category, WARNING, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a formatted warning with default category.
@@ -188,7 +188,7 @@ class DiagnosticOutput {
      * @param format The format string for the warning message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void warning(const Location& location, const std::string& format, Args&&... args) { output(Symbol{}, WARNING, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void warning(const Location& location, std::string_view format, Args&&... args) { output(Symbol{}, WARNING, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a formatted warning without location.
@@ -197,7 +197,7 @@ class DiagnosticOutput {
      * @param format The format string for the warning message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void warning(Symbol category, const std::string& format, Args&&... args) { output(category, WARNING, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void warning(Symbol category, std::string_view format, Args&&... args) { output(category, WARNING, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a formatted warning with default category and without location.
@@ -205,7 +205,7 @@ class DiagnosticOutput {
      * @param format The format string for the warning message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void warning(const std::string& format, Args&&... args) { output(Symbol{}, WARNING, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void warning(std::string_view format, Args&&... args) { output(Symbol{}, WARNING, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a warning.
@@ -214,7 +214,7 @@ class DiagnosticOutput {
      * @param location The location of the warning.
      * @param message The message of the warning.
      */
-    void warning(Symbol category, const Location& location, const std::string& message) { output(category, WARNING, location, message); }
+    void warning(Symbol category, const Location& location, std::string_view message) { output(category, WARNING, location, message); }
 
     /**
      * Output a warning with default category.
@@ -222,7 +222,7 @@ class DiagnosticOutput {
      * @param location The location of the warning.
      * @param message The message of the warning.
      */
-    void warning(const Location& location, const std::string& message) { output(Symbol{}, WARNING, location, message); }
+    void warning(const Location& location, std::string_view message) { output(Symbol{}, WARNING, location, message); }
 
     /**
      * Output a warning without location.
@@ -230,14 +230,14 @@ class DiagnosticOutput {
      * @param category The category of the warning.
      * @param message The message of the warning.
      */
-    void warning(Symbol category, const std::string& message) { output(category, WARNING, Location{}, message); }
+    void warning(Symbol category, std::string_view message) { output(category, WARNING, Location{}, message); }
 
     /**
      * Output a warning with default category and without location.
      *
      * @param message The message of the warning.
      */
-    void warning(const std::string& message) { output(Symbol{}, WARNING, Location{}, message); }
+    void warning(std::string_view message) { output(Symbol{}, WARNING, Location{}, message); }
 
     /**
      * Output an error message with stream interface.
@@ -256,7 +256,7 @@ class DiagnosticOutput {
      * @param format The format string for the error message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void error(Symbol category, const Location& location, const std::string& format, Args&&... args) { output(category, ERROR, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void error(Symbol category, const Location& location, std::string_view format, Args&&... args) { output(category, ERROR, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a formatted error message with default category.
@@ -265,7 +265,7 @@ class DiagnosticOutput {
      * @param format The format string for the error message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void error(const Location& location, const std::string& format, Args&&... args) { output(Symbol{}, ERROR, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void error(const Location& location, std::string_view format, Args&&... args) { output(Symbol{}, ERROR, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a formatted error message without location.
@@ -274,7 +274,7 @@ class DiagnosticOutput {
      * @param format The format string for the error message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void error(Symbol category, const std::string& format, Args&&... args) { output(category, ERROR, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void error(Symbol category, std::string_view format, Args&&... args) { output(category, ERROR, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a formatted error message with default category and without location.
@@ -282,7 +282,7 @@ class DiagnosticOutput {
      * @param format The format string for the error message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void error(const std::string& format, Args&&... args) { output(Symbol{}, ERROR, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void error(std::string_view format, Args&&... args) { output(Symbol{}, ERROR, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output an error message.
@@ -291,7 +291,7 @@ class DiagnosticOutput {
      * @param location The location of the error.
      * @param message The message of the error.
      */
-    void error(Symbol category, const Location& location, const std::string& message) { output(category, ERROR, location, message); }
+    void error(Symbol category, const Location& location, std::string_view message) { output(category, ERROR, location, message); }
 
     /**
      * Output an error message with default category.
@@ -299,7 +299,7 @@ class DiagnosticOutput {
      * @param location The location of the error.
      * @param message The message of the error.
      */
-    void error(const Location& location, const std::string& message) { output(Symbol{}, ERROR, location, message); }
+    void error(const Location& location, std::string_view message) { output(Symbol{}, ERROR, location, message); }
 
     /**
      * Output an error message without location.
@@ -307,14 +307,14 @@ class DiagnosticOutput {
      * @param category The category of the error.
      * @param message The message of the error.
      */
-    void error(Symbol category, const std::string& message) { output(category, ERROR, Location{}, message); }
+    void error(Symbol category, std::string_view message) { output(category, ERROR, Location{}, message); }
 
     /**
      * Output an error message with default category and without location.
      *
      * @param message The message of the error.
      */
-    void error(const std::string& message) { output(Symbol{}, ERROR, Location{}, message); }
+    void error(std::string_view message) { output(Symbol{}, ERROR, Location{}, message); }
 
     /**
      * Output a message with stream interface.
@@ -335,7 +335,7 @@ class DiagnosticOutput {
      * @param format The format string for the message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void output(Symbol category, Severity severity, const Location& location, const std::string& format, Args&&... args) { output(category, severity, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void output(Symbol category, Severity severity, const Location& location, std::string_view format, Args&&... args) { output(category, severity, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a message with default category and formatting.
@@ -345,7 +345,7 @@ class DiagnosticOutput {
      * @param format The format string for the message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void output(Severity severity, const Location& location, const std::string& format, Args&&... args) { output(Symbol{}, severity, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void output(Severity severity, const Location& location, std::string_view format, Args&&... args) { output(Symbol{}, severity, location, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a message without location and with formatting.
@@ -355,7 +355,7 @@ class DiagnosticOutput {
      * @param format The format string for the message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void output(Symbol category, Severity severity, const std::string& format, Args&&... args) { output(category, severity, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void output(Symbol category, Severity severity, std::string_view format, Args&&... args) { output(category, severity, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a message with default category, without location and with formatting.
@@ -364,7 +364,7 @@ class DiagnosticOutput {
      * @param format The format string for the message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void output(Severity severity, const std::string& format, Args&&... args) { output(Symbol{}, severity, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
+    template <typename... Args> void output(Severity severity, std::string_view format, Args&&... args) { output(Symbol{}, severity, Location{}, std::vformat(format, std::make_format_args(std::forward<Args>(args)...))); }
 
     /**
      * Output a message with default category.
@@ -373,7 +373,7 @@ class DiagnosticOutput {
      * @param location The location of the message.
      * @param message The message to output.
      */
-    void output(Severity severity, const Location& location, const std::string& message) { output(Symbol{}, severity, location, message); }
+    void output(Severity severity, const Location& location, std::string_view message) { output(Symbol{}, severity, location, message); }
 
     /**
      * Output a message without location.
@@ -382,7 +382,7 @@ class DiagnosticOutput {
      * @param severity The severity of the message.
      * @param message The message to output.
      */
-    void output(Symbol category, Severity severity, const Location& location, const std::string& message);
+    void output(Symbol category, Severity severity, const Location& location, std::string_view message);
 
     /**
      * Output a message with default category and without location.
@@ -390,7 +390,7 @@ class DiagnosticOutput {
      * @param severity The severity of the message.
      * @param message The message to output.
      */
-    void output(Severity severity, const std::string& message) { output(Symbol{}, severity, Location{}, message); }
+    void output(Severity severity, std::string_view message) { output(Symbol{}, severity, Location{}, message); }
 
     [[nodiscard]] bool failed() const { return fail_flag; }
 
@@ -412,7 +412,7 @@ class DiagnosticOutput {
      * @param width The number of columns to underline.
      * @param underline_char The character to use.
      */
-    void underscore_line(const std::string& line, size_t start_column, size_t width, char underline_char) const;
+    void underscore_line(std::string_view line, size_t start_column, size_t width, char underline_char) const;
 
     static const char* diagnostics_severity_name(Severity severity);
 

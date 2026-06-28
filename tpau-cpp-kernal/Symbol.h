@@ -67,7 +67,7 @@ class Symbol {
      * @param name The string to create the symbol from.
      * @return The created symbol.
      */
-    explicit Symbol(const std::string& name);
+    explicit Symbol(std::string_view name);
 
     /**
      * Assign the symbol corresponding to a string.
@@ -75,7 +75,7 @@ class Symbol {
      * @param name The string to create the symbol from.
      * @return The created symbol.
      */
-    Symbol& operator=(const std::string& name);
+    Symbol& operator=(std::string_view name);
 
     /**
      * Get the string represented by the symbol.
@@ -157,11 +157,11 @@ class Symbol {
     /// @brief A table of all symbols, used to ensure that each symbol is only stored once.
     struct Table {
       public:
-        const std::string* intern(const std::string& string);
+        const std::string* intern(std::string_view string);
 
       private:
         /// @brief This table maps raw pointers of interned strings to unique pointers of the same strings.
-        std::unordered_map<const std::string*, std::unique_ptr<std::string>, StringPtrHash, StringPtrEqual> symbols;
+        std::unordered_map<std::string_view, std::unique_ptr<std::string>> symbols;
     };
 
     /// @brief Pointer to the interned representation by the symbol.

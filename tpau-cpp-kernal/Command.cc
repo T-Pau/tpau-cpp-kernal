@@ -45,7 +45,7 @@ std::string Command::header = "";
 std::string Command::footer = "";
 std::string Command::version = "";
 
-Command::Command(const std::vector<Commandline::Option>& options, std::string arguments, const std::string& name) : commandline(options, std::move(arguments), name + header, footer, version) {}
+Command::Command(const std::vector<Commandline::Option>& options, std::string arguments, std::string_view name) : commandline(options, std::move(arguments), std::string(name) + header, footer, version) {}
 
 
 int Command::run(int argc, char* const* argv) {

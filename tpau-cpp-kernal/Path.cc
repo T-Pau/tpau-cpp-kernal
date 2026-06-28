@@ -59,7 +59,7 @@ Symbol Path::find(Symbol name, Symbol base) const {
 }
 
 
-void Path::append_path(const Path& path, const std::string& subdirectory) {
+void Path::append_path(const Path& path, std::string_view subdirectory) {
     for (const auto& directory : path.directories) {
         if (!subdirectory.empty()) {
             append_directory(directory / subdirectory);
@@ -71,7 +71,7 @@ void Path::append_path(const Path& path, const std::string& subdirectory) {
 }
 
 
-void Path::prepend_path(const Path& path, const std::string& subdirectory) {
+void Path::prepend_path(const Path& path, std::string_view subdirectory) {
     for (const auto& directory : path.directories) {
         if (!subdirectory.empty()) {
             prepend_directory(directory / subdirectory);

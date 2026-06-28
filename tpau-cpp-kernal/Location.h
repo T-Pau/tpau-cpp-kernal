@@ -153,7 +153,7 @@ class Location {
      *
      * @param file_name The name of the file.
      */
-    explicit Location(const std::string& file_name) : file(file_name) {}
+    explicit Location(std::string_view file_name) : file(file_name) {}
 
     /**
      * Create a location.

@@ -65,7 +65,7 @@ class Exception : public std::exception {
      * @param str The information to append.
      * @return The exception with the appended information.
      */
-    Exception append_detail(const std::string& str);
+    Exception append_detail(std::string_view str);
 
     /**
      * Create a new exception with additional information about a system error appended to the message.

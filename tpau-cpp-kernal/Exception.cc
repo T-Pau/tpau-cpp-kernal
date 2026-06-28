@@ -35,8 +35,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace tpau::cpp_kernal {
 
-Exception Exception::append_detail(const std::string& str) {
-    message += ": " + str;
+Exception Exception::append_detail(std::string_view str) {
+    message = std::format("{}: {}", message, str);
 
     return *this;
 }

@@ -132,7 +132,7 @@ class Coder {
      *
      * @param data The data to process.
      */
-    void process(const std::string& data);
+    void process(std::string_view data);
 
     /**
      * Process the given byte.

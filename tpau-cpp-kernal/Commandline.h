@@ -77,7 +77,7 @@ class ParsedCommandline {
      *
      * @return The argument of the option, or `{}` if the option was not found.
      */
-    [[nodiscard]] std::optional<std::string> find_first(const std::string& name) const;
+    [[nodiscard]] std::optional<std::string> find_first(std::string_view name) const;
 
     /**
      * Find the last occurrence of the option with the given name.
@@ -86,7 +86,7 @@ class ParsedCommandline {
      *
      * @return The argument of the option, or `{}` if the option was not found.
      */
-    [[maybe_unused]] [[nodiscard]] std::optional<std::string> find_last(const std::string& name) const;
+    [[maybe_unused]] [[nodiscard]] std::optional<std::string> find_last(std::string_view name) const;
 
     /**
      * Add an argument to the parsed command line.
