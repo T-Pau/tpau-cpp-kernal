@@ -7,7 +7,6 @@
 TEST_CASE("Symbol: empty", "[symbol]") {
     auto empty = tpau::cpp_kernal::Symbol();
     REQUIRE(empty.str() == "");
-    REQUIRE(strcmp(empty.c_str(), "") == 0);
     REQUIRE(!empty);
     REQUIRE(empty.empty());
 }
@@ -15,7 +14,6 @@ TEST_CASE("Symbol: empty", "[symbol]") {
 TEST_CASE("Symbol: non-empty", "[symbol]") {
     auto a = tpau::cpp_kernal::Symbol("a");
     REQUIRE(a.str() == "a");
-    REQUIRE(strcmp(a.c_str(), "a") == 0);
     REQUIRE(a);
     REQUIRE(!a.empty());
     REQUIRE(a != tpau::cpp_kernal::Symbol());

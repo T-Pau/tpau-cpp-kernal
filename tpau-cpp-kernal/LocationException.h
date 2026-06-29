@@ -47,21 +47,30 @@ class LocationException : public Exception {
     LocationException() = default;
 
     /**
-     * Create an exception with the given message.
+     * Create an exception with a message.
      *
-     * @param message The message of the exception.
+     * @param location The location of the exception.
+     * @param message The message for the exception.
      */
-    explicit LocationException(Location location, std::string message) : Exception(std::move(message)), location(std::move(location)) {}
+    LocationException(Location location, const std::string_view message) : Exception(message), location(std::move(location)) {}
 
     /**
      * Create an exception with a formatted message.
      *
+     * @param location The location of the exception.
      * @param format The format string for the message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> LocationException(Location location, std::string format, Args&&... args) : Exception(std::vformat(format, std::make_format_args(args...))), location(std::move(location)) {}
+    template <typename... Args> LocationException(Location location, std::format_string<Args...> format, Args&&... args) : Exception(std::format(format, std::forward<Args>(args)...)), location(std::move(location)) {}
 
-  protected:
+    /**
+     * Create a location exception from an existing exception.
+     *
+     * @param location The location of the exception.
+     * @param exception The existing exception.
+     */
+    LocationException(Location location, const Exception& exception) : Exception(exception), location(location) {}
+
     /// The location of the exception.
     Location location;
 };

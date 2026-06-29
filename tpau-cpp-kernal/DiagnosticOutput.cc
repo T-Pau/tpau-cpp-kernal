@@ -50,23 +50,11 @@ const char* DiagnosticOutput::diagnostics_severity_name(Severity severity) {
     throw Exception("invalid severity");
 }
 
-DiagnosticOutput::Stream DiagnosticOutput::output(Symbol category, Severity severity, const Location& location) {
-    auto output = begin_message(category, severity, location);
-    return {*this, location, diagnostics_file, output};
-}
-
 void DiagnosticOutput::output(Symbol category, Severity severity, const Location& location, std::string_view message) {
-    if (begin_message(category, severity, location)) {
-        diagnostics_file << message << std::endl;
-        end_message(location);
-    }
-}
-
-bool DiagnosticOutput::begin_message(Symbol category, Severity severity, const Location& location) {
     if (ignored_categories.contains(category)) {
-        return false;
+        return;
     }
-    if (severity >= fail_serverity) {
+    if (severity >= fail_severity) {
         fail_flag = true;
     }
     if (!location.empty()) {
@@ -74,10 +62,8 @@ bool DiagnosticOutput::begin_message(Symbol category, Severity severity, const L
     }
     diagnostics_file << diagnostics_severity_name(severity) << ": ";
 
-    return true;
-}
+    diagnostics_file << message << std::endl;
 
-void DiagnosticOutput::end_message(const Location& location) const {
     if (location.empty() || location.start.empty()) {
         return;
     }
@@ -97,6 +83,7 @@ void DiagnosticOutput::end_message(const Location& location) const {
     }
 }
 
+
 void DiagnosticOutput::underscore_line(std::string_view line, size_t start_column, size_t width, char underline_char) const {
     auto end_column = start_column + width;
     auto position = start_column;
@@ -110,11 +97,6 @@ void DiagnosticOutput::underscore_line(std::string_view line, size_t start_colum
             }
         }
     }
-}
-
-DiagnosticOutput::Stream::~Stream() {
-    *this << std::endl;
-    diagnostic_output.end_message(location);
 }
 
 } // namespace tpau::cpp_kernal

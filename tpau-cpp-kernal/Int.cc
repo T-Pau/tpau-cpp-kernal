@@ -91,9 +91,7 @@ void Int::encode(std::string& bytes, uint64_t value, uint64_t size, uint64_t byt
         for (auto index = 0; index < 8; index += 1) {
             uint64_t byte_index = (byte_order / mask) % 10 - 1;
             if (byte_index > 8) {
-                std::stringstream str;
-                str << "invalid byte order " << std::setfill('0') << std::setw(8) << byte_order;
-                throw Exception(str.str());
+                throw Exception("invalid byte order {:08x}", byte_order);
             }
             mask /= 10;
             if (byte_index >= size) {

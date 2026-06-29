@@ -125,6 +125,20 @@ class Location {
         operator bool() const { return !empty(); } // NOLINT(*-explicit-constructor)
 
         /**
+         * Check if the line number is specified.
+         *
+         * @return `true` if the line number is specified, `false` otherwise.
+         */
+        [[nodiscard]] bool has_line() const { return line_number > 0; }
+
+        /**
+         * Check if the column number is specified.
+         *
+         * @return `true` if the column number is specified, `false` otherwise.
+         */
+        [[nodiscard]] bool has_column() const { return column > 0; }
+
+        /**
          * Get the 0-based line index of the position. If the line number is not specified, `0` is returned.
          *
          * @return The 0-based line index of the position, or `0` if the line number is not specified.

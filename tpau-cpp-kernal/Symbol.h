@@ -85,13 +85,6 @@ class Symbol {
     [[nodiscard]] const std::string& str() const { return *id; }
 
     /**
-     * Get the C string represented by the symbol.
-     *
-     * @return The C string represented by the symbol.
-     */
-    [[nodiscard]] const char* c_str() const { return id->c_str(); }
-
-    /**
      * Check if the symbol is empty, i. e. it represents the empty string.
      *
      * @return `true` if the symbol is empty, `false` otherwise.
@@ -194,14 +187,15 @@ std::ostream& operator<<(std::ostream& stream, const Symbol& symbol);
 } // namespace tpau::cpp_kernal
 
 template <> struct std::hash<tpau::cpp_kernal::Symbol> {
-    std::size_t operator()(tpau::cpp_kernal::Symbol const& symbol) const noexcept { return std::hash<const char*>{}(symbol.c_str()); }
+    std::size_t operator()(tpau::cpp_kernal::Symbol const& symbol) const noexcept { return std::hash<std::string_view>{}(symbol.str()); }
 };
 
 template <> struct std::formatter<tpau::cpp_kernal::Symbol> : std::formatter<std::string_view> {
-    auto format(const tpau::cpp_kernal::Symbol& s, format_context& ctx) const {
+    auto format(const tpau::cpp_kernal::Symbol& symbol, format_context& ctx) const {
         // We delegate the actual rendering to the base class.
         // It will use the options parsed by the inherited parse() method.
-        return std::formatter<std::string_view>::format(s.str(), ctx);
+        return std::formatter<std::string_view>::format(symbol.str(), ctx);
     }
 };
+
 #endif // HAD_TPAU_CPP_KERNAL_SYMBOL_H

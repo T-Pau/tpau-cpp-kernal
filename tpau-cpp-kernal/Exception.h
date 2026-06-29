@@ -45,11 +45,11 @@ class Exception : public std::exception {
     Exception() = default;
 
     /**
-     * Create an exception with the given message.
+     * Create an exception with a message.
      *
-     * @param message The message of the exception.
+     * @param message The message for the exception.
      */
-    explicit Exception(std::string message) : message(std::move(message)) {}
+    explicit Exception(std::string_view message) : message(message) {}
 
     /**
      * Create an exception with a formatted message.
@@ -57,7 +57,7 @@ class Exception : public std::exception {
      * @param format The format string for the message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> Exception(std::string format, Args&&... args) : message(std::vformat(format, std::make_format_args(args...))) {}
+    template <typename... Args> Exception(std::format_string<Args...> format, Args&&... args) : message(std::format(format, std::forward<Args>(args)...)) {}
 
     /**
      * Create a new exception with additional information appended to the message.
