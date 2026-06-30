@@ -30,7 +30,7 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <cstdarg>
+#include <algorithm>
 #include <filesystem>
 #include <optional>
 #include <string>
@@ -84,8 +84,7 @@ std::string join(const R& strings, std::string_view separator) {
  * @param comp The comparison function to use for sorting. (default: std::less)
  * @return The sorted collection.
  */
-template <std::ranges::input_range R, typename T = std::iter_value_t<R>, class Comp = std::less<T>>
-std::vector<T> sorted(const R& collection, Comp comp = {}) {
+template <std::ranges::input_range R, typename T = std::iter_value_t<R>, class Comp = std::less<T>> std::vector<T> sorted(const R& collection, Comp comp = {}) {
     auto sorted_collection = std::vector<T>(collection.begin(), collection.end());
     std::sort(sorted_collection.begin(), sorted_collection.end(), comp);
     return sorted_collection;
