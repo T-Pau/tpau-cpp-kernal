@@ -130,7 +130,12 @@ size_t Location::width() const {
     if (!is_one_line() || start.column == 0 || end.column == 0) {
         return 0;
     }
-    return end.column - start.column;
+    else if (start.column == end.column) {
+        return 1;
+    }
+    else {
+        return end.column - start.column;
+    }
 }
 
 } // namespace tpau::cpp_kernal

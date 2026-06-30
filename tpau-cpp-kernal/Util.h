@@ -41,6 +41,17 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace tpau::cpp_kernal {
 
 /**
+ * Get a default output file name based on input file name and extension.
+ *
+ * It discards the directory part of the input file name and replaces the extension.
+ *
+ * @param input_filename The input file name.
+ * @param extension The extension to use for the output file name.
+ * @return The default output file name.
+ */
+std::filesystem::path default_output_filename(const std::filesystem::path& input_filename, std::string_view extension);
+
+/**
  * Join a vector of symbols into a string with a separator between the symbols.
  *
  * @param symbols The symbols to join.

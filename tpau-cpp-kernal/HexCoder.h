@@ -36,28 +36,24 @@ namespace tpau::cpp_kernal {
 
 class HexEncoderEngine : public CoderEngine {
   public:
-    HexEncoderEngine(CoderOutput& output);
+    HexEncoderEngine(CoderOutput& output) : CoderEngine(output) {}
 
   protected:
     void process_implementation(uint8_t datum) override;
 
   private:
-    CoderOutput& output;
-
     static char encode(uint8_t value);
 };
 
 class HexDecoderEngine : public CoderEngine {
   public:
-    HexDecoderEngine(CoderOutput& output);
+    HexDecoderEngine(CoderOutput& output) : CoderEngine(output) {}
 
   protected:
     void process_implementation(uint8_t datum) override;
     void finish_implementation() override;
 
   private:
-    CoderOutput& output;
-
     /// The partial byte that has been read so far.
     uint8_t partial_byte;
 
@@ -72,7 +68,7 @@ class HexDecoderEngine : public CoderEngine {
  */
 class HexStringEncoder : public Coder {
   public:
-    HexStringEncoder() : Coder(engine) {};
+    HexStringEncoder() : Coder(engine) {}
 
     /**
      * Finish the encoding process and return the encoded data.

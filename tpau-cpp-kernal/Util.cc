@@ -37,8 +37,12 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace tpau::cpp_kernal {
 
+std::filesystem::path default_output_filename(const std::filesystem::path& input_filename, std::string_view extension) { 
+    return replace_extension(input_filename.filename(), extension);
+}
 
-std::filesystem::path replace_extension(const std::filesystem::path& file_name, std::string_view extension) { return file_name.parent_path() / (file_name.stem().string() + std::string(".") + std::string(extension)); }
+
+std::filesystem::path replace_extension(const std::filesystem::path& file_name, std::string_view extension) { return file_name.parent_path() / (std::format("{}.{}", file_name.stem().string(), extension)); }
 
 
 std::string join(const std::vector<Symbol>& symbols, std::string_view separator) {
