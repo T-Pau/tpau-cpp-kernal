@@ -50,6 +50,48 @@ namespace tpau::cpp_kernal {
 std::string join(const std::vector<Symbol>& symbols, std::string_view separator = ", ");
 
 /**
+ * Join a range of strings into a string with a separator between the strings.
+ *
+ * @tparam R The type of the range.
+ * @param strings The range of strings to join.
+ * @param separator The separator to use between the strings. (default: ", ")
+ * @return The joined string.
+ */
+template <std::ranges::input_range R>
+    requires std::same_as<std::iter_value_t<R>, std::string>
+std::string join(const R& strings, std::string_view separator) {
+    auto s = std::string();
+    auto first = true;
+
+    for (auto& str : strings) {
+        if (first) {
+            first = false;
+        }
+        else {
+            s += separator;
+        }
+        s += str;
+    }
+
+    return s;
+}
+
+/**
+ * Sort a range of elements and return the sorted collection.
+ *
+ * @tparam R The type of the range.
+ * @param collection The range of elements to sort.
+ * @param comp The comparison function to use for sorting. (default: std::less)
+ * @return The sorted collection.
+ */
+template <std::ranges::input_range R, typename T = std::iter_value_t<R>, class Comp = std::less<T>>
+std::vector<T> sorted(const R& collection, Comp comp = {}) {
+    auto sorted_collection = std::vector<T>(collection.begin(), collection.end());
+    std::sort(sorted_collection.begin(), sorted_collection.end(), comp);
+    return sorted_collection;
+}
+
+/**
  * Replace the extension of a file name with a new extension.
  *
  * @param file_name The file name to replace the extension of.

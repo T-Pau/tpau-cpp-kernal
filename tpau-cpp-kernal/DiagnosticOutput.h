@@ -523,7 +523,17 @@ class DiagnosticOutput {
     void output(Severity severity, const LocationException& exception) { output(Symbol{}, severity, exception.location, exception.what()); }
 
 
+    /**
+     * Check if the program has been marked as failed.
+     *
+     * This can either been done expliclity by calling `mark_failed()`, or implicitly by outputting a message with a severity equal to or higher than the fail severity, which defaults to error.
+     */
     [[nodiscard]] bool failed() const { return fail_flag; }
+
+    /**
+     * Mark the program as failed.
+     */
+    void mark_failed() { fail_flag = true; }
 
     bool verbose_error_messages{false};
 
