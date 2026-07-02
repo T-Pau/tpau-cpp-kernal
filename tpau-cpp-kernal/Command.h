@@ -89,7 +89,7 @@ class Command {
          * @param feature The feature to check.
          * @return `true` if the feature is enabled, `false` otherwise.
          */
-        [[nodiscard]] constexpr bool is_enabled(Feature feature) const { return (feature_mask & get_mask(feature)) != 0; }
+        [[nodiscard]] bool is_enabled(Feature feature) const { return (feature_mask & get_mask(feature)) != 0; }
 
         /**
          * Enable a feature.
@@ -111,7 +111,7 @@ class Command {
          * @param feature The feature to get the bitmask for.
          * @return The bitmask for the feature.
          */
-        static uint64_t get_mask(Feature feature) { return 1 << static_cast<uint8_t>(feature); }
+        static constexpr uint64_t get_mask(Feature feature) { return static_cast<uint64_t>(1) << static_cast<uint8_t>(feature); }
 
       private:
         uint64_t feature_mask{0};

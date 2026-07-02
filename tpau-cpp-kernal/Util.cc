@@ -64,7 +64,7 @@ std::string strerror_string(std::optional<int> errnum) {
     if (!errnum) {
         errnum = errno;
     }
-#if HAVE_STRERROR_S
+#if defined(HAVE_STRERROR_S)
     char buf[strerrorlen_s(*errnum)];
     strerror_s(buf, sizeof(buf), *errnum);
     return std::string(buf);
