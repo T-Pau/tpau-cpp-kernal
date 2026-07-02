@@ -41,7 +41,7 @@ bool handle_output(const Location& location, std::string_view command, std::stri
                 try {
                     line_number = std::stoul(std::string(location_parts[1]));
                 }
-                catch (const std::exception& e) {
+                catch (...) {
                     DiagnosticOutput::global.error(location, "Invalid line number in location: '{}'", location_str);
                     return false;
                 }
@@ -50,7 +50,7 @@ bool handle_output(const Location& location, std::string_view command, std::stri
                 try {
                     start_column = std::stoul(std::string(location_parts[2]));
                 }
-                catch (const std::exception& e) {
+                catch (...) {
                     DiagnosticOutput::global.error(location, "Invalid start column in location: '{}'", location_str);
                     return false;
                 }
@@ -59,7 +59,7 @@ bool handle_output(const Location& location, std::string_view command, std::stri
                 try {
                     width = std::stoul(std::string(location_parts[3]));
                 }
-                catch (const std::exception& e) {
+                catch (...) {
                     DiagnosticOutput::global.error(location, "Invalid width in location: '{}'", location_str);
                     return false;
                 }
