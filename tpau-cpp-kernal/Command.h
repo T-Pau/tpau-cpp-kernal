@@ -30,6 +30,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef HAD_TPAU_CPP_KERNAL_COMMAND_H
 #define HAD_TPAU_CPP_KERNAL_COMMAND_H
 
+#include <filesystem>
 #include <limits>
 #include <string>
 
@@ -53,16 +54,89 @@ namespace tpau::cpp_kernal {
  */
 class Command {
   public:
+    enum class Feature : uint8_t {
+        OutputFile,     ///< The command creates an output file.
+        DependencyFile, ///< The command can create a gcc style dependency file.
+    };
+
+    class Features {
+      public:
+        /**
+         * Create a Features object with all features disabled.
+         */
+        Features() {}
+
+        // Constructor using Fold Expressions (C++17/20)
+        // This allows: Features{Feature::OutputFile, Feature::DependencyFile}
+        /**
+         * Create a Features object with the given features enabled.
+         *
+         * @param args The features to enable.
+         */
+        template <typename... Args> constexpr Features(Args... args) { ((enable(args)), ...); }
+
+        /**
+         * Create a Features object with a single feature or a raw bitmask.
+         *
+         * @param feature_mask The bitmask of the features to enable.
+         */
+        constexpr explicit Features(uint64_t feature_mask) : feature_mask(feature_mask) {}
+
+        // Easy check: "Does this option exist in the set?"
+        /**
+         * Check if a feature is enabled.
+         *
+         * @param feature The feature to check.
+         * @return `true` if the feature is enabled, `false` otherwise.
+         */
+        [[nodiscard]] constexpr bool is_enabled(Feature feature) const { return (feature_mask & get_mask(feature)) != 0; }
+
+        /**
+         * Enable a feature.
+         *
+         * @param feature The feature to enable.
+         */
+        void enable(Feature feature) { feature_mask |= get_mask(feature); }
+
+        /**
+         * Disable a feature.
+         *
+         * @param feature The feature to disable.
+         */
+        void disable(Feature feature) { feature_mask &= ~get_mask(feature); }
+
+        /**
+         * Get the bitmask for a feature.
+         *
+         * @param feature The feature to get the bitmask for.
+         * @return The bitmask for the feature.
+         */
+        static uint64_t get_mask(Feature feature) { return 1 << static_cast<uint8_t>(feature); }
+
+      private:
+        uint64_t feature_mask{0};
+    };
+
     /**
      * Create a command line program with the given options and arguments.
      *
-     * @param options The options for the command line program.
-     * @param arguments The arguments for the command line program.
-     * @param name The name of the command line program.
+     * @param options The option definitions for the program.
+     * @param arguments The argument names for the program.
+     * @param name The name of the program.
+     * @param features The features to enable for the program.
      */
-    Command(const std::vector<Commandline::Option>& options, std::string arguments, std::string_view name);
+    Command(const std::vector<Commandline::Option>& options, std::string arguments, std::string_view name, Features features = Features{});
+
+    /**
+     * Run the command line program with the given arguments.
+     *
+     * @param argc The number of arguments.
+     * @param argv The arguments.
+     * @return The exit code of the program.
+     */
     int run(int argc, char* const argv[]);
 
+    /// @brief The name of the program.
     std::string program_name;
 
   protected:
@@ -108,7 +182,15 @@ class Command {
      */
     ParsedCommandline arguments;
 
+    /// @brief The name of the output file.
+    std::optional<std::filesystem::path> output_file;
+
+    /// @brief The name of the dependency file.
+    std::optional<std::filesystem::path> dependency_file;
+
   private:
+    Features features;
+
     static std::string header;
     static std::string footer;
     static std::string version;

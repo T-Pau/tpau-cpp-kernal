@@ -43,6 +43,19 @@ class DiagnosticOutput {
   public:
     enum Severity { NOTICE, WARNING, ERROR };
 
+    /**
+     * Create a diagnostic output.
+     *
+     * @param diagnostics_file The file to output diagnostics to.
+     */
+    explicit DiagnosticOutput(std::ostream& diagnostics_file = std::cerr) : diagnostics_file(diagnostics_file) {}
+
+    /**
+     * Register a category with a severity.
+     *
+     * @param category The category to register.
+     * @param severity The minimum severity for messages in the category to be printed.
+     */
     void register_category(Symbol category, Severity severity);
 
     /**
@@ -541,18 +554,28 @@ class DiagnosticOutput {
 
   private:
     /**
+     * Output a line of source code, expanding tabs to spaces.
+     *
+     * @param stream The stream to output to.
+     * @param line The line of source code to output.
+     */
+    void print_expanded_line(std::ostream& stream, std::string_view line) const;
+
+    /**
      * Output a character under part of a line of source code.
      *
      * This function handles tabs in the source code line, assuming a tab width of 8 characters.
      *
-     * It assumes that the line of source code has already been output, and the cursor is at start_column of the next line.
+     * It assumes that the line of source code has already been output.
      *
      * @param line The line of source code to underline.
-     * @param start_column The column to start at.
+     * @param start_column The position to start at; the start of the line is 1.
      * @param width The number of columns to underline.
      * @param underline_char The character to use.
+     * @param position The position in the line the cursor is at; the beginning of the line is 0.
+     * @return The position of the cursor after outputting the underline characters; the beginning of the line is 0.
      */
-    void underscore_line(std::string_view line, size_t start_column, size_t width, char underline_char) const;
+    size_t underscore_line(std::string_view line, size_t start_column, size_t width, char underline_char, size_t position = 0) const;
 
     static const char* diagnostics_severity_name(Severity severity);
 

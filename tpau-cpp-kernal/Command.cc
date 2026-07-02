@@ -45,7 +45,14 @@ std::string Command::header = "";
 std::string Command::footer = "";
 std::string Command::version = "";
 
-Command::Command(const std::vector<Commandline::Option>& options, std::string arguments, std::string_view name) : commandline(options, std::move(arguments), std::string(name) + header, footer, version) {}
+Command::Command(const std::vector<Commandline::Option>& options, std::string arguments, std::string_view name, Features features) : commandline(options, std::move(arguments), std::string(name) + header, footer, version), features(features) {
+    if (features.is_enabled(Feature::OutputFile)) {
+        commandline.add_option(Commandline::Option("output", 'o', "file", "write output to FILE"));
+    }
+    if (features.is_enabled(Feature::DependencyFile)) {
+        commandline.add_option(Commandline::Option("depfile", 'M', "file", "write gcc-style dependency file to FILE"));
+    }
+}
 
 
 int Command::run(int argc, char* const* argv) {
@@ -55,7 +62,19 @@ int Command::run(int argc, char* const* argv) {
 
         if (arguments.arguments.size() < minimum_arguments() || arguments.arguments.size() > maximum_arguments()) {
             commandline.usage(false, stderr);
-            throw Exception();
+            return 1;
+        }
+
+        if (features.is_enabled(Feature::OutputFile)) {
+            if (auto option = arguments.find_first("output")) {
+                output_file = *option;
+            }
+        }
+
+        if (features.is_enabled(Feature::DependencyFile)) {
+            if (auto option = arguments.find_first("depfile")) {
+                dependency_file = *option;
+            }
         }
 
         process();

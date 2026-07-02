@@ -70,12 +70,12 @@ void DiagnosticOutput::output(Symbol category, Severity severity, const Location
 
     try {
         const auto& line = FileReader::global.get_line(location.file, location.start.line_number);
-        diagnostics_file << line << std::endl;
+        print_expanded_line(diagnostics_file, line);
 
         auto width = location.width();
         if (width > 0) {
-            underscore_line(line, 0, location.start.column, ' ');
-            underscore_line(line, location.start.column, width, '^');
+            auto position = underscore_line(line, 1, location.start.column - 1, ' ');
+            underscore_line(line, location.start.column, width, '^', position);
             diagnostics_file << std::endl;
         }
     }
@@ -84,19 +84,41 @@ void DiagnosticOutput::output(Symbol category, Severity severity, const Location
 }
 
 
-void DiagnosticOutput::underscore_line(std::string_view line, size_t start_column, size_t width, char underline_char) const {
-    auto end_column = start_column + width;
-    auto position = start_column;
-    while (position < end_column && position < line.size()) {
-        diagnostics_file << underline_char;
-        position += 1;
-        if (line[position] == '\t') {
-            while (position % 8 != 0) {
+size_t DiagnosticOutput::underscore_line(std::string_view line, size_t start_column, size_t width, char underline_char, size_t position) const {
+    for (auto index = start_column - 1; index < std::min(start_column + width - 1, line.size()); index += 1) {
+        if (line[index] == '\t') {
+            do {
                 diagnostics_file << underline_char;
                 position += 1;
-            }
+            } while (position % 8 != 0);
+        }
+        else {
+            diagnostics_file << underline_char;
+            position += 1;
         }
     }
+    return position;
+}
+
+void DiagnosticOutput::print_expanded_line(std::ostream& stream, std::string_view line) const {
+    size_t position = 0;
+    for (auto c : line) {
+        if (c == '\t') {
+            do {
+                stream << ' ';
+                position += 1;
+            } while (position % 8 != 0);
+        }
+        else if (c == '\n') {
+            stream << c;
+            position = 0;
+        }
+        else {
+            stream << c;
+            position += 1;
+        }
+    }
+    stream << std::endl;
 }
 
 } // namespace tpau::cpp_kernal

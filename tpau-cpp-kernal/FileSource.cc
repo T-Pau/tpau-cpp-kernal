@@ -39,24 +39,24 @@ FileSource::FileSource(Symbol filename) : filename_(filename), lines(FileReader:
 
 void FileSource::expand_location(Location& location) const {
     if (location.file == filename()) {
-        location.end = Location::Position(line + 1, column + 1);
+        location.end = Location::Position(line_index + 1, column_index + 1);
     }
 }
 
 int FileSource::get() {
-    if (line >= lines.size()) {
-        line = lines.size() + 1;
+    if (line_index >= lines.size()) {
+        line_index = lines.size() + 1;
         return EOF;
     }
 
-    if (column >= lines[line].size()) {
-        line += 1;
-        column = 0;
+    if (column_index >= lines[line_index].size()) {
+        line_index += 1;
+        column_index = 0;
         return '\n';
     }
 
-    auto c = lines[line][column];
-    column += 1;
+    auto c = lines[line_index][column_index];
+    column_index += 1;
     return c;
 }
 
@@ -64,17 +64,17 @@ void FileSource::reset_to(const Location& new_location) {
     if (new_location.file != filename()) {
         throw Exception("Can't reset to location in different file.");
     }
-    line = new_location.start.line_index();
-    column = new_location.start.column_index();
+    line_index = new_location.start.line_index();
+    column_index = new_location.start.column_index();
 }
 
 
 void FileSource::unget() {
-    if (column == 0) {
-        if (line > 0) {
-            line -= 1;
-            if (line < lines.size()) {
-                column = lines[line].size();
+    if (column_index == 0) {
+        if (line_index > 0) {
+            line_index -= 1;
+            if (line_index < lines.size()) {
+                column_index = lines[line_index].size();
             }
         }
         else {
@@ -82,7 +82,7 @@ void FileSource::unget() {
         }
     }
     else {
-        column -= 1;
+        column_index -= 1;
     }
 }
 

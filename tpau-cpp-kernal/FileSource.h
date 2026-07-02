@@ -70,7 +70,7 @@ class FileSource {
      *
      * @return The current location in the file.
      */
-    [[nodiscard]] Location location() const { return {filename(), line + 1, column, column}; }
+    [[nodiscard]] Location location() const { return {filename(), line_index + 1, column_index + 1, column_index + 1}; }
 
     /**
      * Expand a location within the file to include the current location.
@@ -97,10 +97,10 @@ class FileSource {
     const std::vector<std::string>& lines;
 
     /// @brief The current line number (0-based).
-    size_t line{0};
+    size_t line_index{0};
 
     /// @brief The current column number (0-based).
-    size_t column{0};
+    size_t column_index{0};
 };
 
 } // namespace tpau::cpp_kernal

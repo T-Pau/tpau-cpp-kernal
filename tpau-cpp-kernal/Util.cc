@@ -37,9 +37,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace tpau::cpp_kernal {
 
-std::filesystem::path default_output_filename(const std::filesystem::path& input_filename, std::string_view extension) { 
-    return replace_extension(input_filename.filename(), extension);
-}
+std::filesystem::path default_output_filename(const std::filesystem::path& input_filename, std::string_view extension) { return replace_extension(input_filename.filename(), extension); }
 
 
 std::filesystem::path replace_extension(const std::filesystem::path& file_name, std::string_view extension) { return file_name.parent_path() / (std::format("{}.{}", file_name.stem().string(), extension)); }
@@ -73,6 +71,37 @@ std::string strerror_string(std::optional<int> errnum) {
 #else
     return std::string(strerror(*errnum));
 #endif
+}
+
+std::vector<std::string> split(std::string_view str, std::string_view delimiters, bool keep_empty) {
+    std::vector<std::string> result;
+    size_t start = 0;
+    size_t end = 0;
+
+    while (end < str.size()) {
+        if (delimiters.find(str[end]) != std::string_view::npos) {
+            if (keep_empty || end > start) {
+                result.emplace_back(str.substr(start, end - start));
+            }
+            start = end + 1;
+        }
+        end++;
+    }
+
+    if (keep_empty || end > start) {
+        result.emplace_back(str.substr(start, end - start));
+    }
+
+    return result;
+}
+
+std::string trim(std::string_view str, std::string_view whitespace) {
+    auto start = str.find_first_not_of(whitespace);
+    if (start == std::string_view::npos) {
+        return {};
+    }
+    auto end = str.find_last_not_of(whitespace);
+    return std::string(str.substr(start, end - start + 1));
 }
 
 } // namespace tpau::cpp_kernal

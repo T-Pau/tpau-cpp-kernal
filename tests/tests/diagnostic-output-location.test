@@ -1,0 +1,40 @@
+description Test underlining in diagnostic output.
+program diagnostic-output
+file file1 <>
+This is line one without tabs.
+	This line has a tab at the beginning.
+This line has	a tab in the middle.
+end-of-inline-data
+stdin
+read file1
+notice {file1 1 1 0} start of line, zero width
+notice {file1 1 1 1} start of line, width 1
+notice {file1 2 1 1} just the tab
+notice {file1 2 2 1} past the tab
+notice {file1 1 18 7} no tabs in line
+notice {file1 2 29 9} tab at beginning
+notice {file1 3 28 6} tab in middle
+end-of-inline-data
+stderr
+file1:1:1: notice: start of line, zero width
+This is line one without tabs.
+^
+file1:1:1: notice: start of line, width 1
+This is line one without tabs.
+^
+file1:2:1: notice: just the tab
+        This line has a tab at the beginning.
+^^^^^^^^
+file1:2:2: notice: past the tab
+        This line has a tab at the beginning.
+        ^
+file1:1:18: notice: no tabs in line
+This is line one without tabs.
+                 ^^^^^^^
+file1:2:29: notice: tab at beginning
+        This line has a tab at the beginning.
+                                   ^^^^^^^^^
+file1:3:28: notice: tab in middle
+This line has   a tab in the middle.
+                             ^^^^^^
+end-of-inline-data

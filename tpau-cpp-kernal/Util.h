@@ -118,6 +118,25 @@ std::filesystem::path replace_extension(const std::filesystem::path& file_name, 
  */
 std::string strerror_string(std::optional<int> errnum);
 
+/**
+ * Split a string into a vector of strings based on a set of delimiters.
+ *
+ * @param str The string to split.
+ * @param delimiters The set of delimiters to use for splitting. (default: whitespace)
+ * @param keep_empty If `true`, consecutive delimiters will result in empty strings in the output. (default: `false`)
+ * @return The vector of split strings.
+ */
+std::vector<std::string> split(std::string_view str, std::string_view delimiters = " \t\n\r\f\v", bool keep_empty = false);
+
+/**
+ * Trim whitespace from the beginning and end of a string.
+ *
+ * @param str The string to trim.
+ * @param whitespace The set of whitespace characters to trim. (default: whitespace)
+ * @return The trimmed string.
+ */
+std::string trim(std::string_view str, std::string_view whitespace = " \t\n\r\f\v");
+
 } // namespace tpau::cpp_kernal
 
 #endif // HAD_TPAU_CPP_KERNAL_UTIL_H

@@ -13,10 +13,44 @@ SET(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 SET(CMAKE_CXX_EXTENSIONS OFF)
 
+option(RUN_REGRESS "Run regression tests" ON)
+
 include(CheckFunctionExists)
 INCLUDE(GNUInstallDirs)
 
-find_package(Catch2 3)
+if(RUN_REGRESS)
+    find_package(Catch2 3)
+    if (NOT Catch2_FOUND)
+        message(WARNING "-- Catch2 not found, unit testing disabled")
+    endif()
+
+    if (NOT PYTHONBIN)
+        find_package (Python COMPONENTS Interpreter)
+        set (PYTHONBIN ${Python_EXECUTABLE})
+    else()
+        message("Python set to ${PYTHONBIN}")
+    endif()
+
+    find_program(NIHTEST nihtest)
+    set(NIHTEST_REQUIRED_VERSION "1.9.1")
+    set(USE_NIHTEST ON)
+
+    if (NOT NIHTEST OR NOT PYTHONBIN)
+        message(WARNING "-- nihtest or Python interpreter not found, command testing disabled")
+        set(USE_NIHTEST OFF)
+    else()
+        execute_process(COMMAND ${NIHTEST} --version OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE NIHTEST_VERSION_RAW)
+        string(REGEX REPLACE "[^ ]* " "" NIHTEST_VERSION ${NIHTEST_VERSION_RAW})
+        if (${NIHTEST_VERSION} VERSION_LESS ${NIHTEST_REQUIRED_VERSION})
+            message(WARNING "-- nihtest ${NIHTEST_VERSION} too old, at least ${NIHTEST_REQUIRED_VERSION} required, command testing disabled")
+            set(USE_NIHTEST OFF)
+        endif()
+    endif()
+    if (NOT USE_NIHTEST AND NOT Catch2_FOUND)
+        set(RUN_REGRESS OFF)
+    endif()
+endif()
+
 
 check_function_exists(strerror_s HAVE_STRERROR_S)
 check_function_exists(strerrorlen_s HAVE_STRERRORLEN_S)
@@ -62,11 +96,9 @@ enable_testing()
 # Targets
 add_subdirectory(tpau-cpp-kernal)
 
-if(Catch2_FOUND)
+if(RUN_REGRESS)
     add_subdirectory(tests)
-else()
-    message(WARNING "Catch2 not found, skipping tests")
-endif(Catch2_FOUND)
+endif(RUN_REGRESS)
 
 # write out config file
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)

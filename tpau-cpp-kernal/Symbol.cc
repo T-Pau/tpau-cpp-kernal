@@ -34,9 +34,23 @@ namespace tpau::cpp_kernal {
 Symbol::Table* Symbol::global = nullptr;
 const std::string Symbol::empty_string{};
 
+Symbol::Symbol(const char* name) : Symbol(std::string_view(name)) {}
+
+Symbol::Symbol(const std::string& name) : Symbol(std::string_view(name)) {}
+
 Symbol::Symbol(std::string_view name) {
     init_global();
     id = global->intern(name);
+}
+
+Symbol& Symbol::operator=(const std::string& name) {
+    *this = Symbol(name);
+    return *this;
+}
+
+Symbol& Symbol::operator=(const char* name) {
+    *this = Symbol(name);
+    return *this;
 }
 
 Symbol& Symbol::operator=(std::string_view name) {

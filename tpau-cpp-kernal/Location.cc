@@ -102,7 +102,7 @@ std::string Location::Position::to_string() const {
     }
     auto s = std::to_string(line_number);
     if (column > 0) {
-        s += "." + std::to_string(column);
+        s += ":" + std::to_string(column);
     }
     return s;
 }

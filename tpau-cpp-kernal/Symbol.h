@@ -67,10 +67,42 @@ class Symbol {
      * @param name The string to create the symbol from.
      * @return The created symbol.
      */
-    explicit Symbol(std::string_view name);
+    Symbol(const char* name);
+
+    /**
+     * Create a symbol from a string.
+     *
+     * @param name The string to create the symbol from.
+     * @return The created symbol.
+     */
+    Symbol(const std::string& name);
+
+    /**
+     * Create a symbol from a string view.
+     *
+     * @param name The string to create the symbol from.
+     * @return The created symbol.
+     */
+    Symbol(std::string_view name);
 
     /**
      * Assign the symbol corresponding to a string.
+     *
+     * @param name The string to create the symbol from.
+     * @return The created symbol.
+     */
+    Symbol& operator=(const char* name);
+
+    /**
+     * Assign the symbol corresponding to a string.
+     *
+     * @param name The string to create the symbol from.
+     * @return The created symbol.
+     */
+    Symbol& operator=(const std::string& name);
+
+    /**
+     * Assign the symbol corresponding to a string view.
      *
      * @param name The string to create the symbol from.
      * @return The created symbol.
