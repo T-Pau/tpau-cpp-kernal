@@ -3,5 +3,7 @@ features-files = @PROJECT_BINARY_DIR@/config.h
 test-input-directories = @CMAKE_CURRENT_SOURCE_DIR@/tests
     @CMAKE_CURRENT_SOURCE_DIR@/data
 program-directories = @CMAKE_CURRENT_BINARY_DIR@
+    @CMAKE_CURRENT_BINARY_DIR@/Debug
+    @CMAKE_CURRENT_BINARY_DIR@/Release
     @CMAKE_CURRENT_SOURCE_DIR@/programs
 default-stderr-replace = "^(@CMAKE_CURRENT_BINARY_DIR@|@CMAKE_CURRENT_SOURCE_DIR@/programs)[^ :]*: " ""
