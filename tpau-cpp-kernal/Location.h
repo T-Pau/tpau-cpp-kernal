@@ -153,10 +153,10 @@ class Location {
         size_t column_index() const { return column > 0 ? column - 1 : 0; }
 
         /// @brief The line number, or `0` if the line number is not specified.
-        size_t line_number;
+        size_t line_number{0};
 
         /// @brief The column number, or `0` if the column number is not specified.
-        size_t column;
+        size_t column{0};
     };
 
     /// @brief Empty location.
