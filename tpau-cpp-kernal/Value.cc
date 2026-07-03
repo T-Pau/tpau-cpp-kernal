@@ -38,6 +38,15 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace tpau::cpp_kernal {
 
+Value::Value(std::string_view value, bool binary) {
+    if (binary) {
+        this->value = std::string(value);
+    }
+    else {
+        this->value = Symbol(value);
+    }
+}
+
 Value::Value(int64_t value_, uint64_t default_size) : explicit_default_size(default_size) {
     if (value_ < 0) {
         value = value_;

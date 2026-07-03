@@ -90,11 +90,14 @@ class Value {
     explicit Value(double value) : value{value} {}
 
     /**
-     * Create a binary value.
+     * Create a binary or a string value.
+     *
+     * The extra parameter is neccessary to distinguish this constructor from the one that takes a `Symbol` parameter.
      *
      * @param value The binary data.
+     * @param binary If `true`, the value is binary data, otherwise it is a string.
      */
-    explicit Value(std::string_view value) : value{std::string(value)} {}
+    explicit Value(std::string_view value, bool binary);
 
     /**
      * Create a string value.
