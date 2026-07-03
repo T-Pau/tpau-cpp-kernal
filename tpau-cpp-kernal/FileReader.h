@@ -55,6 +55,13 @@ class FileReader {
     const std::vector<std::string>& read(Symbol file_name, bool optional = false);
 
     /**
+     * Get the contents of the standard input.
+     *
+     * @return The contents of the standard input as a vector of lines.
+     */
+    const std::vector<std::string>& read_stdin();
+
+    /**
      * Get the contents of a binary file.
      *
      * @param file_name The name of the file to read.
@@ -85,6 +92,8 @@ class FileReader {
     static FileReader global;
 
   private:
+    std::vector<std::string> get_lines(std::istream& stream);
+
     /// @brief An empty file to return when an optional file is not found.
     static std::vector<std::string> empty_file;
 
@@ -93,6 +102,12 @@ class FileReader {
 
     /// @brief The map of text file names to their contents.
     std::unordered_map<Symbol, std::vector<std::string>> files;
+
+    /// @brief A flag indicating whether the standard input has been read.
+    bool stdin_read{false};
+
+    /// @brief The contents of the standard input.
+    std::vector<std::string> stdin_lines;
 };
 
 } // namespace tpau::cpp_kernal

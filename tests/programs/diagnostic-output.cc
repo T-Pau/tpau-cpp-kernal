@@ -1,5 +1,4 @@
-#include <string>
-#include <unordered_map>
+#include "TestCommand.h"
 
 #include "DiagnosticOutput.h"
 #include "FileReader.h"
@@ -7,29 +6,23 @@
 
 using namespace tpau::cpp_kernal;
 
-bool handle_read(const Location& location, std::string_view command, std::string_view arguments) {
+TestCommand::Status handle_read(const Location& location, std::string_view command, TestCommand::Arguments arguments) {
+    auto filename = arguments.all();
     try {
-        (void)FileReader::global.read(arguments);
+        (void)FileReader::global.read(filename);
     }
     catch (const std::exception& e) {
-        DiagnosticOutput::global.error(location, "Failed to read file '{}': {}", arguments, e.what());
-        return false;
+        DiagnosticOutput::global.error(location, "Failed to read file '{}': {}", filename, e.what());
+        return TestCommand::Status::ERROR;
     }
-    return true;
+    return TestCommand::Status::OK;
 }
 
-bool handle_output(const Location& location, std::string_view command, std::string_view arguments) {
+TestCommand::Status handle_output(const Location& location, std::string_view command, TestCommand::Arguments arguments) {
     auto message_location = Location();
-    auto message = std::string(arguments);
 
-    if (!arguments.empty() && arguments[0] == '{') {
-        auto end = arguments.find('}');
-        if (end == std::string_view::npos) {
-            DiagnosticOutput::global.error(location, "No closing brace found in location");
-            return false;
-        }
-        auto location_str = trim(arguments.substr(1, end - 1));
-        message = trim(arguments.substr(end + 1));
+    if (auto optional_location_str = arguments.enclosed("{", "}", true)) {
+        auto location_str = *optional_location_str;
         auto location_parts = split(location_str, " \t");
         if (!location_parts.empty()) {
             auto file_name = location_parts[0];
@@ -43,7 +36,7 @@ bool handle_output(const Location& location, std::string_view command, std::stri
                 }
                 catch (...) {
                     DiagnosticOutput::global.error(location, "Invalid line number in location: '{}'", location_str);
-                    return false;
+                    return TestCommand::Status::ERROR;
                 }
             }
             if (location_parts.size() > 2) {
@@ -52,7 +45,7 @@ bool handle_output(const Location& location, std::string_view command, std::stri
                 }
                 catch (...) {
                     DiagnosticOutput::global.error(location, "Invalid start column in location: '{}'", location_str);
-                    return false;
+                    return TestCommand::Status::ERROR;
                 }
             }
             if (location_parts.size() > 3) {
@@ -61,24 +54,26 @@ bool handle_output(const Location& location, std::string_view command, std::stri
                 }
                 catch (...) {
                     DiagnosticOutput::global.error(location, "Invalid width in location: '{}'", location_str);
-                    return false;
+                    return TestCommand::Status::ERROR;
                 }
             }
             if (location_parts.size() > 4) {
                 DiagnosticOutput::global.error(location, "Invalid location: '{}'", location_str);
-                return false;
+                return TestCommand::Status::ERROR;
             }
             message_location = Location(file_name, line_number, start_column, start_column + width);
         }
     }
 
+    auto message = arguments.all();
+
     if (message.empty()) {
         DiagnosticOutput::global.error(location, "No message specified");
-        return false;
+        return TestCommand::Status::ERROR;
     }
 
-    if (command == "notice") {
-        DiagnosticOutput::global.notice(message_location, message);
+    if (command == "note") {
+        DiagnosticOutput::global.note(message_location, message);
     }
     else if (command == "warning") {
         DiagnosticOutput::global.warning(message_location, message);
@@ -88,52 +83,24 @@ bool handle_output(const Location& location, std::string_view command, std::stri
     }
     else {
         DiagnosticOutput::global.error(location, "Unknown command: '{}'", command);
-        return false;
+        return TestCommand::Status::ERROR;
     }
 
-    return true;
+    return TestCommand::Status::OK;
 }
 
-std::unordered_map<std::string, bool (*)(const Location& location, std::string_view command, std::string_view arguments)> command_handlers = {
-    {"error", handle_output},
-    {"notice", handle_output},
-    {"read", handle_read},
-    {"warning", handle_output},
+TestCommand::Status handle_mark_failed(const Location& location, std::string_view command, TestCommand::Arguments arguments) {
+    DiagnosticOutput::global.mark_failed();
+
+    return TestCommand::Status::OK;
+}
+
+std::unordered_map<std::string, TestCommand::CommandDefinition> command_definitions = {
+    {"error", {"[{location}] message", "print error message", handle_output}}, {"mark_failed", {{}, "mark program as failed", handle_mark_failed}}, {"note", {"[{location}] message", "print note message", handle_output}}, {"read", {"filename", "read file", handle_read}}, {"warning", {"[{location}] message", "print warning message", handle_output}},
 };
 
-int main() {
-    auto line = std::string();
-    auto line_number = 0;
-    while (std::getline(std::cin, line)) {
-        line_number += 1;
-        if (line.empty()) {
-            continue;
-        }
-        auto space_pos = line.find(' ');
-        auto command = line.substr(0, space_pos);
-        auto arguments = space_pos == std::string::npos ? "" : trim(line.substr(space_pos + 1));
-        auto location = Location("<stdin>", line_number, 0, 0);
+int main(int argc, char* const argv[]) {
+    auto command = TestCommand("diagnostic-output", command_definitions);
 
-        auto handler_it = command_handlers.find(std::string(command));
-        if (handler_it == command_handlers.end()) {
-            DiagnosticOutput::global.error(location, "unknown command: '{}'", command);
-            return 2;
-        }
-
-        try {
-            if (!handler_it->second(location, command, arguments)) {
-                return 2;
-            }
-        }
-        catch (const std::exception& e) {
-            DiagnosticOutput::global.error(location, "command caused uncaught exception: {}", e.what());
-            return 2;
-        }
-    }
-
-    if (DiagnosticOutput::global.failed()) {
-        return 1;
-    }
-
-    return 0;
+    return command.run(argc, argv);
 }

@@ -5,12 +5,13 @@ set(TEST_PROGRAMS
     test-symbol
 )
 
-set(PROGRAMS
+set(TEST_COMMAND_PROGRAMS
+    command
     diagnostic-output
 )
 
-foreach(program IN LISTS TEST_PROGRAMS PROGRAMS)
-    add_executable(${program} programs/${program}.cc)
+foreach(program IN LISTS TEST_PROGRAMS TEST_COMMAND_PROGRAMS)
+    add_executable(${program} programs/${program}.cc programs/TestCommand.cc)
     target_include_directories(${program} PRIVATE BEFORE ${PROJECT_SOURCE_DIR}/tpau-cpp-kernal)
     target_link_libraries(${program} PRIVATE tpau-cpp-kernal Catch2::Catch2WithMain)
 endforeach()

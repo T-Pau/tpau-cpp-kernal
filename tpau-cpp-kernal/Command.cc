@@ -37,6 +37,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "config.h"
 
+#include "DiagnosticOutput.h"
 #include "Exception.h"
 
 namespace tpau::cpp_kernal {
@@ -45,7 +46,7 @@ std::string Command::header = "";
 std::string Command::footer = "";
 std::string Command::version = "";
 
-Command::Command(const std::vector<Commandline::Option>& options, std::string arguments, std::string_view name, Features features) : commandline(options, std::move(arguments), std::string(name) + header, footer, version), features(features) {
+Command::Command(const std::vector<Commandline::Option>& options, std::string arguments, std::string_view name, FlagSet<Feature> features) : commandline(options, std::move(arguments), std::string(name) + header, footer, version), features(features) {
     if (features.is_enabled(Feature::OutputFile)) {
         commandline.add_option(Commandline::Option("output", 'o', "file", "write output to FILE"));
     }
@@ -58,7 +59,10 @@ Command::Command(const std::vector<Commandline::Option>& options, std::string ar
 int Command::run(int argc, char* const* argv) {
     try {
         program_name = argv[0];
-        arguments = commandline.parse(argc, argv);
+        arguments = commandline.parse(argc, argv, false);
+        if (arguments.exit_code) {
+            return *arguments.exit_code;
+        }
 
         if (arguments.arguments.size() < minimum_arguments() || arguments.arguments.size() > maximum_arguments()) {
             commandline.usage(false, stderr);
@@ -77,8 +81,16 @@ int Command::run(int argc, char* const* argv) {
             }
         }
 
-        process();
-        create_output();
+        auto ret = process();
+        if (ret != 0) {
+            return ret;
+        }
+        if (DiagnosticOutput::global.failed()) {
+            return 1;
+        }
+        if (features.is_enabled(Feature::OutputFile)) {
+            return create_output();
+        }
     }
     catch (std::exception& ex) {
         if (strlen(ex.what()) > 0) {

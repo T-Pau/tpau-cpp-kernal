@@ -44,7 +44,7 @@ Commandline::Commandline(std::vector<Option> options_, std::string arguments_, s
 }
 
 
-ParsedCommandline Commandline::parse(int argc, char* const* argv) {
+ParsedCommandline Commandline::parse(int argc, char* const* argv, bool allow_exit) {
     program_name = argv[0];
 
     std::unordered_map<char, const Option*> short_options;
@@ -72,7 +72,13 @@ ParsedCommandline Commandline::parse(int argc, char* const* argv) {
                 if (it == long_options.end()) {
                     usage(false, stderr);
                     std::cerr << "unknown option '--" << option_name << "'\n";
-                    exit(1);
+                    if (allow_exit) {
+                        exit(1);
+                    }
+                    else {
+                        parsed_commandline.exit_code = 1;
+                        return parsed_commandline;
+                    }
                 }
                 auto option_argument = std::string{};
                 if (equals != std::string::npos) {
@@ -82,7 +88,13 @@ ParsedCommandline Commandline::parse(int argc, char* const* argv) {
                     else {
                         usage(false, stderr);
                         std::cerr << "option '--" << option_name << "' doesn't take an argument\n";
-                        exit(1);
+                        if (allow_exit) {
+                            exit(1);
+                        }
+                        else {
+                            parsed_commandline.exit_code = 1;
+                            return parsed_commandline;
+                        }
                     }
                 }
                 else {
@@ -90,7 +102,13 @@ ParsedCommandline Commandline::parse(int argc, char* const* argv) {
                         if (index == argc - 1) {
                             usage(false, stderr);
                             std::cerr << "missing argument for option '--" << option_name << "'\n";
-                            exit(1);
+                            if (allow_exit) {
+                                exit(1);
+                            }
+                            else {
+                                parsed_commandline.exit_code = 1;
+                                return parsed_commandline;
+                            }
                         }
                         index += 1;
                         parsed_commandline.add_option(option_name, argv[index]);
@@ -107,7 +125,13 @@ ParsedCommandline Commandline::parse(int argc, char* const* argv) {
                     if (it == short_options.end()) {
                         usage(false, stderr);
                         std::cerr << "unknown option '-" << option_name << "'\n";
-                        exit(1);
+                        if (allow_exit) {
+                            exit(1);
+                        }
+                        else {
+                            parsed_commandline.exit_code = 1;
+                            return parsed_commandline;
+                        }
                     }
                     if (it->second->has_argument()) {
                         position += 1;
@@ -118,7 +142,13 @@ ParsedCommandline Commandline::parse(int argc, char* const* argv) {
                             if (index == argc - 1) {
                                 usage(false, stderr);
                                 std::cerr << "missing argument for option '-" << option_name << "'\n";
-                                exit(1);
+                                if (allow_exit) {
+                                    exit(1);
+                                }
+                                else {
+                                    parsed_commandline.exit_code = 1;
+                                    return parsed_commandline;
+                                }
                             }
                             index += 1;
                             parsed_commandline.add_option(it->second->name, argv[index]);
@@ -142,11 +172,23 @@ ParsedCommandline Commandline::parse(int argc, char* const* argv) {
 
     if (parsed_commandline.find_first("help").has_value()) {
         usage(true);
-        exit(0);
+        if (allow_exit) {
+            exit(0);
+        }
+        else {
+            parsed_commandline.exit_code = 0;
+            return parsed_commandline;
+        }
     }
     if (parsed_commandline.find_first("version").has_value()) {
         std::cout << version << std::endl;
-        exit(0);
+        if (allow_exit) {
+            exit(0);
+        }
+        else {
+            parsed_commandline.exit_code = 0;
+            return parsed_commandline;
+        }
     }
 
     return parsed_commandline;

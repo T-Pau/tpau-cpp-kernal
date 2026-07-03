@@ -8,7 +8,7 @@ modification, are permitted provided that the following conditions
 are met:
 
 1. Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
+   note, this list of conditions and the following disclaimer.
 
 2. The names of the authors may not be used to endorse or promote
    products derived from this software without specific prior
@@ -37,8 +37,8 @@ DiagnosticOutput DiagnosticOutput::global;
 
 const char* DiagnosticOutput::diagnostics_severity_name(Severity severity) {
     switch (severity) {
-    case NOTICE:
-        return "notice";
+    case NOTE:
+        return "note";
 
     case WARNING:
         return "warning";
@@ -47,7 +47,7 @@ const char* DiagnosticOutput::diagnostics_severity_name(Severity severity) {
         return "error";
     }
 
-    throw Exception("invalid severity");
+    throw Exception("invalid severity {}", static_cast<int>(severity));
 }
 
 void DiagnosticOutput::output(Symbol category, Severity severity, const Location& location, std::string_view message) {

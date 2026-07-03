@@ -32,7 +32,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <algorithm>
 #include <filesystem>
+#include <functional>
 #include <optional>
+#include <ranges>
 #include <string>
 #include <vector>
 
@@ -95,8 +97,14 @@ std::string join(const R& strings, std::string_view separator) {
  * @param comp The comparison function to use for sorting. (default: std::less)
  * @return The sorted collection.
  */
-template <std::ranges::input_range R, typename T = std::iter_value_t<R>, class Comp = std::less<T>> std::vector<T> sorted(const R& collection, Comp comp = {}) {
-    auto sorted_collection = std::vector<T>(collection.begin(), collection.end());
+template <std::ranges::input_range R, typename T = std::ranges::range_value_t<R>, class Comp = std::less<T>> std::vector<T> sorted(const R& collection, Comp comp = {}) {
+    auto sorted_collection = std::vector<T>();
+    if constexpr (std::ranges::sized_range<R>) {
+        sorted_collection.reserve(std::ranges::size(collection));
+    }
+    for (const auto& value : collection) {
+        sorted_collection.emplace_back(value);
+    }
     std::sort(sorted_collection.begin(), sorted_collection.end(), comp);
     return sorted_collection;
 }
@@ -135,7 +143,7 @@ std::vector<std::string> split(std::string_view str, std::string_view delimiters
  * @param whitespace The set of whitespace characters to trim. (default: whitespace)
  * @return The trimmed string.
  */
-std::string trim(std::string_view str, std::string_view whitespace = " \t\n\r\f\v");
+std::string_view trim(std::string_view str, std::string_view whitespace = " \t\n\r\f\v");
 
 } // namespace tpau::cpp_kernal
 

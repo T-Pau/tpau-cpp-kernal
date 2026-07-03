@@ -112,6 +112,11 @@ class ParsedCommandline {
      * The parsed command line arguments.
      */
     std::vector<std::string> arguments;
+
+    /**
+     * The exit code of the command. If this is set, the command should not be run and the program should exit with this code.
+     */
+    std::optional<int> exit_code;
 };
 
 /**
@@ -227,9 +232,10 @@ class Commandline {
      *
      * @param argc The number of command line arguments.
      * @param argv The command line arguments.
+     * @param allow_exit If `true`, the program will exit if the command should not run. Otherwise, exit_code will be set in the returned `ParsedCommandline`.
      * @return The parsed command line.
      */
-    ParsedCommandline parse(int argc, char* const argv[]);
+    ParsedCommandline parse(int argc, char* const argv[], bool allow_exit = true);
 
     /**
      * Print the usage message to the given `FILE`.

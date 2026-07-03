@@ -95,13 +95,16 @@ std::vector<std::string> split(std::string_view str, std::string_view delimiters
     return result;
 }
 
-std::string trim(std::string_view str, std::string_view whitespace) {
+std::string_view trim(std::string_view str, std::string_view whitespace) {
     auto start = str.find_first_not_of(whitespace);
     if (start == std::string_view::npos) {
         return {};
     }
     auto end = str.find_last_not_of(whitespace);
-    return std::string(str.substr(start, end - start + 1));
+    if (end == std::string_view::npos) {
+        return str.substr(start);
+    }
+    return str.substr(start, end - start + 1);
 }
 
 } // namespace tpau::cpp_kernal

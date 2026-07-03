@@ -32,6 +32,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <algorithm>
 #include <cstring>
 #include <fstream>
+#include <iostream>
 #include <ranges>
 
 #include "Exception.h"
@@ -52,11 +53,7 @@ const std::vector<std::string>& FileReader::read(Symbol file_name, bool optional
 
     std::ifstream input_file(file_name.str());
     if (input_file) {
-        std::vector<std::string> lines;
-        std::string s;
-        while (getline(input_file, s)) {
-            lines.push_back(s);
-        }
+        std::vector<std::string> lines = get_lines(input_file);
 
         files[file_name] = std::move(lines);
         return files[file_name];
@@ -112,6 +109,23 @@ std::vector<Symbol> FileReader::file_names() const {
     std::sort(file_names.begin(), file_names.end());
 
     return file_names;
+}
+
+const std::vector<std::string>& FileReader::read_stdin() {
+    if (!stdin_read) {
+        stdin_read = true;
+        stdin_lines = get_lines(std::cin);
+    }
+    return stdin_lines;
+}
+
+std::vector<std::string> FileReader::get_lines(std::istream& stream) {
+    std::vector<std::string> lines;
+    std::string line;
+    while (std::getline(stream, line)) {
+        lines.push_back(line);
+    }
+    return lines;
 }
 
 } // namespace tpau::cpp_kernal

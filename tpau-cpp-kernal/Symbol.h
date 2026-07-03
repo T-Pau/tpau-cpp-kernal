@@ -41,16 +41,6 @@ namespace tpau::cpp_kernal {
 
 class SymbolTable;
 
-/// @brief Class for hashing string pointers.
-struct StringPtrHash {
-    auto operator()(const std::string* string) const noexcept { return std::hash<std::string>{}(*string); }
-};
-
-/// @brief Class for comparing string pointers.
-struct StringPtrEqual {
-    auto operator()(const std::string* a, const std::string* b) const { return *a == *b; }
-};
-
 /**
  * A Symbol represents a string in a way that allows copying and comparison in constant time.
  *

@@ -11,7 +11,7 @@ modification, are permitted provided that the following conditions
 are met:
 
 1. Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
+   note, this list of conditions and the following disclaimer.
 
 2. The names of the authors may not be used to endorse or promote
    products derived from this software without specific prior
@@ -41,7 +41,7 @@ namespace tpau::cpp_kernal {
 
 class DiagnosticOutput {
   public:
-    enum Severity { NOTICE, WARNING, ERROR };
+    enum Severity { NOTE, WARNING, ERROR };
 
     /**
      * Create a diagnostic output.
@@ -59,119 +59,119 @@ class DiagnosticOutput {
     void register_category(Symbol category, Severity severity);
 
     /**
-     * Output a notice.
+     * Output a note.
      *
-     * @param category The category of the notice.
-     * @param location The location of the notice.
-     * @param message The message of the notice.
+     * @param category The category of the note.
+     * @param location The location of the note.
+     * @param message The message of the note.
      */
-    void notice(Symbol category, const Location& location, std::string_view message) { output(category, NOTICE, location, message); }
+    void note(Symbol category, const Location& location, std::string_view message) { output(category, NOTE, location, message); }
 
     /**
-     * Output a notice with default category.
+     * Output a note with default category.
      *
-     * @param location The location of the notice.
-     * @param message The message of the notice.
+     * @param location The location of the note.
+     * @param message The message of the note.
      */
-    void notice(const Location& location, std::string_view message) { notice(Symbol{}, location, message); }
+    void note(const Location& location, std::string_view message) { note(Symbol{}, location, message); }
 
     /**
-     * Output a notice without location.
+     * Output a note without location.
      *
-     * @param category The category of the notice.
-     * @param message The message of the notice.
+     * @param category The category of the note.
+     * @param message The message of the note.
      */
-    void notice(Symbol category, std::string_view message) { output(category, NOTICE, Location{}, message); }
+    void note(Symbol category, std::string_view message) { output(category, NOTE, Location{}, message); }
 
     /**
-     * Output a notice with default category and without location.
+     * Output a note with default category and without location.
      *
-     * @param message The message of the notice.
+     * @param message The message of the note.
      */
-    void notice(std::string_view message) { notice(Symbol{}, Location{}, message); }
+    void note(std::string_view message) { note(Symbol{}, Location{}, message); }
 
     /**
-     * Output a formatted notice.
+     * Output a formatted note.
      *
-     * @param category The category of the notice.
-     * @param location The location of the notice.
-     * @param format The format string for the notice message.
+     * @param category The category of the note.
+     * @param location The location of the note.
+     * @param format The format string for the note message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void notice(Symbol category, const Location& location, std::format_string<Args...> format, Args&&... args) { notice(category, location, std::format(format, std::forward<Args>(args)...)); }
+    template <typename... Args> void note(Symbol category, const Location& location, std::format_string<Args...> format, Args&&... args) { note(category, location, std::format(format, std::forward<Args>(args)...)); }
 
     /**
-     * Output a formatted notice with default category.
+     * Output a formatted note with default category.
      *
-     * @param location The location of the notice.
-     * @param format The format string for the notice message.
+     * @param location The location of the note.
+     * @param format The format string for the note message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void notice(const Location& location, std::format_string<Args...> format, Args&&... args) { notice(location, std::format(format, std::forward<Args>(args)...)); }
+    template <typename... Args> void note(const Location& location, std::format_string<Args...> format, Args&&... args) { note(location, std::format(format, std::forward<Args>(args)...)); }
 
     /**
-     * Output a formatted notice without location.
+     * Output a formatted note without location.
      *
-     * @param category The category of the notice.
-     * @param format The format string for the notice message.
+     * @param category The category of the note.
+     * @param format The format string for the note message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void notice(Symbol category, std::format_string<Args...> format, Args&&... args) { notice(category, std::format(format, std::forward<Args>(args)...)); }
+    template <typename... Args> void note(Symbol category, std::format_string<Args...> format, Args&&... args) { note(category, std::format(format, std::forward<Args>(args)...)); }
 
     /**
-     * Output a formatted notice with default category and without location.
+     * Output a formatted note with default category and without location.
      *
-     * @param format The format string for the notice message.
+     * @param format The format string for the note message.
      * @param args The arguments for the format string.
      */
-    template <typename... Args> void notice(std::format_string<Args...> format, Args&&... args) { notice(std::format(format, std::forward<Args>(args)...)); }
+    template <typename... Args> void note(std::format_string<Args...> format, Args&&... args) { note(std::format(format, std::forward<Args>(args)...)); }
 
     /**
-     * Output a notice from an exception.
+     * Output a note from an exception.
      *
-     * @param category The category of the notice.
-     * @param location The location of the notice.
+     * @param category The category of the note.
+     * @param location The location of the note.
      * @param exception The exception.
      */
-    void notice(Symbol category, const Location& location, const Exception& exception) { notice(category, Location{}, exception.what()); }
+    void note(Symbol category, const Location& location, const Exception& exception) { note(category, Location{}, exception.what()); }
 
     /**
-     * Output a notice from an exception with default category.
+     * Output a note from an exception with default category.
      *
-     * @param location The location of the notice.
+     * @param location The location of the note.
      * @param exception The exception.
      */
-    void notice(const Location& location, const Exception& exception) { notice(location, exception.what()); }
+    void note(const Location& location, const Exception& exception) { note(location, exception.what()); }
 
     /**
-     * Output a notice from an exception without location.
+     * Output a note from an exception without location.
      *
-     * @param category The category of the notice.
+     * @param category The category of the note.
      * @param exception The exception.
      */
-    void notice(Symbol category, const Exception& exception) { notice(category, exception.what()); }
+    void note(Symbol category, const Exception& exception) { note(category, exception.what()); }
 
     /**
-     * Output a notice from an exception with default category and without location.
+     * Output a note from an exception with default category and without location.
      *
      * @param exception The exception.
      */
-    void notice(const Exception& exception) { notice(exception.what()); }
+    void note(const Exception& exception) { note(exception.what()); }
 
     /**
-     * Output a notice from a location exception.
+     * Output a note from a location exception.
      *
-     * @param category The category of the notice.
+     * @param category The category of the note.
      * @param exception The location exception.
      */
-    void notice(Symbol category, const LocationException& exception) { notice(category, exception.location, exception.what()); }
+    void note(Symbol category, const LocationException& exception) { note(category, exception.location, exception.what()); }
 
     /**
-     * Output a notice from a location exception with default category.
+     * Output a note from a location exception with default category.
      *
      * @param exception The location exception.
      */
-    void notice(const LocationException& exception) { notice(exception.location, exception.what()); }
+    void note(const LocationException& exception) { note(exception.location, exception.what()); }
 
 
     /**

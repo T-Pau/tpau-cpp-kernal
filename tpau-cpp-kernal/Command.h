@@ -35,6 +35,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string>
 
 #include "Commandline.h"
+#include "Exception.h"
+#include "FlagSet.h"
 
 /**
  * Sets the default package information for the command line interface from CMake definitions.
@@ -59,64 +61,6 @@ class Command {
         DependencyFile, ///< The command can create a gcc style dependency file.
     };
 
-    class Features {
-      public:
-        /**
-         * Create a Features object with all features disabled.
-         */
-        Features() {}
-
-        // Constructor using Fold Expressions (C++17/20)
-        // This allows: Features{Feature::OutputFile, Feature::DependencyFile}
-        /**
-         * Create a Features object with the given features enabled.
-         *
-         * @param args The features to enable.
-         */
-        template <typename... Args> constexpr Features(Args... args) { ((enable(args)), ...); }
-
-        /**
-         * Create a Features object with a single feature or a raw bitmask.
-         *
-         * @param feature_mask The bitmask of the features to enable.
-         */
-        constexpr explicit Features(uint64_t feature_mask) : feature_mask(feature_mask) {}
-
-        // Easy check: "Does this option exist in the set?"
-        /**
-         * Check if a feature is enabled.
-         *
-         * @param feature The feature to check.
-         * @return `true` if the feature is enabled, `false` otherwise.
-         */
-        [[nodiscard]] bool is_enabled(Feature feature) const { return (feature_mask & get_mask(feature)) != 0; }
-
-        /**
-         * Enable a feature.
-         *
-         * @param feature The feature to enable.
-         */
-        void enable(Feature feature) { feature_mask |= get_mask(feature); }
-
-        /**
-         * Disable a feature.
-         *
-         * @param feature The feature to disable.
-         */
-        void disable(Feature feature) { feature_mask &= ~get_mask(feature); }
-
-        /**
-         * Get the bitmask for a feature.
-         *
-         * @param feature The feature to get the bitmask for.
-         * @return The bitmask for the feature.
-         */
-        static constexpr uint64_t get_mask(Feature feature) { return static_cast<uint64_t>(1) << static_cast<uint8_t>(feature); }
-
-      private:
-        uint64_t feature_mask{0};
-    };
-
     /**
      * Create a command line program with the given options and arguments.
      *
@@ -125,7 +69,7 @@ class Command {
      * @param name The name of the program.
      * @param features The features to enable for the program.
      */
-    Command(const std::vector<Commandline::Option>& options, std::string arguments, std::string_view name, Features features = Features{});
+    Command(const std::vector<Commandline::Option>& options, std::string arguments, std::string_view name, FlagSet<Feature> features = FlagSet<Feature>{});
 
     /**
      * Run the command line program with the given arguments.
@@ -144,15 +88,19 @@ class Command {
      * Process the command line arguments and options.
      *
      * This method must be implemented by subclasses to perform the actual processing of the command.
+     *
+     * @return A non-zero value indicates an error occurred during processing and will be used as the exit code.
      */
-    virtual void process() = 0;
+    virtual int process() = 0;
 
     /**
      * Create the output files for the command.
      *
-     * This method must be implemented by subclasses to create the output files. It will only be called if no errors occurred during processing.
+     * If the feature `OutputFile` is enabled, this method must be implemented by subclasses to create the output files. It will only be called if no errors occurred during processing.
+     *
+     * @return A non-zero value indicates an error occurred during output creation and will be used as the exit code.
      */
-    virtual void create_output() = 0;
+    virtual int create_output() { throw Exception("create_output() not implemented"); }
 
     /**
      * Get the minimum number of arguments required for the command.
@@ -188,9 +136,10 @@ class Command {
     /// @brief The name of the dependency file.
     std::optional<std::filesystem::path> dependency_file;
 
-  private:
-    Features features;
+    /// @brief The features enabled for the command.
+    FlagSet<Feature> features;
 
+  private:
     static std::string header;
     static std::string footer;
     static std::string version;

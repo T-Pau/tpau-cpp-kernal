@@ -2,5 +2,4 @@
     options:
         omit:
             - "std::hash< tpau::cpp_kernal::Symbol >"
-            - "tpau::cpp_kernal::StringPtrEqual"
-            - "tpau::cpp_kernal::StringPtrHash"
+            - "std::formatter< tpau::cpp_kernal::Symbol >"

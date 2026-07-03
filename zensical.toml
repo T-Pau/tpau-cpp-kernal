@@ -29,6 +29,7 @@ nav = [
         { "Exception" = "Reference/Exception.md" },
         { "FileReader" = "Reference/FileReader.md" },
         { "FileSource" = "Reference/FileSource.md" },
+        { "FlagSet" = "Reference/FlagSet.md" },
         { "HexCoder" = "Reference/HexCoder.md" },
         { "Int" = "Reference/Int.md" },
         { "Location" = "Reference/Location.md" },
