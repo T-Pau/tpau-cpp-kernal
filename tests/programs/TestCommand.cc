@@ -1,5 +1,6 @@
 #include "TestCommand.h"
 
+#include <filesystem>
 #include <ranges>
 
 #include "DiagnosticOutput.h"
@@ -19,7 +20,7 @@ int TestCommand::process() {
     std::string_view filename;
     if (!arguments.arguments.empty()) {
         filename = arguments.arguments[0];
-        file_stream.open(filename);
+        file_stream.open(std::filesystem::path(filename));
         if (!file_stream) {
             DiagnosticOutput::global.error(Location(filename), "Failed to open file '{}'", filename);
             return static_cast<int>(Status::ERROR);
