@@ -30,15 +30,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Command.h"
 
 #include <cstring>
-#include <filesystem>
-#include <fstream>
 #include <iostream>
 #include <utility>
 
-#include "config.h"
-
 #include "DiagnosticOutput.h"
-#include "Exception.h"
 
 namespace tpau::cpp_kernal {
 

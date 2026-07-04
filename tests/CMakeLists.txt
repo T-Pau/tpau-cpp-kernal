@@ -1,3 +1,5 @@
+# cspell: words CTEST endforeach XFAIL
+
 include(Catch)
 
 set(TEST_PROGRAMS

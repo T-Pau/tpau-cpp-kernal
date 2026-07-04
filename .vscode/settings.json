@@ -9,7 +9,9 @@
     "C_Cpp.clang_format_style": "file",
     "editor.formatOnSave": true,
     "cSpell.words": [
+        "depfile",
         "kernal",
+        "nihtest",
         "RAII",
         "T-Pau",
         "T'Pau",

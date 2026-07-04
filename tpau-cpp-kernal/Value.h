@@ -1,3 +1,6 @@
+#ifndef HAD_TPAU_CPP_KERNAL_VALUE_H
+#define HAD_TPAU_CPP_KERNAL_VALUE_H
+
 /*
 Copyright (C) Dieter Baron
 
@@ -26,9 +29,6 @@ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-
-#ifndef HAD_TPAU_CPP_KERNAL_VALUE_H
-#define HAD_TPAU_CPP_KERNAL_VALUE_H
 
 #include <cstdint>
 #include <format>
@@ -92,7 +92,7 @@ class Value {
     /**
      * Create a binary or a string value.
      *
-     * The extra parameter is neccessary to distinguish this constructor from the one that takes a `Symbol` parameter.
+     * The extra parameter is necessary to distinguish this constructor from the one that takes a `Symbol` parameter.
      *
      * @param value The binary data.
      * @param binary If `true`, the value is binary data, otherwise it is a string.

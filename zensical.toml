@@ -1,4 +1,4 @@
-# cspell: ignore fontawesome inlinehilite linenums mkdocstrings nbsp pygments pymdownx superfences def_list
+# cspell: ignore fontawesome inlinehilite linenums mkdocstrings nbsp pygments pymdownx superfences def_list twemoji
 
 [project]
 site_name = "&nbsp;"
@@ -35,6 +35,7 @@ nav = [
         { "Location" = "Reference/Location.md" },
         { "Path" = "Reference/Path.md" },
         { "Symbol" = "Reference/Symbol.md" },
+        { "UTF8" = "Reference/UTF8.md" },
         { "Util" = "Reference/Util.md" },
         { "Value" = "Reference/Value.md" },
     ]},

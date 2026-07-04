@@ -1,3 +1,6 @@
+#ifndef HAD_TPAU_CPP_KERNAL_COMMAND_H
+#define HAD_TPAU_CPP_KERNAL_COMMAND_H
+
 /*
 Copyright (C) Dieter Baron
 
@@ -27,9 +30,6 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef HAD_TPAU_CPP_KERNAL_COMMAND_H
-#define HAD_TPAU_CPP_KERNAL_COMMAND_H
-
 #include <filesystem>
 #include <limits>
 #include <string>
@@ -56,9 +56,27 @@ namespace tpau::cpp_kernal {
  */
 class Command {
   public:
+    /**
+     * Optional features a subclass can enable.
+     */
     enum class Feature : uint8_t {
-        OutputFile,     ///< The command creates an output file.
-        DependencyFile, ///< The command can create a gcc style dependency file.
+        /**
+         * The command creates an output file.
+         *
+         * This adds the `--output` command line option and the subclass must implement the `create_output()` method to create the output file.
+         */
+        OutputFile,
+
+        /**
+         * The command can create a gcc style dependency file.
+         *
+         * This option requires the `OutputFile` feature to be enabled.
+         *
+         * This adds the `--dependency-file` command line option.
+         *
+         * TODO: Implement the tracking of dependencies and the creation of the dependency file.
+         */
+        DependencyFile,
     };
 
     /**

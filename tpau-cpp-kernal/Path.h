@@ -1,3 +1,6 @@
+#ifndef HAD_TPAU_CPP_KERNAL_PATH_H
+#define HAD_TPAU_CPP_KERNAL_PATH_H
+
 /*
 Copyright (C) Dieter Baron
 
@@ -27,11 +30,7 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef HAD_TPAU_CPP_KERNAL_PATH_H
-#define HAD_TPAU_CPP_KERNAL_PATH_H
-
 #include <filesystem>
-#include <optional>
 #include <vector>
 
 #include "Symbol.h"

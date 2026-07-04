@@ -15,6 +15,7 @@ set(KERNAL_SOURCES
         Int.cc
         Path.cc
         Symbol.cc
+        UTF8.cc
         Util.cc
         Value.cc
 )
@@ -35,6 +36,7 @@ set(KERNAL_PUBLIC_HEADERS
         LocationException.h
         Path.h
         Symbol.h
+        UTF8.h
         Util.h
         Value.h
 )

@@ -539,7 +539,7 @@ class DiagnosticOutput {
     /**
      * Check if the program has been marked as failed.
      *
-     * This can either been done expliclity by calling `mark_failed()`, or implicitly by outputting a message with a severity equal to or higher than the fail severity, which defaults to error.
+     * This can either been done explicitly by calling `mark_failed()`, or implicitly by outputting a message with a severity equal to or higher than the fail severity, which defaults to error.
      */
     [[nodiscard]] bool failed() const { return fail_flag; }
 
