@@ -29,7 +29,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "UTF8.h"
 
-#include <tpau-cpp-kernal/Exception.h>
+#include "Exception.h"
 
 namespace tpau::cpp_kernal {
 
