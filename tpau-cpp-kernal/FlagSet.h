@@ -73,6 +73,18 @@ class FlagSet {
     [[nodiscard]] bool is_enabled(Flag flag) const { return (flag_mask & get_mask(flag)) != 0; }
 
     /**
+     * Check if any flag from another FlagSet is enabled.
+     *
+     * @return `true` if any flag is enabled, `false` otherwise.
+     */
+    [[nodiscard]] bool any_enabled(const FlagSet& other) const { return (flag_mask & other.flag_mask) != 0; }
+
+    /**
+     * Check if all flags from another FlagSet are enabled.
+     */
+    [[nodiscard]] bool all_enabled(const FlagSet& other) const { return (flag_mask & other.flag_mask) == other.flag_mask; }
+
+    /**
      * Check if a flag is enabled.
      *
      * @param flag The flag to check.
@@ -88,11 +100,23 @@ class FlagSet {
     void enable(Flag flag) { flag_mask |= get_mask(flag); }
 
     /**
+     * Enable all flags set in another FlagSet.
+     */
+    void enable(const FlagSet& other) { flag_mask |= other.flag_mask; }
+
+    /**
      * Disable a flag.
      *
      * @param flag The flag to disable.
      */
     void disable(Flag flag) { flag_mask &= ~get_mask(flag); }
+
+    /**
+     * Disable all flags set in another FlagSet.
+     *
+     * @param other The FlagSet containing the flags to disable.
+     */
+    void disable(const FlagSet& other) { flag_mask &= ~other.flag_mask; }
 
     /**
      * Get the bitmask for a flag.

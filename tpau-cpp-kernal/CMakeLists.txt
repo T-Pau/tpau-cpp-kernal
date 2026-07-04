@@ -28,6 +28,7 @@ set(KERNAL_PUBLIC_HEADERS
         Exception.h
         FileReader.h
         FileSource.h
+        FlagSet.h
         HexCoder.h
         Int.h
         Location.h
