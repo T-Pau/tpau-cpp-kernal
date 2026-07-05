@@ -252,6 +252,13 @@ class Value {
     [[nodiscard]] uint64_t unsigned_value() const;
 
     /**
+     * Get the hash value of the value.
+     *
+     * @return The hash value of the value.
+     */
+    [[nodiscard]] size_t hash_value() const { return std::hash<std::optional<std::variant<bool, double, int64_t, uint64_t, Symbol, std::string>>>{}(value); }
+
+    /**
      * Get the default size of the value.
      *
      * For integer values, this is the smallest size that can hold the value, or the explicitly set default size if it is larger. For binary data, this is its size in bytes.
@@ -750,25 +757,7 @@ bool operator<=(const std::optional<Value>& a, const std::optional<Value>& b);
 
 template <> struct std::hash<tpau::cpp_kernal::Value> {
     std::size_t operator()(tpau::cpp_kernal::Value const& value) const noexcept {
-        switch (value.type()) {
-        case tpau::cpp_kernal::Value::BINARY:
-            return std::hash<std::string>{}(value.binary_value());
-        case tpau::cpp_kernal::Value::BOOLEAN:
-            return std::hash<bool>{}(value.boolean_value());
-        case tpau::cpp_kernal::Value::FLOAT:
-            return std::hash<double>{}(value.float_value());
-        case tpau::cpp_kernal::Value::SIGNED:
-            return std::hash<::int64_t>{}(value.signed_value());
-        case tpau::cpp_kernal::Value::STRING:
-            return std::hash<tpau::cpp_kernal::Symbol>{}(value.symbol_value());
-        case tpau::cpp_kernal::Value::UNSIGNED:
-            return std::hash<::uint64_t>{}(value.unsigned_value());
-        case tpau::cpp_kernal::Value::VOID:
-        case tpau::cpp_kernal::Value::NUMBER:
-        case tpau::cpp_kernal::Value::INTEGER:
-            return 0;
-        }
-        return 0;
+        return value.hash_value();
     }
 };
 

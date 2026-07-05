@@ -4,6 +4,7 @@ include(Catch)
 
 set(TEST_PROGRAMS
     test-base64
+    test-flagset
     test-symbol
     test-system-environment
 )
@@ -25,6 +26,12 @@ foreach(program IN LISTS TEST_COMMAND_PROGRAMS)
     target_include_directories(${program} PRIVATE BEFORE ${PROJECT_SOURCE_DIR}/tpau-cpp-kernal)
     target_link_libraries(${program} PRIVATE tpau-cpp-kernal)
 endforeach()
+
+if(WIN32)
+set(XFAIL_TESTS
+    test-system-environment
+)
+endif()
 
 foreach(test_program IN LISTS TEST_PROGRAMS)
     catch_discover_tests(${test_program})

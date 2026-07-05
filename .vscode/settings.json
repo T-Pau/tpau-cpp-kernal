@@ -1,4 +1,7 @@
 {
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
+    "C_Cpp.default.cppStandard": "c++20",
     "[c]": {
         "editor.defaultFormatter": "ms-vscode.cpptools"
     },
@@ -7,10 +10,13 @@
     },
     "C_Cpp.formatting": "clangFormat",
     "C_Cpp.clang_format_style": "file",
+    "cmake.saveBeforeBuild": true,
+    "task.saveBeforeRun": "always",
     "editor.formatOnSave": true,
     "cSpell.words": [
         "depfile",
         "getenv",
+        "flagset",
         "kernal",
         "nihtest",
         "RAII",

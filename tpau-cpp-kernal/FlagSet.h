@@ -30,14 +30,16 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <concepts>
+#include <cstdint>
 #include <type_traits>
 
 namespace tpau::cpp_kernal {
 
 /**
- * A set of flags represented as an enum class.
+ * A set of flags. The possible flags are defined by an enum type.
  *
- * The enum cases should be consecutive, not powers of two. The maximum number of flags is 64.
+ * This is meant to be used with enum types that don't explicitly define the values of their members. Do not define the values as powers of two. Values must be between 0 and 63, inclusive.
  */
 template <typename Flag>
     requires std::is_enum_v<Flag>
@@ -48,14 +50,17 @@ class FlagSet {
      */
     FlagSet() {}
 
+
     // Constructor using Fold Expressions (C++17/20)
     // This allows: FlagSet{Flag::OptionOne, Flag::OptionTwo}
     /**
      * Create a FlagSet with the given flags enabled.
      *
-     * @param args The flags to enable.
+     * @param args The flags to enable. Arguments can be of type Flag or other FlagSet<Flag>.
      */
-    template <typename... Args> constexpr FlagSet(Args... args) { ((enable(args)), ...); }
+    template <typename... Args>
+      requires ((std::same_as<std::remove_cvref_t<Args>, Flag> || std::same_as<std::remove_cvref_t<Args>, FlagSet<Flag>>) && ...)
+    constexpr FlagSet(Args... args) { ((enable(args)), ...); }
 
     /**
      * Create a FlagSet from a raw bitmask.
@@ -84,6 +89,27 @@ class FlagSet {
      */
     [[nodiscard]] bool all_enabled(const FlagSet& other) const { return (flag_mask & other.flag_mask) == other.flag_mask; }
 
+    /**
+     * Check if no flags are enabled.
+     *
+     * @return `true` if no flags are enabled, `false` otherwise.
+     */
+    [[nodiscard]] bool empty() const { return flag_mask == 0; }
+
+    /**
+     * Interpret as bool: Check if any flags are enabled.
+     *
+     * @return `true` if any flags are enabled, `false` otherwise.
+     */
+    operator bool() const { return !empty(); }
+
+    /*
+     * Compare two FlagSets for equality.
+     * @param other The other FlagSet to compare with.
+     * @return `true` if both FlagSets have the same enabled flags, `false` otherwise.
+     */
+    [[nodiscard]] bool operator==(const FlagSet& other) const { return flag_mask == other.flag_mask; }
+ 
     /**
      * Check if a flag is enabled.
      *
