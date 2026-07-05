@@ -44,15 +44,17 @@ namespace tpau::cpp_kernal {
 std::optional<std::string> SystemEnvironment::get(std::string_view name) {
 #if defined(HAVE_GETENV_S)
     size_t required_size{};
-   if (!getenv_s(&required_size, nullptr, 0, name.data())) {
-        throw Exception("can't get length of environment variable '{}': {}", name, strerror_string());
+    auto ret = getenv_s(&required_size, nullptr, 0, name.data());
+    if (ret != 0 && ret != -1 /* not found */) {
+        throw Exception("can't get length of environment variable '{}': {}", name, strerror_string(-ret));
     }
     if (required_size == 0) {
         return {};
     }
     std::string value(required_size, '\0');
-    if (!getenv_s(&required_size, value.data(), required_size, name.data())) {
-        throw Exception("can't get environment variable '{}': {}", name, strerror_string());
+    ret = getenv_s(&required_size, value.data(), required_size, name.data());
+    if (ret != 0 && ret != -1 /* not found */) {
+        throw Exception("can't get environment variable '{}': {}", name, strerror_string(-ret));
     }
     value.resize(required_size - 1); // Remove the NUL terminator
     return value;
@@ -96,7 +98,10 @@ void SystemEnvironment::unset(std::string_view name) {
 bool SystemEnvironment::is_set(std::string_view name) {
 #if defined(HAVE_GETENV_S)
     size_t required_size{};
-    getenv_s(&required_size, nullptr, 0, name.data());
+    auto ret = getenv_s(&required_size, nullptr, 0, name.data());
+    if (ret != 0 && ret != -1 /* not found */) {
+        throw Exception("can't get length of environment variable '{}': {}", name, strerror_string(-ret));
+    }
     return required_size > 0;
 #else
     return getenv(name.data()) != nullptr;
