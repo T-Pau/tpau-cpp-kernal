@@ -1,4 +1,4 @@
-# cspell: words CTEST endforeach XFAIL
+# cspell: words CTEST endforeach XFAIL STREQUAL
 
 include(Catch)
 
@@ -15,9 +15,12 @@ set(TEST_COMMAND_PROGRAMS
 )
 
 foreach(program IN LISTS TEST_PROGRAMS)
+if (WIN32 AND ${program} STREQUAL "test-system-environment")
+else()
     add_executable(${program} programs/${program}.cc)
     target_include_directories(${program} PRIVATE BEFORE ${PROJECT_SOURCE_DIR}/tpau-cpp-kernal)
     target_link_libraries(${program} PRIVATE tpau-cpp-kernal Catch2::Catch2WithMain)
+endif()
 endforeach()
 
 
@@ -27,11 +30,6 @@ foreach(program IN LISTS TEST_COMMAND_PROGRAMS)
     target_link_libraries(${program} PRIVATE tpau-cpp-kernal)
 endforeach()
 
-if(WIN32)
-set(XFAIL_TESTS
-    test-system-environment
-)
-endif()
 
 foreach(test_program IN LISTS TEST_PROGRAMS)
     catch_discover_tests(${test_program})
