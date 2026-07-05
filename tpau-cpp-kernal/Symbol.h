@@ -1,3 +1,6 @@
+#ifndef HAD_TPAU_CPP_KERNAL_SYMBOL_H
+#define HAD_TPAU_CPP_KERNAL_SYMBOL_H
+
 /*
 Copyright (C) Dieter Baron
 
@@ -27,15 +30,11 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef HAD_TPAU_CPP_KERNAL_SYMBOL_H
-#define HAD_TPAU_CPP_KERNAL_SYMBOL_H
-
 #include <format>
 #include <memory>
 #include <ostream>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
 namespace tpau::cpp_kernal {
 

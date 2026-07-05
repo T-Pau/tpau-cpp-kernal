@@ -10,9 +10,11 @@
     "editor.formatOnSave": true,
     "cSpell.words": [
         "depfile",
+        "getenv",
         "kernal",
         "nihtest",
         "RAII",
+        "strerror",
         "T-Pau",
         "T'Pau",
         "tpau",

@@ -1,4 +1,4 @@
-# cspell:ignore BUGREPORT distcheck DHAVE DCMAKE
+# cspell:ignore BUGREPORT distcheck DHAVE DCMAKE PYTHONBIN includedir strerrorlen
 
 CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
@@ -52,6 +52,7 @@ if(RUN_REGRESS)
 endif()
 
 
+check_function_exists(getenv_s HAVE_GETENV_S)
 check_function_exists(strerror_s HAVE_STRERROR_S)
 check_function_exists(strerrorlen_s HAVE_STRERRORLEN_S)
 

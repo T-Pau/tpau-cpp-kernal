@@ -5,6 +5,7 @@ include(Catch)
 set(TEST_PROGRAMS
     test-base64
     test-symbol
+    test-system-environment
 )
 
 set(TEST_COMMAND_PROGRAMS
