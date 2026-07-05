@@ -13,10 +13,17 @@ set(TEST_COMMAND_PROGRAMS
     diagnostic-output
 )
 
-foreach(program IN LISTS TEST_PROGRAMS TEST_COMMAND_PROGRAMS)
-    add_executable(${program} programs/${program}.cc programs/TestCommand.cc)
+foreach(program IN LISTS TEST_PROGRAMS)
+    add_executable(${program} programs/${program}.cc)
     target_include_directories(${program} PRIVATE BEFORE ${PROJECT_SOURCE_DIR}/tpau-cpp-kernal)
     target_link_libraries(${program} PRIVATE tpau-cpp-kernal Catch2::Catch2WithMain)
+endforeach()
+
+
+foreach(program IN LISTS TEST_COMMAND_PROGRAMS)
+    add_executable(${program} programs/${program}.cc programs/TestCommand.cc)
+    target_include_directories(${program} PRIVATE BEFORE ${PROJECT_SOURCE_DIR}/tpau-cpp-kernal)
+    target_link_libraries(${program} PRIVATE tpau-cpp-kernal)
 endforeach()
 
 foreach(test_program IN LISTS TEST_PROGRAMS)

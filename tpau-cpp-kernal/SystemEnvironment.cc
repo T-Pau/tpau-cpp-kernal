@@ -44,12 +44,16 @@ namespace tpau::cpp_kernal {
 std::optional<std::string> SystemEnvironment::get(std::string_view name) {
 #if defined(HAVE_GETENV_S)
     size_t required_size{};
-    getenv_s(&required_size, nullptr, 0, name.data());
+   if (!getenv_s(&required_size, nullptr, 0, name.data())) {
+        throw Exception("can't get length of environment variable '{}': {}", name, strerror_string());
+    }
     if (required_size == 0) {
         return {};
     }
     std::string value(required_size, '\0');
-    getenv_s(&required_size, value.data(), required_size, name.data());
+    if (!getenv_s(&required_size, value.data(), required_size, name.data())) {
+        throw Exception("can't get environment variable '{}': {}", name, strerror_string());
+    }
     value.resize(required_size - 1); // Remove the NUL terminator
     return value;
 #else
