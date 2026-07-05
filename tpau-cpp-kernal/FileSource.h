@@ -31,6 +31,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <cstdio>
+#include <vector>
 
 #include "Location.h"
 #include "Symbol.h"

@@ -17,6 +17,15 @@ TEST_CASE("SystemEnvironment: set and get variable", "[system_environment]") {
     tpau::cpp_kernal::SystemEnvironment::unset("TEST_VARIABLE");
 }
 
+TEST_CASE("SystemEnvironment: not overwriting variable", "[system_environment]") {
+    tpau::cpp_kernal::SystemEnvironment::set("TEST_VARIABLE", "value");
+    tpau::cpp_kernal::SystemEnvironment::set("TEST_VARIABLE", "new_value", false);
+    auto value = tpau::cpp_kernal::SystemEnvironment::get("TEST_VARIABLE");
+    REQUIRE(value.has_value());
+    REQUIRE(value.value() == "value");
+    tpau::cpp_kernal::SystemEnvironment::unset("TEST_VARIABLE");
+}
+
 TEST_CASE("SystemEnvironment: is_set", "[system_environment]") {
     tpau::cpp_kernal::SystemEnvironment::set("TEST_VARIABLE", "value");
     REQUIRE(tpau::cpp_kernal::SystemEnvironment::is_set("TEST_VARIABLE"));

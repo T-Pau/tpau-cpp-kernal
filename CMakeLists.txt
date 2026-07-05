@@ -55,6 +55,7 @@ endif()
 check_function_exists(getenv_s HAVE_GETENV_S)
 check_function_exists(strerror_s HAVE_STRERROR_S)
 check_function_exists(strerrorlen_s HAVE_STRERRORLEN_S)
+check_function_exists(SetEnvironmentVariableA HAVE_SET_ENVIRONMENT_VARIABLE_A)
 
 set(ARCHIVE_NAME ${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION})
 IF(NOT TARGET dist)

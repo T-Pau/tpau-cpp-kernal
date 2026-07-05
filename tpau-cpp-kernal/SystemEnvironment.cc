@@ -29,9 +29,13 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "SystemEnvironment.h"
 
+#include "config.h"
+
+#if defined(HAVE_SET_ENVIRONMENT_VARIABLE_A)
+#include <windows.h>
+#endif
 #include <cstdlib>
 
-#include "config.h"
 
 namespace tpau::cpp_kernal {
 
@@ -55,12 +59,22 @@ std::optional<std::string> SystemEnvironment::get(std::string_view name) {
 #endif
 }
 
-void SystemEnvironment::set(std::string_view name, std::string_view value) {
-    setenv(name.data(), value.data(), 1);
+void SystemEnvironment::set(std::string_view name, std::string_view value, bool overwrite) {
+#if defined(HAVE_SET_ENVIRONMENT_VARIABLE_A)
+    if (overwrite || !is_set(name)) {
+        SetEnvironmentVariableA(name.data(), value.data());
+    }
+#else
+    setenv(name.data(), value.data(), overwrite ? 1 : 0);
+#endif
 }
 
 void SystemEnvironment::unset(std::string_view name) {
+#if defined(HAVE_SET_ENVIRONMENT_VARIABLE_A)
+    SetEnvironmentVariableA(name.data(), nullptr);
+#else
     unsetenv(name.data());
+#endif
 }
 
 bool SystemEnvironment::is_set(std::string_view name) {

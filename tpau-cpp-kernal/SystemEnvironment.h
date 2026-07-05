@@ -54,8 +54,9 @@ class SystemEnvironment {
      *
      * @param name The name of the environment variable.
      * @param value The value to set the environment variable to.
+     * @param overwrite Whether to overwrite the environment variable if it is already set.
      */
-    static void set(std::string_view name, std::string_view value);
+    static void set(std::string_view name, std::string_view value, bool overwrite = true);
 
     /**
      * Unset an environment variable.
