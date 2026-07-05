@@ -36,6 +36,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 #include <cstdlib>
 
+#include "Exception.h"
+#include "Util.h"
 
 namespace tpau::cpp_kernal {
 
@@ -62,18 +64,28 @@ std::optional<std::string> SystemEnvironment::get(std::string_view name) {
 void SystemEnvironment::set(std::string_view name, std::string_view value, bool overwrite) {
 #if defined(HAVE_SET_ENVIRONMENT_VARIABLE_A)
     if (overwrite || !is_set(name)) {
-        SetEnvironmentVariableA(name.data(), value.data());
+        if (!SetEnvironmentVariableA(name.data(), value.data())) {
+            auto error = GetLastError();
+            throw Exception("can't set environment variable '{}': {}", name, std::system_category().message(error));
+        }
     }
 #else
-    setenv(name.data(), value.data(), overwrite ? 1 : 0);
+    if (setenv(name.data(), value.data(), overwrite ? 1 : 0) != 0) {
+        throw Exception("can't set environment variable '{}': {}", name, strerror_string());
+    }
 #endif
 }
 
 void SystemEnvironment::unset(std::string_view name) {
 #if defined(HAVE_SET_ENVIRONMENT_VARIABLE_A)
-    SetEnvironmentVariableA(name.data(), nullptr);
+    if (!SetEnvironmentVariableA(name.data(), nullptr)) {
+        auto error = GetLastError();
+        throw Exception("can't unset environment variable '{}': {}", name, std::system_category().message(error));
+    }
 #else
-    unsetenv(name.data());
+    if (unsetenv(name.data()) != 0) {
+        throw Exception("can't unset environment variable '{}': {}", name, strerror_string());
+    }
 #endif
 }
 

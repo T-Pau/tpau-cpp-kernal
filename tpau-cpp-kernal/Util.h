@@ -124,7 +124,7 @@ std::filesystem::path replace_extension(const std::filesystem::path& file_name, 
  * @param errnum The error code to get the string representation of. If not provided, the current value of `errno` will be used.
  * @return The string representation of the error code.
  */
-std::string strerror_string(std::optional<int> errnum);
+std::string strerror_string(std::optional<int> errnum = {});
 
 /**
  * Split a string into a vector of strings based on a set of delimiters.
