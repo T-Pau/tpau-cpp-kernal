@@ -18,9 +18,6 @@ FIND_PACKAGE(tpau-cpp-kernal REQUIRED)
 
     Add instructions for using the library from its build directory.
 
-!!! todo
-
-    Add instructions for adding the include directory if it is not in the compiler's default search path.
 
 ## Using the Library in Your Code
 
@@ -43,3 +40,5 @@ To link against the library, add the following to your target's `CMakeLists.txt`
 ```cmake
 TARGET_LINK_LIBRARIES(your-target tpau-cpp-kernal::tpau-cpp-kernal)
 ```
+
+This also adds the include directories to the compiler's search path. This means that the target of any source files that include headers from T'Pau C++ Kernal needs to be linked against the library, even a static convenience library.

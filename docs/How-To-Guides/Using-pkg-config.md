@@ -6,6 +6,7 @@ You can use an installed version of the library, or you can use it directly from
 
 If you don't have the library yet, please refer to the [Building the Library](../Tutorials/Building/) tutorial.
 
+
 ## Adding the Library to Your Project with pkg-config
 
 To find the library and its dependencies with pkg-config, add the following to your `Makefile`:
