@@ -4,3 +4,6 @@
     options:
         omit:
             - "std::hash< tpau::cpp_kernal::Value >"
+            - "std::formatter< tpau::cpp_kernal::Value::Type >"
+
+

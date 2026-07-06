@@ -40,7 +40,13 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace tpau::cpp_kernal {
 
-/// Class representing a value of any type.
+/*
+* This class represents a value of various types.
+*
+* All operations check for compatible types and integer overflow. Invalid operations throw an exception.
+*
+* Supported types are boolean, signed and unsigned integers, floating point numbers, strings, binary data and void (has no value).
+*/
 class Value {
   public:
     /// @brief The type of a value.
@@ -48,7 +54,7 @@ class Value {
         BINARY,   ///< Binary data
         BOOLEAN,  ///< Boolean value
         FLOAT,    ///< Floating point number
-        INTEGER,  ///< Integer
+        INTEGER,  ///< Integer (signed or unsigned)
         NUMBER,   ///< Number (integer or floating point)
         SIGNED,   ///< Signed integer
         STRING,   ///< String value
@@ -56,22 +62,22 @@ class Value {
         VOID      ///< No value
     };
 
-    /// @brief Create void value.
+    /// @brief Create a void value.
     explicit Value() = default;
 
     /**
-     * Create a unsigned value.
+     * Create an unsigned integer value.
      *
      * @param value The unsigned integer value.
-     * @param default_size Explicitly set the default size of the value. Otherwise the smallest size that can hold the value is used.
+     * @param default_size Explicitly set the default size of the value. If `0`, the smallest size that can hold the value is used.
      */
     explicit Value(uint64_t value, uint64_t default_size = 0) : value{value}, explicit_default_size{default_size} {}
 
     /**
-     * Create a signed value.
+     * Create a signed integer value.
      *
      * @param value The signed integer value.
-     * @param default_size Explicitly set the default size of the value. Otherwise the smallest size that can hold the value is used.
+     * @param default_size Explicitly set the default size of the value. If `0`, the smallest size that can hold the value is used.
      */
     explicit Value(int64_t value, uint64_t default_size = 0);
 
@@ -92,10 +98,8 @@ class Value {
     /**
      * Create a binary or a string value.
      *
-     * The extra parameter is necessary to distinguish this constructor from the one that takes a `Symbol` parameter.
-     *
-     * @param value The binary data.
-     * @param binary If `true`, the value is binary data, otherwise it is a string.
+     * @param value The binary data or string value.
+     * @param binary If `true`, a binary value is created, otherwise a string value is created.
      */
     explicit Value(std::string_view value, bool binary);
 
@@ -136,7 +140,7 @@ class Value {
     [[nodiscard]] bool is_float() const { return value && std::holds_alternative<double>(*value); }
 
     /**
-     * Check if it is an integer.
+     * Check if it is an integer (signed or unsigned).
      *
      * @return `true` if it is an integer, `false` otherwise.
      */
@@ -195,7 +199,7 @@ class Value {
      * Get the binary data of the value.
      *
      * @return The value as binary data.
-     * @throws Exception if the value is not binary data.
+     * @throws Exception if the value is not binary.
      */
     [[nodiscard]] std::string binary_value() const;
 
@@ -210,7 +214,7 @@ class Value {
     [[nodiscard]] bool boolean_value() const;
 
     /**
-     * Get the floating point value.
+     * Get the floating point value. Integer values are converted to floating point numbers.
      *
      * @return The value as a floating point number.
      * @throws Exception if the value is not a number.
@@ -252,7 +256,7 @@ class Value {
     [[nodiscard]] uint64_t unsigned_value() const;
 
     /**
-     * Get the hash value of the value.
+     * Compute the hash value of the value. This is used to implement `std::hash` for `Value`.
      *
      * @return The hash value of the value.
      */
@@ -278,7 +282,7 @@ class Value {
     explicit operator bool() const { return boolean_value(); }
 
     /**
-     * Check if two values are equal.
+     * Check if two values are equal. Numbers are compared by their numeric value, regardless of their type. Values of other types are not equal if their types are different.
      *
      * @param other The value to compare with.
      * @return `true` if the values are equal, `false` otherwise.
@@ -286,7 +290,7 @@ class Value {
     bool operator==(const Value& other) const;
 
     /**
-     * Check if two values are different.
+     * Check if two values are different. Numbers are compared by their numeric value, regardless of their type. Values of other types are not equal if their types are different.
      *
      * @param other The value to compare with.
      * @return `true` if the values are different, `false` otherwise.
@@ -294,39 +298,39 @@ class Value {
     bool operator!=(const Value& other) const { return !(*this == other); }
 
     /**
-     * Check if this value is less than another value. Only numbers are comparable.
+     * Check if this value is less than another value. Numbers and strings are comparable to other numbers and strings, respectively. No other types are comparable.
      *
      * @param other The value to compare with.
-     * @return `true` if both values are numbers and this value is less than the other value, `false` otherwise.
+     * @return `true` if the values are comparable and this value is less than the other value, `false` otherwise.
      */
     bool operator<(const Value& other) const;
 
     /**
-     * Check if this value is greater than another value. Only numbers are comparable.
+     * Check if this value is greater than another value. Numbers and strings are comparable to other numbers and strings, respectively. No other types are comparable.
      *
      * @param other The value to compare with.
-     * @return `true` if both values are numbers and this value is greater than the other value, `false` otherwise.
+     * @return `true` if the values are comparable and this value is greater than the other value, `false` otherwise.
      */
     bool operator>(const Value& other) const { return other < *this; }
 
     /**
-     * Check if this value is less than or equal to another value. Only numbers are comparable.
+     * Check if this value is less than or equal to another value. Numbers and strings are comparable to other numbers and strings, respectively. No other types are comparable.
      *
      * @param other The value to compare with.
-     * @return `true` if both values are numbers and this value is less than or equal to the other value, `false` otherwise.
+     * @return `true` if the values are comparable and this value is less than or equal to the other value, `false` otherwise.
      */
     bool operator<=(const Value& other) const;
 
     /**
-     * Check if this value is greater than or equal to another value. Only numbers are comparable.
+     * Check if this value is greater than or equal to another value. Numbers and strings are comparable to other numbers and strings, respectively. No other types are comparable.
      *
      * @param other The value to compare with.
-     * @return `true` if both values are numbers and this value is greater than or equal to the other value, `false` otherwise.
+     * @return `true` if the values are comparable and this value is greater than or equal to the other value, `false` otherwise.
      */
     bool operator>=(const Value& other) const { return other <= *this; }
 
     /**
-     * Negate value.
+     * Negate value. Only numbers can be negated.
      *
      * @return The negated value.
      * @throws Exception if the value is not a number.
@@ -334,7 +338,7 @@ class Value {
     Value operator-() const;
 
     /**
-     * Bitwise NOT of the value.
+     * Bitwise NOT of the value. Only integers can be bitwise negated.
      *
      * @return The bitwise NOT of the value.
      * @throws Exception if the value is not an integer.
@@ -342,7 +346,7 @@ class Value {
     Value operator~() const;
 
     /**
-     * Add another value to this value.
+     * Add another value to this value. Only numbers can be added.
      *
      * @param other The value to add.
      * @return The sum of the two values.
@@ -351,7 +355,7 @@ class Value {
     Value operator+(const Value& other) const;
 
     /**
-     * Subtract another value from this value.
+     * Subtract another value from this value. Only numbers can be subtracted.
      *
      * @param other The value to subtract.
      * @return The difference of the two values.
@@ -360,7 +364,7 @@ class Value {
     Value operator-(const Value& other) const;
 
     /**
-     * Divide this value by another value.
+     * Divide this value by another value. Only numbers can be divided.
      *
      * @param other The value to divide by.
      * @return The quotient of the two values.
@@ -369,7 +373,7 @@ class Value {
     Value operator/(const Value& other) const;
 
     /**
-     * Multiply this value by another value.
+     * Multiply this value by another value. Only numbers can be multiplied.
      *
      * @param other The value to multiply by.
      * @return The product of the two values.
@@ -378,7 +382,7 @@ class Value {
     Value operator*(const Value& other) const;
 
     /**
-     * Bitwise OR of this value and another value.
+     * Bitwise OR of this value and another value. Only unsigned integers can be bitwise ORed.
      *
      * @param other The value to OR with.
      * @return The result of the bitwise OR operation.
@@ -387,7 +391,7 @@ class Value {
     Value operator|(const Value& other) const;
 
     /**
-     * Bitwise AND of this value and another value.
+     * Bitwise AND of this value and another value. Only unsigned integers can be bitwise ANDed.
      *
      * @param other The value to AND with.
      * @return The result of the bitwise AND operation.
@@ -405,7 +409,7 @@ class Value {
     Value operator&(uint64_t other) const { return *this & Value(other); }
 
     /**
-     * Bitwise exclusive OR of this value and another value.
+     * Bitwise exclusive OR of this value and another value. Only unsigned integers can be bitwise exclusive ORed.
      *
      * @param other The value to exclusive OR with.
      * @return The result of the bitwise exclusive OR operation.
@@ -414,7 +418,7 @@ class Value {
     Value operator^(const Value& other) const;
 
     /**
-     * The remainder of this value divided by another value.
+     * The remainder of this value divided by another value. The remainder can only be computed from unsigned integers.
      *
      * @param other The value to divide by.
      * @return The remainder of the division.
@@ -423,7 +427,7 @@ class Value {
     Value operator%(const Value& other) const;
 
     /**
-     * Left shift this value by another value.
+     * Left shift this value by another value. Only integers can be left shifted.
      *
      * @param other The value to shift by.
      * @return The result of the left shift operation.
@@ -432,7 +436,7 @@ class Value {
     Value operator<<(const Value& other) const;
 
     /**
-     * Right shift this value by another value.
+     * Right shift this value by another value. Only integers can be right shifted.
      *
      * @param other The value to shift by.
      * @return The result of the right shift operation.
@@ -450,7 +454,7 @@ class Value {
     Value operator>>(uint64_t other) const { return *this >> Value(other); }
 
     /**
-     * Logical AND of this value and another value.
+     * Logical AND of this value and another value. Only values that can be interpreted as booleans can be logically ANDed.
      *
      * @param other The value to AND with.
      * @return True if both values are true.
@@ -458,7 +462,7 @@ class Value {
      */
     Value operator&&(const Value& other) const;
     /**
-     * Logical OR of this value and another value.
+     * Logical OR of this value and another value. Only values that can be interpreted as booleans can be logically ORed.
      *
      * @param other The value to OR with.
      * @return True if either value is true.
@@ -522,7 +526,7 @@ class Value {
     void serialize(std::ostream& stream) const;
 
   private:
-    /// @brief The value, or `std::nullopt` if it is void.
+    /// @brief The value, or {} if it is void.
     std::optional<std::variant<bool, double, int64_t, uint64_t, Symbol, std::string>> value;
 
     /// @brief The explicitly set default size of the value, or 0 if the default size is not explicitly set.
