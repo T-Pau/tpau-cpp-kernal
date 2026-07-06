@@ -57,7 +57,7 @@ std::filesystem::path default_output_filename(const std::filesystem::path& input
  * Join a vector of symbols into a string with a separator between the symbols.
  *
  * @param symbols The symbols to join.
- * @param separator The separator to use between the symbols. (default: ", ")
+ * @param separator The separator to use between the symbols.
  * @return The joined string.
  */
 std::string join(const std::vector<Symbol>& symbols, std::string_view separator = ", ");
@@ -67,7 +67,7 @@ std::string join(const std::vector<Symbol>& symbols, std::string_view separator 
  *
  * @tparam R The type of the range.
  * @param strings The range of strings to join.
- * @param separator The separator to use between the strings. (default: ", ")
+ * @param separator The separator to use between the strings.
  * @return The joined string.
  */
 template <std::ranges::input_range R>
@@ -94,7 +94,7 @@ std::string join(const R& strings, std::string_view separator) {
  *
  * @tparam R The type of the range.
  * @param collection The range of elements to sort.
- * @param comp The comparison function to use for sorting. (default: std::less)
+ * @param comp The comparison function to use for sorting. If not provided, the default comparison operator will be used.
  * @return The sorted collection.
  */
 template <std::ranges::input_range R, typename T = std::ranges::range_value_t<R>, class Comp = std::less<T>> std::vector<T> sorted(const R& collection, Comp comp = {}) {
@@ -130,20 +130,20 @@ std::string strerror_string(std::optional<int> errnum = {});
  * Split a string into a vector of strings based on a set of delimiters.
  *
  * @param str The string to split.
- * @param delimiters The set of delimiters to use for splitting. (default: whitespace)
- * @param keep_empty If `true`, consecutive delimiters will result in empty strings in the output. (default: `false`)
+ * @param delimiters The set of delimiters to use for splitting.
+ * @param keep_empty If `true`, consecutive delimiters will result in empty strings in the output.
  * @return The vector of split strings.
  */
 std::vector<std::string> split(std::string_view str, std::string_view delimiters = " \t\n\r\f\v", bool keep_empty = false);
 
 /**
- * Trim whitespace from the beginning and end of a string.
+ * Trim characters from the beginning and end of a string.
  *
  * @param str The string to trim.
- * @param whitespace The set of whitespace characters to trim. (default: whitespace)
+ * @param characters The set of characters to trim.
  * @return The trimmed string.
  */
-std::string_view trim(std::string_view str, std::string_view whitespace = " \t\n\r\f\v");
+std::string_view trim(std::string_view str, std::string_view characters = " \t\n\r\f\v");
 
 } // namespace tpau::cpp_kernal
 

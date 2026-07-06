@@ -13,7 +13,7 @@ set(KERNAL_SOURCES
         Location.cc
         LocationException.cc
         Int.cc
-        Path.cc
+        SearchPath.cc
         Symbol.cc
         SystemEnvironment.cc
         UTF8.cc
@@ -35,7 +35,7 @@ set(KERNAL_PUBLIC_HEADERS
         Int.h
         Location.h
         LocationException.h
-        Path.h
+        SearchPath.h
         Symbol.h
         SystemEnvironment.h
         UTF8.h

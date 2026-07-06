@@ -30,10 +30,13 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Command.h"
 
 #include <cstring>
+#include <fstream>
 #include <iostream>
 #include <utility>
 
 #include "DiagnosticOutput.h"
+#include "FileReader.h"
+#include "Util.h"
 
 namespace tpau::cpp_kernal {
 
@@ -83,15 +86,60 @@ int Command::run(int argc, char* const* argv) {
         if (DiagnosticOutput::global.failed()) {
             return 1;
         }
+
         if (features.is_enabled(Feature::OutputFile)) {
-            return create_output();
+            if (!output_file) {
+                throw Exception("no output file specified");
+            }
+            auto result = create_output();
+            if (result != 0) {
+                (void)std::filesystem::remove(*output_file);
+                return result;
+            }
+
+            if (dependency_file) {
+                auto result = create_dependency_file();
+                if (result != 0) {
+                    (void)std::filesystem::remove(*output_file);
+                    (void)std::filesystem::remove(*dependency_file);
+                    return result;
+                }
+            }
         }
     }
     catch (std::exception& ex) {
+        (void)std::filesystem::remove(*output_file);
+        if (dependency_file) {
+            (void)std::filesystem::remove(*dependency_file);
+        }
         if (strlen(ex.what()) > 0) {
             std::cerr << program_name << ": " << ex.what() << std::endl;
         }
         return 1;
+    }
+
+    return 0;
+}
+
+int Command::create_dependency_file() {
+    if (!dependency_file) {
+        return 0;
+    }
+
+    auto depfile = std::ofstream(*dependency_file);
+    if (!depfile) {
+        throw Exception("can't create dependency file '{}': {}", dependency_file->string(), strerror_string());
+    }
+
+    depfile << *output_file << ":";
+    for (const auto& file : FileReader::global.file_names()) {
+        depfile << " " << file;
+    }
+    depfile << std::endl;
+
+    depfile.close();
+    if (!depfile) {
+        throw Exception("can't write dependency file '{}': {}", dependency_file->string(), strerror_string());
     }
 
     return 0;

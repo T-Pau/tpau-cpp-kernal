@@ -27,13 +27,13 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "Path.h"
+#include "SearchPath.h"
 
 namespace tpau::cpp_kernal {
 
-const Path Path::empty_path;
+const SearchPath SearchPath::empty_path;
 
-Symbol Path::find(Symbol name, Symbol base) const {
+Symbol SearchPath::find(Symbol name, Symbol base) const {
     auto path = std::filesystem::path(name.str());
 
     if (std::filesystem::exists(path)) {
@@ -59,7 +59,7 @@ Symbol Path::find(Symbol name, Symbol base) const {
 }
 
 
-void Path::append_path(const Path& path, std::string_view subdirectory) {
+void SearchPath::append_path(const SearchPath& path, std::string_view subdirectory) {
     for (const auto& directory : path.directories) {
         if (!subdirectory.empty()) {
             append_directory(directory / subdirectory);
@@ -71,7 +71,7 @@ void Path::append_path(const Path& path, std::string_view subdirectory) {
 }
 
 
-void Path::prepend_path(const Path& path, std::string_view subdirectory) {
+void SearchPath::prepend_path(const SearchPath& path, std::string_view subdirectory) {
     for (const auto& directory : path.directories) {
         if (!subdirectory.empty()) {
             prepend_directory(directory / subdirectory);

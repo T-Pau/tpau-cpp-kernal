@@ -158,6 +158,19 @@ class Command {
     FlagSet<Feature> features;
 
   private:
+    /**
+     * Create the dependency file for the command.
+     *
+     * Create the dependency file in gcc style format. This method will only be called if the feature `DependencyFile` is enabled and no errors occurred during processing.
+     * 
+     * It records all files read by the global FileReader as dependencies.
+     *
+     * TODO: Allow augmenting or overriding the list of dependencies in subclasses.
+     *
+     * @return A non-zero value indicates an error occurred during dependency file creation and will be used as the exit code.
+     */
+    virtual int create_dependency_file();
+
     static std::string header;
     static std::string footer;
     static std::string version;

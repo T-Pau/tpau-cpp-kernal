@@ -16,13 +16,10 @@ if(Catch2_FOUND)
     include(Catch)
 
     foreach(program IN LISTS TEST_PROGRAMS)
-    if (WIN32 AND ${program} STREQUAL "test-system-environmentxxx")
-    else()
         add_executable(${program} programs/${program}.cc)
         target_include_directories(${program} PRIVATE BEFORE ${PROJECT_SOURCE_DIR}/tpau-cpp-kernal)
         target_link_libraries(${program} PRIVATE tpau-cpp-kernal Catch2::Catch2WithMain)
         catch_discover_tests(${program})
-    endif(WIN32 AND ${program} STREQUAL "test-system-environmentxxx")
     endforeach()
 endif(Catch2_FOUND)
 

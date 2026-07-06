@@ -1,4 +1,4 @@
-# cspell:ignore BUGREPORT distcheck DHAVE DCMAKE PYTHONBIN includedir strerrorlen
+# cspell:ignore BUGREPORT distcheck DHAVE DCMAKE PYTHONBIN includedir strerrorlen putenv
 
 CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 

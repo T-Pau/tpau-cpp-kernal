@@ -14,9 +14,10 @@
     "task.saveBeforeRun": "always",
     "editor.formatOnSave": true,
     "cSpell.words": [
+        "ctest",
         "depfile",
-        "getenv",
         "flagset",
+        "getenv",
         "kernal",
         "nihtest",
         "RAII",
