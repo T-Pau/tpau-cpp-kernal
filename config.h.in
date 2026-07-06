@@ -6,7 +6,9 @@
 #define VERSION "@CMAKE_PROJECT_VERSION@"
 
 #cmakedefine HAVE_GETENV_S
+#cmakedefine HAVE_GET_ENVIRONMENT_VARIABLE_A
 #cmakedefine HAVE_SET_ENVIRONMENT_VARIABLE_A
+#cmakedefine HAVE__PUTENV_S
 #cmakedefine HAVE_STRERROR_S
 #cmakedefine HAVE_STRERRORLEN_S
 

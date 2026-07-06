@@ -47,8 +47,8 @@ class SystemEnvironment {
      * @param name The name of the environment variable.
      * @return The value of the environment variable, or {} if it is not set.
      */
-    [[nodiscard]] static std::optional<std::string> get(std::string_view name);
-
+    [[nodiscard]] static std::optional<std::string> get(const std::string& name);
+                                                                   
     /**
      * Set the value of an environment variable.
      *
@@ -57,7 +57,7 @@ class SystemEnvironment {
      * @param overwrite Whether to overwrite the environment variable if it is already set.
      * @throws Exception If the environment variable could not be set.
      */
-    static void set(std::string_view name, std::string_view value, bool overwrite = true);
+    static void set(const std::string& name, const std::string& value, bool overwrite = true);
 
     /**
      * Unset an environment variable.
@@ -65,7 +65,7 @@ class SystemEnvironment {
      * @param name The name of the environment variable.
      * @throws Exception If the environment variable could not be unset.
      */
-    static void unset(std::string_view name);
+    static void unset(const std::string& name);
 
     /**
      * Check if an environment variable is set.
@@ -73,7 +73,7 @@ class SystemEnvironment {
      * @param name The name of the environment variable.
      * @return `true` if the environment variable is set, `false` otherwise.
      */
-    [[nodiscard]] static bool is_set(std::string_view name);
+    [[nodiscard]] static bool is_set(const std::string& name);
 };
 
 } // namespace tpau::cpp_kernal

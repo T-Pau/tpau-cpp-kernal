@@ -31,19 +31,36 @@ if(RUN_REGRESS)
         message("Python set to ${PYTHONBIN}")
     endif()
 
-    find_program(NIHTEST nihtest)
-    set(NIHTEST_REQUIRED_VERSION "1.9.1")
-    set(USE_NIHTEST ON)
+    if (PYTHONBIN)
+        find_program(NIHTEST nihtest)
+        if (NOT NIHTEST)
+            execute_process(
+                COMMAND ${PYTHONBIN} -m nihtest --version
+                OUTPUT_VARIABLE FOO
+                RESULT_VARIABLE NIHTEST_MODULE
+            )
+            if (NIHTEST_MODULE EQUAL 0)
+                set(NIHTEST "${PYTHONBIN}" "-m" "nihtest")
+            endif()
+        endif()
+    endif(PYTHONBIN)
 
+    set(USE_NIHTEST OFF)
     if (NOT NIHTEST OR NOT PYTHONBIN)
         message(WARNING "-- nihtest or Python interpreter not found, command testing disabled")
-        set(USE_NIHTEST OFF)
     else()
-        execute_process(COMMAND ${NIHTEST} --version OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE NIHTEST_VERSION_RAW)
-        string(REGEX REPLACE "[^ ]* " "" NIHTEST_VERSION ${NIHTEST_VERSION_RAW})
-        if (${NIHTEST_VERSION} VERSION_LESS ${NIHTEST_REQUIRED_VERSION})
+        set(NIHTEST_REQUIRED_VERSION "1.9.1")
+        execute_process(
+            COMMAND ${NIHTEST} --version
+            OUTPUT_VARIABLE NIHTEST_VERSION_RAW
+        )
+        string(REGEX REPLACE "[^ ]* " "" NIHTEST_VERSION "${NIHTEST_VERSION_RAW}")
+        if (NOT NIHTEST_VERSION)
+            message(WARNING "-- can't get nihtest version, command testing disabled")
+        elseif (${NIHTEST_VERSION} VERSION_LESS ${NIHTEST_REQUIRED_VERSION})
             message(WARNING "-- nihtest ${NIHTEST_VERSION} too old, at least ${NIHTEST_REQUIRED_VERSION} required, command testing disabled")
-            set(USE_NIHTEST OFF)
+        else()
+            set(USE_NIHTEST ON)
         endif()
     endif()
     if (NOT USE_NIHTEST AND NOT Catch2_FOUND)
@@ -53,6 +70,8 @@ endif()
 
 
 check_function_exists(getenv_s HAVE_GETENV_S)
+check_function_exists(GetEnvironmentVariableA HAVE_GET_ENVIRONMENT_VARIABLE_A)
+check_function_exists(_putenv_s HAVE__PUTENV_S)
 check_function_exists(strerror_s HAVE_STRERROR_S)
 check_function_exists(strerrorlen_s HAVE_STRERRORLEN_S)
 check_function_exists(SetEnvironmentVariableA HAVE_SET_ENVIRONMENT_VARIABLE_A)

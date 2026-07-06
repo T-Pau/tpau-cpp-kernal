@@ -4,7 +4,7 @@
 #include "SystemEnvironment.h"
 
 TEST_CASE("SystemEnvironment: get set variable", "[system_environment]") {
-    auto value = tpau::cpp_kernal::SystemEnvironment::get("HOME");
+    auto value = tpau::cpp_kernal::SystemEnvironment::get("PATH");
     REQUIRE(value.has_value());
     REQUIRE(!value->empty());
 }
