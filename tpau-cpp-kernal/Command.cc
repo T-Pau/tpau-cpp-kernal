@@ -131,7 +131,7 @@ int Command::create_dependency_file() {
         throw Exception("can't create dependency file '{}': {}", dependency_file->string(), strerror_string());
     }
 
-    depfile << *output_file << ":";
+    depfile << output_file->string() << ":";
     for (const auto& file : FileReader::global.file_names()) {
         depfile << " " << file;
     }
