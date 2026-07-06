@@ -1,3 +1,5 @@
+`#include <tpau-cpp-kernal/Value.h>`
+
 ::: tpau-cpp-kernal/Value.h
     options:
         omit:

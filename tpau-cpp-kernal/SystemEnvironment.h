@@ -32,12 +32,17 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <string>
 #include <optional>
-#include <string_view>
 
 namespace tpau::cpp_kernal {
 
 /**
- * Access to the system environment variables.
+ * Access to system environment variables.
+ *
+ * Since C++ does not provide a standard way to access environment variables, this class provides a platform-independent interface for getting, setting, and unsetting environment variables.
+ * 
+ * On Windows it uses `GetEnvironmentVariable`, `SetEnvironmentVariable`, since they are available in all build environments. However, variables changed this way won't reflect when queried using `std::getenv`.
+ *
+ * On POSIX systems it uses `getenv`, `setenv`, and `unsetenv`.
  */
 class SystemEnvironment {
   public:

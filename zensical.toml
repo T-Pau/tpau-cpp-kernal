@@ -1,7 +1,7 @@
 # cspell: ignore fontawesome inlinehilite linenums mkdocstrings nbsp pygments pymdownx superfences def_list twemoji
 
 [project]
-site_name = "&nbsp;"
+site_name = "T'Pau C++ Kernal"
 site_url = "https://tpau-cpp-kernal.tpau.group/"
 repo_url = "https://github.com/T-Pau/tpau-cpp-kernal"
 copyright = "©2026 Dieter Baron"

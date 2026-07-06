@@ -35,10 +35,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace tpau::cpp_kernal {
 
+/**
+  * This class provides static methods for various integer utility functions.
+  */
 class Int {
-  /**
-   * This class provides static methods for various integer utility functions.
-   */
   public:
     /**
      * Encode the given signed integer value into a string of bytes.

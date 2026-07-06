@@ -1,3 +1,5 @@
+`#include <tpau-cpp-kernal/Base64Coder.h>`
+
 ::: tpau-cpp-kernal/Base64Coder.h
     options:
         omit:

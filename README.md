@@ -2,36 +2,29 @@
 
 T'Pau C++ Kernal is a C++ library collecting various classes and functions that are used in other T'Pau projects.
 
+Its main focus is on command line utilities, especially development tools.
+
+
 ## Why Use T'Pau C++ Kernal?
 
 T'Pau C++ Kernal was primarily developed for use in our own programs.
-    
-While the scripts creating assembly code, the provided assembler routines, and the build rules are specific to Accelerate and fast-ninja, some scripts and the underlying Python classes are more versatile.
+
+However, the provided classes form a solid foundation for building command line utilities, integrating with build system, and writing flexible parsers.
+
+**Warning:** T'Pau C++ Kernal is still in early development and not yet stable. The API will change in breaking ways, and there are no official releases yet. Only use it if you are willing to adapt your code.
+
+
+## Who Uses T'Pau C++ Kernal?
+
+It is currently used in the cross assembler [Accelerate](https://accelerate.tpau.group) and the build system [fast-ninja](https://fast-ninja.tpau.group).
+
 
 ## Getting Started
 
-The T'Pau C++ Kernal provides CMake and pkg-config files for easy integration into your project.
+Since there are no official releases yet, you will have to [build it from source](https://tpau-cpp-kernal.tpau.group/Tutorials/Building.md).
 
-## Building C++ Kernal
+The T'Pau C++ Kernal can be easily [integrated into CMake projects](https://tpau-cpp-kernal.tpau.group/How-To-Guides/Using-cmake.md). It also provides [pkg-config files](https://tpau-cpp-kernal.tpau.group/How-To-Guides/Using-pkg-config.md) for other types of projects.
 
-Kernal is written in C++20.
-
-To build it, you need a C++20 compiler and [cmake](https://cmake.org). To run the tests, you need [Catch2](https://github.com/catchorg/Catch2).
-
-To build the library, run the following commands in the top level directory:
-
-```bash
-mkdir build
-cd build
-cmake ..
-cmake --build .
-```
-
-To run the tests, run the following command in the `build` directory:
-
-```bash
-ctest
-```
 
 ## Staying in Touch
 

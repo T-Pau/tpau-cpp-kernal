@@ -1,3 +1,5 @@
+`#include <tpau-cpp-kernal/Symbol.h>`
+
 ::: tpau-cpp-kernal/Symbol.h
     options:
         omit:

@@ -1,3 +1,5 @@
+`#include <tpau-cpp-kernal/HexCoder.h>`
+
 ::: tpau-cpp-kernal/HexCoder.h
     options:
         omit:

@@ -36,40 +36,40 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace tpau::cpp_kernal {
 
 /**
-  * Utility functions for working with UTF-8 and Unicode codepoints.
+  * Utility functions for working with UTF-8 and Unicode code-points.
   */
 class UTF8 {
   public:
     /**
-      * Decodes a UTF-8 string into a sequence of Unicode codepoints.
+      * Decodes a UTF-8 string into a sequence of Unicode code-points.
       * 
       * @param string The UTF-8 string to decode.
-      * @return A sequence of Unicode codepoints.
+      * @return A sequence of Unicode code-points.
       */
     static std::u32string decode(const std::string& string);
 
     /**
-      * Encodes a Unicode codepoint into a UTF-8 string.
+      * Encodes a Unicode code-point into a UTF-8 string.
       * 
-      * @param codepoint The Unicode codepoint to encode.
+      * @param codepoint The Unicode code-point to encode.
       * @param escape_non_printable If true, non-printable characters will be escaped as `\uXXXX`.
       * @return The UTF-8 encoded string.
       */
     static std::string encode(char32_t codepoint, bool escape_non_printable = false);
 
     /**
-      * Encodes a sequence of Unicode codepoints into a UTF-8 string.
+      * Encodes a sequence of Unicode code-points into a UTF-8 string.
       * 
-      * @param string The sequence of Unicode codepoints to encode.
+      * @param string The sequence of Unicode code-points to encode.
       * @return The UTF-8 encoded string.
       */
     static std::string encode(const std::u32string& string);
 
     /**
-      * Checks if a Unicode codepoint is printable.
+      * Checks if a Unicode code-point is printable.
       * 
-      * @param codepoint The Unicode codepoint to check.
-      * @return True if the codepoint is printable, false otherwise.
+      * @param codepoint The Unicode code-point to check.
+      * @return True if the code-point is printable, false otherwise.
       */
     static bool is_printable(char32_t codepoint);
 
