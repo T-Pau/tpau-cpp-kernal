@@ -108,7 +108,9 @@ int Command::run(int argc, char* const* argv) {
         }
     }
     catch (std::exception& ex) {
-        (void)std::filesystem::remove(*output_file);
+        if (output_file) {
+            (void)std::filesystem::remove(*output_file);
+        }
         if (dependency_file) {
             (void)std::filesystem::remove(*dependency_file);
         }
