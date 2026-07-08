@@ -103,10 +103,11 @@ class FlagSet {
      */
     operator bool() const { return !empty(); }
 
-    /*
+    /**
      * Compare two FlagSets for equality.
+     *
      * @param other The other FlagSet to compare with.
-     * @return `true` if both FlagSets have the same enabled flags, `false` otherwise.
+     * @return `true` if both FlagSets have the same flags enabled, `false` otherwise.
      */
     [[nodiscard]] bool operator==(const FlagSet& other) const { return flag_mask == other.flag_mask; }
  

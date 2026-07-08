@@ -40,7 +40,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace tpau::cpp_kernal {
 
-/*
+/**
 * This class represents a value of various types.
 *
 * All operations check for compatible types and integer overflow. Invalid operations throw an exception.

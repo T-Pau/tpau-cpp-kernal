@@ -52,6 +52,8 @@ extra_css = [
     "assets/styles/mkdocstrings.css",
     "assets/styles/style.css",
     "assets/styles/tpau.css",
+    # This should not be needed, but Zensical's mkdocstrings support is unfinished and does not support custom CSS yet.
+    "assets/styles/mkdocstrings-doxygen.css", 
 ]
 
 
