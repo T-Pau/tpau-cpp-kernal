@@ -167,7 +167,7 @@ class Location {
      *
      * @param file_name The name of the file.
      */
-    explicit Location(std::string_view file_name) : file(file_name) {}
+    explicit Location(Symbol file_name) : file(file_name) {}
 
     /**
      * Create a location.
@@ -265,6 +265,22 @@ class Location {
      * @return `true` if this location is after the other location, `false` otherwise.
      */
     bool operator>(const Location& other) const;
+
+    /**
+     * Check if this location is before or equal to another location.
+     *
+     * @param other The location to compare with.
+     * @return `true` if this location is before or equal to the other location, `false` otherwise.
+     */
+    bool operator<=(const Location& other) const { return !(*this > other); }
+
+    /**
+     * Check if this location is after or equal to another location.
+     *
+     * @param other The location to compare with.
+     * @return `true` if this location is after or equal to the other location, `false` otherwise.
+     */
+    bool operator>=(const Location& other) const { return !(*this < other); }
 
     /**
      * Convert the location to a string representation of the start of the location.

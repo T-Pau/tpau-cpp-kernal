@@ -145,6 +145,25 @@ std::vector<std::string> split(std::string_view str, std::string_view delimiters
  */
 std::string_view trim(std::string_view str, std::string_view characters = " \t\n\r\f\v");
 
+/**
+ * Get the value associated with a key in an unordered map, or return a fallback value if the key is not found.
+ *
+ * @tparam K The type of the keys in the map.
+ * @tparam V The type of the values in the map.
+ * @param map The unordered map to search.
+ * @param key The key to look for.
+ * @param fallback The fallback value to return if the key is not found.
+ * @return The value associated with the key, or the fallback value if the key is not found.
+ */
+template <typename K, typename V>
+V get_with_fallback(const std::unordered_map<K, V>& map, const K& key, V fallback) {
+    auto it = map.find(key);
+    if (it == map.end()) {
+        return fallback;
+    }
+    return it->second;
+}
+
 } // namespace tpau::cpp_kernal
 
 #endif // HAD_TPAU_CPP_KERNAL_UTIL_H

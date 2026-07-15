@@ -548,8 +548,19 @@ class DiagnosticOutput {
      */
     void mark_failed() { fail_flag = true; }
 
+    /**
+     * Cause the program to exit by throwing an exception if it has been marked as failed.
+     */
+    void exit_if_failed() {if(failed()) { throw Exception(); }};
+
+    /**
+     * @brief Whether to output verbose error messages.
+     *
+     * This is not used by the Kernal itself. It is provided for use by the application.
+     */
     bool verbose_error_messages{false};
 
+    /// @brief The global diagnostic output.
     static DiagnosticOutput global;
 
   private:

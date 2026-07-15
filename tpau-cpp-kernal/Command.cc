@@ -133,8 +133,10 @@ int Command::create_dependency_file() {
         throw Exception("can't create dependency file '{}': {}", dependency_file->string(), strerror_string());
     }
 
+    auto dependencies = sorted(FileReader::global.file_names());
+
     depfile << output_file->string() << ":";
-    for (const auto& file : FileReader::global.file_names()) {
+    for (const auto& file : dependencies) {
         depfile << " " << file;
     }
     depfile << std::endl;

@@ -818,4 +818,17 @@ void Value::serialize(std::ostream& stream) const {
     }
 }
 
+bool Value::is_subtype(Type type, Type supertype) {
+    if (type == supertype) {
+        return true;
+    }
+    if (supertype == NUMBER && (type == SIGNED || type == UNSIGNED || type == FLOAT)) {
+        return true;
+    }
+    if (supertype == INTEGER && (type == SIGNED || type == UNSIGNED)) {
+        return true;
+    }
+    return false;
+}
+
 } // namespace tpau::cpp_kernal

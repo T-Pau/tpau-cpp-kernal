@@ -76,6 +76,13 @@ class Exception : public std::exception {
     Exception append_system_error(std::optional<int> code); // default: use current errno
 
     /**
+     * Check if the exception's message is empty.
+     *
+     * @return `true` if the exception has no message, `false` otherwise.
+     */
+    [[nodiscard]] bool empty() const { return message.empty(); }
+
+    /**
      * Get the message of the exception.
      *
      * @return The message of the exception.

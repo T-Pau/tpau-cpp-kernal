@@ -62,6 +62,15 @@ class Value {
         VOID      ///< No value
     };
 
+    /**
+     * Check if a type is a subtype of another type.
+     *
+     * @param type The type to check.
+     * @param supertype The supertype to check against.
+     * @return `true` if `type` is a subtype of `supertype`, `false` otherwise.
+     */
+    static bool is_subtype(Type type, Type supertype);
+
     /// @brief Create a void value.
     explicit Value() = default;
 
